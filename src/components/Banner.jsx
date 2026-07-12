@@ -5,7 +5,7 @@ import Link from "next/link";
 const Banner = () => {
   return (
     <section className="px-4 pt-28 pb-16 sm:px-6 sm:pt-32 lg:px-8">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-banner-card px-6 py-14 sm:px-10 sm:py-16 lg:px-14 bg-[#2563EB]">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-banner-card px-6 py-14 sm:px-10 sm:py-16 lg:px-14 bg-accent">
         <div className="relative grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
           {/* Left: copy */}
           <div>
