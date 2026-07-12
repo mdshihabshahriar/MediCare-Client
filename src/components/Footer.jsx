@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import Link from "next/link";
 
 const quickLinks = [
   { name: "Home", href: "/" },
@@ -48,9 +48,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Logo + description */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <NextLink href="/" className="text-xl font-bold tracking-tight text-white">
+            <Link href="/" className="text-xl font-bold tracking-tight text-white">
               <span>MediCare Connect</span>
-            </NextLink>
+            </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-footer-paragraph text-[#334155]">
               Connecting patients with verified, top-rated doctors for reliable
               healthcare — anytime, anywhere.
@@ -83,12 +83,12 @@ const Footer = () => {
             <ul className="mt-4 space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <NextLink
+                  <Link
                     href={link.href}
                     className="text-sm text-[#334155] text-footer-paragraph transition-colors hover:text-primary"
                   >
                     {link.name}
-                  </NextLink>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -180,12 +180,12 @@ const Footer = () => {
             © {year} MediCareConnect. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-xs text-footer-paragraph">
-            <NextLink href="/privacy" className="hover:text-primary">
+            <Link href="/privacy" className="hover:text-primary">
               Privacy Policy
-            </NextLink>
-            <NextLink href="/terms" className="hover:text-primary">
+            </Link>
+            <Link href="/terms" className="hover:text-primary">
               Terms of Service
-            </NextLink>
+            </Link>
           </div>
         </div>
       </div>
