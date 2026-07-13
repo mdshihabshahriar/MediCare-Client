@@ -1,6 +1,7 @@
 import Banner from "@/components/Banner";
 import MedicalSpecializations from "@/components/Medicalspecializations";
 import PlatformStatistics from "@/components/Platformstatistics";
+import WhyChooseUs from "@/components/WhyChooseUs";
 import Image from "next/image";
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
        <Banner />
        <MedicalSpecializations />
        <PlatformStatistics />
+       <WhyChooseUs />
     </div>
   );
 }
