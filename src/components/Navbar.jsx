@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import NextLink from "next/link";
-import { Button, Link, Dropdown, Avatar, Label } from "@heroui/react";
+import { Button, Dropdown, Avatar } from "@heroui/react";
+import Link from "next/link";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -10,6 +10,8 @@ const navLinks = [
   { name: "About Us", href: "/about" },
   { name: "Contact Us", href: "/contact" },
   { name: "Dashboard", href: "/dashboard" },
+  { name: "Login", href: "/login" },
+  { name: "Register", href: "/register" },
 ];
 
 const Navbar = () => {
@@ -18,14 +20,12 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/30 dark:bg-black/30 backdrop-blur-lg backdrop-saturate-150 shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo (text only) */}
-        <NextLink href="/" className="text-xl font-bold tracking-tight">
+        <Link href="/" className="text-xl font-bold tracking-tight">
           <span className="text-accent">MediCare</span><span> Connect</span>
-        </NextLink>
+        </Link>
 
-        {/* Desktop nav links */}
         <ul className="hidden items-center gap-8 sm:flex">
-          {navLinks.map((link) => (
+          {navLinks.slice(0, 5).map((link) => (
             <li key={link.href}>
               <Link href={link.href} className="text-sm font-medium">
                 {link.name}
@@ -34,10 +34,12 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Right side: auth + profile (desktop) */}
         <div className="hidden items-center gap-4 sm:flex">
-          <Button as={NextLink} href="/login" variant="soft" color="accent" radius="full">
-            Login / Register
+          <Button className="btn border-accent text-accent hover:bg-accent hover:text-white" >
+            <Link href={"/login"}>Login</Link>
+          </Button>
+          <Button className="btn border-accent text-accent hover:bg-accent hover:text-white" >
+            <Link href={"/register"}>Register</Link>
           </Button>
 
           <Dropdown>
@@ -60,17 +62,16 @@ const Navbar = () => {
               </div>
               <Dropdown.Menu aria-label="Profile actions">
                 <Dropdown.Item id="my-profile" textValue="My Profile">
-                  <Label>My Profile</Label>
+                  <Link href="/my-profile">My Profile</Link>
                 </Dropdown.Item>
                 <Dropdown.Item id="logout" textValue="Log Out">
-                  <Label>Logout</Label>
+                  <Link href="/logout">Logout</Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown.Popover>
           </Dropdown>
         </div>
 
-        {/* Hamburger toggle (mobile only) */}
         <button
           type="button"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -96,7 +97,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile menu */}
       {isMenuOpen && (
         <div className="border-t border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-lg sm:hidden">
           <ul className="flex flex-col gap-1 px-4 py-4">
@@ -128,22 +128,20 @@ const Navbar = () => {
 
           <div className="flex flex-col gap-2 px-4 pb-4">
             <Button
-              as={NextLink}
-              href="/my-profile"
               variant="soft"
               onPress={() => setIsMenuOpen(false)}
             >
-              My Profile
+              <Link href={'/my-profile'}>My Profile</Link>
             </Button>
             <Button
-              as={NextLink}
+              as={Link}
               href="/login"
               variant="soft"
               color="accent"
               radius="full"
               onPress={() => setIsMenuOpen(false)}
             >
-              Login / Register
+              Logout
             </Button>
           </div>
         </div>
