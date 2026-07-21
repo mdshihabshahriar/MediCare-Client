@@ -12,9 +12,10 @@ import {
   Radio,
   Button,
 } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 async function uploadPhotoAndGetUrl(file) {
-    // Simulate an upload delay
   return "https://your-cdn.com/uploads/placeholder.jpg";
 }
 
@@ -45,17 +46,33 @@ const RegisterPage = () => {
       photoUrl = await uploadPhotoAndGetUrl(photoFile);
     }
 
-    const payload = {
+    const user = {
       name: formData.get("name"),
       email: formData.get("email"),
       password: formData.get("password"),
-      role,
-      gender,
-      photoUrl, // <- only the URL string goes to the database
+      role: formData.get("role"),
+      gender: formData.get("gender"), 
+      photoUrl: photoUrl, 
     };
 
-    console.log("Register payload:", payload);
-    // TODO: send `payload` to your API / server action here.
+    const {data, error} = await authClient.signUp.email({
+      email: user.email,
+      password: user.password,
+      name: user.name,
+      role: user.role,
+      gender: user.gender,
+      photoUrl: user.photoUrl,
+    })
+
+    if(data) {
+      redirect('/')
+    }
+
+    if(error) {
+      alert("Registration failed: " + error.message);
+    }
+
+    console.log("Register user:", user);
 
     setIsSubmitting(false);
   };
@@ -230,7 +247,7 @@ const RegisterPage = () => {
             </TextField>
 
             {/* User role */}
-            <RadioGroup value={role} onChange={setRole}>
+            <RadioGroup name="role" value={role} onChange={setRole}>
               <Label className="text-sm font-medium text-[#334155]">I am a</Label>
               <div className="mt-2 grid grid-cols-2 gap-3">
                 <Radio
@@ -255,7 +272,7 @@ const RegisterPage = () => {
             </RadioGroup>
 
             {/* Gender */}
-            <RadioGroup value={gender} onChange={setGender}>
+            <RadioGroup name="gender" value={gender} onChange={setGender}>
               <Label className="text-sm font-medium text-[#334155]">Gender</Label>
               <div className="mt-2 grid grid-cols-3 gap-3">
                 <Radio

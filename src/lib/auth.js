@@ -12,4 +12,24 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: true,
+        defaultValue: "patient",
+        input: true, // REQUIRED — lets the client set this on sign up
+      },
+      gender: {
+        type: "string",
+        required: false,
+        input: true,
+      },
+      photoUrl: {
+        type: "string",
+        required: false,
+        input: true,
+      },
+    },
+}
 });
