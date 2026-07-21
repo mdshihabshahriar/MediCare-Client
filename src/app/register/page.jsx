@@ -101,7 +101,7 @@ const RegisterPage = () => {
           <p className="mt-1.5 text-sm text-[#64748B]">
             Already have an account?{" "}
             <Link href="/login" className="font-semibold text-[#2563EB]">
-              Log in
+              Login
             </Link>
           </p>
 

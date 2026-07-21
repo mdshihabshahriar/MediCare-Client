@@ -35,13 +35,12 @@ const Navbar = () => {
         </ul>
 
         <div className="hidden items-center gap-4 sm:flex">
-          <Button className="btn border-accent text-accent hover:bg-accent hover:text-white" >
-            <Link href={"/login"}>Login</Link>
-          </Button>
-          <Button className="btn border-accent text-accent hover:bg-accent hover:text-white" >
-            <Link href={"/register"}>Register</Link>
-          </Button>
-
+            <Link href={"/login"}>
+              <Button className="btn border-accent text-accent hover:bg-accent hover:text-white" >Login</Button>
+            </Link>
+            <Link href={"/register"}>
+              <Button className="btn border-accent text-accent hover:bg-accent hover:text-white" >Register</Button>
+            </Link>
           <Dropdown>
             <Dropdown.Trigger className="rounded-full">
               <Avatar size="sm">
