@@ -21,7 +21,12 @@ const Navbar = () => {
   const { data: session } = authClient.useSession();
 
   const user = session?.user;
-  console.log("User in Navbar:", user);
+  // console.log("User in Navbar:", user);
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    window.location.href = "/login";
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/30 dark:bg-black/30 backdrop-blur-lg backdrop-saturate-150 shadow-sm">
@@ -44,11 +49,9 @@ const Navbar = () => {
         <div className="hidden items-center gap-4 sm:flex">
           {user ? (
             <>
-              <Link href={"/logout"}>
-                <Button className="btn border-danger text-danger hover:bg-danger hover:text-white">
+                <Button onClick={handleLogout} className="btn border-danger text-danger hover:bg-danger hover:text-white">
                   Logout
                 </Button>
-              </Link>
 
               <Dropdown>
                 <Dropdown.Trigger className="rounded-full">
@@ -83,7 +86,9 @@ const Navbar = () => {
                       <Link href="/my-profile">My Profile</Link>
                     </Dropdown.Item>
                     <Dropdown.Item id="logout" textValue="Log Out">
-                      <Link href="/logout">Logout</Link>
+                      <Link href="/login" onClick={handleLogout}>
+                        Logout
+                      </Link>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown.Popover>
@@ -161,7 +166,7 @@ const Navbar = () => {
             </>}
           </ul>
 
-          <div className="flex items-center justify-between gap-4 border-t border-white/20 px-4 py-4">
+          { user ? <div className="flex items-center justify-between gap-4 border-t border-white/20 px-4 py-4">
             <div className="flex items-center gap-2">
               <Avatar size="sm">
                 <Avatar.Image
@@ -177,9 +182,9 @@ const Navbar = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </div> : null}
 
-          <div className="flex flex-col gap-2 px-4 pb-4">
+          { user ? <div className="flex flex-col gap-2 px-4 pb-4">
             <Button variant="soft" onPress={() => setIsMenuOpen(false)}>
               <Link href={"/my-profile"}>My Profile</Link>
             </Button>
@@ -190,10 +195,12 @@ const Navbar = () => {
               color="accent"
               radius="full"
               onPress={() => setIsMenuOpen(false)}
+              onClick={handleLogout}
             >
               Logout
             </Button>
           </div>
+          : null }
         </div>
       )}
     </nav>
