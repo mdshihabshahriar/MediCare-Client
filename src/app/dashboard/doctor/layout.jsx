@@ -1,8 +1,8 @@
 import DashboardLayout from '@/components/DashboardLayout';
 import React from 'react';
 
-const PatientDashboardLayout = ({ children }) => {
+const DoctorDashboardLayout = ({ children }) => {
     return <DashboardLayout>{children}</DashboardLayout>;
 };
 
-export default PatientDashboardLayout;
+export default DoctorDashboardLayout;

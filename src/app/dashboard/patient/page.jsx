@@ -123,7 +123,7 @@ export default function DashboardOverview() {
         <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm lg:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold text-[#0F172A]">Upcoming Appointments</h2>
-            <NextLink href="/dashboard/appointments" className="text-xs font-semibold text-[#2563EB]">
+            <NextLink href="/dashboard/patient/appointments" className="text-xs font-semibold text-[#2563EB]">
               View all
             </NextLink>
           </div>
