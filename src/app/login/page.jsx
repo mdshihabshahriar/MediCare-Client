@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { TextField, Label, Input, FieldError, Button } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,13 +15,26 @@ const LoginPage = () => {
     setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    const payload = {
+    const user = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
 
-    console.log("Login payload:", payload);
-    // TODO: send `payload` to your auth API / server action here.
+    const {data, error} = await authClient.signIn.email({
+      email: user.email,
+      password: user.password,
+    })
+
+    console.log(data, error);
+
+    if(data)
+    {
+      redirect("/")
+    }
+    if(error)
+    {
+      alert(error.message)
+    }
 
     setIsSubmitting(false);
   };
