@@ -10,7 +10,7 @@ const navLinks = [
   { name: "Find Doctors", href: "/find-doctors" },
   { name: "About Us", href: "/about" },
   { name: "Contact Us", href: "/contact" },
-  { name: "Dashboard", href: "/dashboard" },
+  // { name: "Dashboard", href: "/dashboard" },
   { name: "Login", href: "/login" },
   { name: "Register", href: "/register" },
 ];
@@ -37,13 +37,14 @@ const Navbar = () => {
         </Link>
 
         <ul className="hidden items-center gap-8 sm:flex">
-          {navLinks.slice(0, 5).map((link) => (
+          {navLinks.slice(0, 4).map((link) => (
             <li key={link.href}>
               <Link href={link.href} className="text-sm font-medium">
                 {link.name}
               </Link>
             </li>
           ))}
+          <li>{user ? <><Link href={`/dashboard/${user.role}`}>Dashboard</Link></> : null}</li>
         </ul>
 
         <div className="hidden items-center gap-4 sm:flex">

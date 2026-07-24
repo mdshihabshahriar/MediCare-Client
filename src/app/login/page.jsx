@@ -10,6 +10,8 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const session = authClient.useSession().data;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -29,7 +31,7 @@ const LoginPage = () => {
 
     if(data)
     {
-      redirect("/")
+      redirect(`/dashboard/${data.user?.role}`);
     }
     if(error)
     {
@@ -67,14 +69,6 @@ const LoginPage = () => {
             </p>
 
             <div className="mt-8 flex items-center gap-3">
-              {["A", "B", "C"].map((letter) => (
-                <div
-                  key={letter}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-white/40 bg-white/15 text-xs font-semibold"
-                >
-                  {letter}
-                </div>
-              ))}
               <p className="text-xs text-white/80">
                 Trusted by 20,000+ patients
               </p>

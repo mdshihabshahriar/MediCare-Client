@@ -3,24 +3,40 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { TextField, Label, Input, Button } from "@heroui/react";
-
-const initialUser = {
-  name: "Sarah Jenkins",
-  email: "sarah.jenkins@example.com",
-  gender: "female",
-  role: "Patient",
-  photoUrl: "https://i.pravatar.cc/150?img=47",
-};
+import { authClient } from "@/lib/auth-client";
 
 export default function MyProfile() {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
   const fileInputRef = useRef(null);
-  const [photoPreview, setPhotoPreview] = useState(initialUser.photoUrl);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(user?.photoUrl);
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  async function uploadPhotoAndGetUrl(file) {
+    const formData = new FormData();
+
+    formData.append("image", file);
+
+    const res = await fetch(
+      `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await res.json();
+
+    return data.data.url;
+  }
 
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    setPhotoFile(file);
     setPhotoPreview(URL.createObjectURL(file));
   };
 
@@ -29,15 +45,21 @@ export default function MyProfile() {
     setIsSaving(true);
     setIsSaved(false);
 
+    let photoUrl = user.photoUrl;
+
+    if (photoFile) {
+      photoUrl = await uploadPhotoAndGetUrl(photoFile);
+    }
+
     const formData = new FormData(e.currentTarget);
     const payload = {
       name: formData.get("name"),
       email: formData.get("email"),
       gender: formData.get("gender"),
+      photoUrl,
     };
 
-    // TODO: send `payload` (and the new photo, if changed) to your API.
-    console.log("Update profile:", payload);
+    // console.log("Update profile:", payload);
 
     setIsSaving(false);
     setIsSaved(true);
@@ -46,7 +68,9 @@ export default function MyProfile() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">My Profile</h1>
+        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+          My Profile
+        </h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Update your personal information and profile photo.
         </p>
@@ -55,7 +79,15 @@ export default function MyProfile() {
       <div className="max-w-2xl rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm sm:p-8">
         {isSaved && (
           <div className="mb-6 flex items-center gap-2 rounded-xl border border-[#BBF7D0] bg-[#F0FDF4] px-4 py-3 text-sm font-medium text-[#15803D]">
-            <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              className="h-5 w-5 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
               <path d="m22 4-10 10-3-3" />
             </svg>
@@ -67,7 +99,12 @@ export default function MyProfile() {
           {/* Photo */}
           <div className="flex items-center gap-4">
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full ring-1 ring-[#E2E8F0]">
-              <Image src={photoPreview} alt={initialUser.name} fill className="object-cover" />
+              <Image
+                src={photoPreview}
+                alt={user.name}
+                fill
+                className="object-cover"
+              />
             </div>
             <div>
               <button
@@ -77,7 +114,9 @@ export default function MyProfile() {
               >
                 Change photo
               </button>
-              <p className="mt-1.5 text-xs text-[#94A3B8]">PNG or JPG, up to 5MB</p>
+              <p className="mt-1.5 text-xs text-[#94A3B8]">
+                PNG or JPG, up to 5MB
+              </p>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -88,22 +127,33 @@ export default function MyProfile() {
             </div>
           </div>
 
-          <TextField name="name" defaultValue={initialUser.name} isRequired>
-            <Label className="text-sm font-medium text-[#334155]">Full Name</Label>
+          <TextField name="name" defaultValue={user.name} isRequired>
+            <Label className="text-sm font-medium text-[#334155]">
+              Full Name
+            </Label>
             <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
           </TextField>
 
-          <TextField name="email" type="email" defaultValue={initialUser.email} isRequired>
-            <Label className="text-sm font-medium text-[#334155]">Email Address</Label>
+          <TextField
+            name="email"
+            type="email"
+            defaultValue={user.email}
+            isRequired
+          >
+            <Label className="text-sm font-medium text-[#334155]">
+              Email Address
+            </Label>
             <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
           </TextField>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label className="text-sm font-medium text-[#334155]">Gender</Label>
+              <Label className="text-sm font-medium text-[#334155]">
+                Gender
+              </Label>
               <select
                 name="gender"
-                defaultValue={initialUser.gender}
+                defaultValue={user.gender}
                 className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
               >
                 <option value="male">Male</option>
@@ -112,9 +162,11 @@ export default function MyProfile() {
               </select>
             </div>
             <div>
-              <Label className="text-sm font-medium text-[#334155]">Account Type</Label>
+              <Label className="text-sm font-medium text-[#334155]">
+                Account Type
+              </Label>
               <div className="mt-1.5 flex h-10.5 items-center rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 text-sm text-[#94A3B8]">
-                {initialUser.role}
+                {user.role}
               </div>
             </div>
           </div>

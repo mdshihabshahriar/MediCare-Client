@@ -5,7 +5,7 @@ import NextLink from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
-// import { getNavForRole } from "@/lib/dashboard-nav";
+import { getNavForRole } from "@/lib/dashboard-nav";
 
 // Maps the `icon` string in dashboard-nav.js to an actual SVG path.
 const icons = {

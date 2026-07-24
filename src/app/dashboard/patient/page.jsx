@@ -2,6 +2,7 @@
 
 import NextLink from "next/link";
 import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
 
 const stats = [
   {
@@ -88,12 +89,13 @@ const favoriteDoctors = [
 ];
 
 export default function DashboardOverview() {
+  const {data: session} = authClient.useSession();
   return (
     <div className="flex flex-col gap-8">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
-          Welcome back, Sarah 👋
+          Welcome back, {session?.user?.name} 👋
         </h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Here&apos;s what&apos;s happening with your health, at a glance.
