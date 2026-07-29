@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import NextLink from "next/link";
+import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -102,7 +102,7 @@ export default function DashboardLayout({ children }) {
     return null;
   }
 
-  const role = session.user.role; // "patient" | "doctor" | "admin"
+  const role = session.user.role;
   const navItems = getNavForRole(role);
 
   return (
@@ -145,6 +145,14 @@ export default function DashboardLayout({ children }) {
               <div className="min-w-0">
                 <p className="truncate text-sm font-bold text-[#0F172A]">{session.user.name}</p>
                 <p className="text-xs capitalize text-[#94A3B8]">{role}</p>
+
+                {session.user.role === "doctor" && (
+                <p className="text-xs font-medium bg-cyan-500 p-1 rounded-2xl text-white">
+                  {session.user.verificationStatus === "verified"
+                    ? "Verified"
+                    : "Pending"}
+                </p>
+              )}
               </div>
             </div>
 
@@ -153,7 +161,7 @@ export default function DashboardLayout({ children }) {
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                  <NextLink
+                  <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsSidebarOpen(false)}
@@ -175,7 +183,7 @@ export default function DashboardLayout({ children }) {
                       {icons[item.icon]}
                     </svg>
                     {item.label}
-                  </NextLink>
+                  </Link>
                 );
               })}
             </nav>

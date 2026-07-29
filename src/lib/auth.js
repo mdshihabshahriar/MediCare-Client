@@ -30,6 +30,12 @@ export const auth = betterAuth({
         required: false,
         input: true,
       },
+       verificationStatus: {
+        type: "string",
+        required: false,
+        defaultValue: "pending",
+        input: false,
+       }
     },
 }
 });

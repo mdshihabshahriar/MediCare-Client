@@ -1,20 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import Image from "next/image";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
 
+const specialties = [
+  "Cardiology",
+  "Neurology",
+  "Orthopedics",
+  "Pediatrics",
+  "Dermatology",
+];
+
 const initialProfile = {
-  qualifications: "MBBS, FCPS (Cardiology), Fellowship in Interventional Cardiology",
+  photoUrl: "https://i.pravatar.cc/150?img=44",
+  specialty: "Cardiology",
   experience: 12,
-  consultationFee: 1500,
+  qualifications: "MBBS, FCPS (Cardiology), Fellowship in Interventional Cardiology",
+  consultationFee: 45,
+  hospitalName: "Dhaka Medical College Hospital",
   availableSlots: ["Sunday 9:00–13:00", "Monday 9:00–13:00", "Monday 17:00–20:00", "Wednesday 10:00–14:00"],
 };
 
+// TODO: replace with your real upload call (S3 / Cloudinary / imgbb / etc.),
+// same pattern as the Register page — only the returned URL is saved to the DB.
+async function uploadPhotoAndGetUrl(file) {
+  return "https://your-cdn.com/uploads/placeholder.jpg";
+}
+
 export default function DoctorProfileManagement() {
+  const fileInputRef = useRef(null);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(initialProfile.photoUrl);
   const [slots, setSlots] = useState(initialProfile.availableSlots);
   const [newSlot, setNewSlot] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoFile(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
 
   const addSlot = () => {
     if (!newSlot.trim()) return;
@@ -32,14 +60,23 @@ export default function DoctorProfileManagement() {
     setIsSaved(false);
 
     const formData = new FormData(e.currentTarget);
+
+    let photoUrl = initialProfile.photoUrl;
+    if (photoFile) {
+      photoUrl = await uploadPhotoAndGetUrl(photoFile);
+    }
+
     const payload = {
-      qualifications: formData.get("qualifications"),
+      photoUrl,
+      specialty: formData.get("specialty"),
       experience: Number(formData.get("experience")),
+      qualifications: formData.get("qualifications"),
       consultationFee: Number(formData.get("consultationFee")),
+      hospitalName: formData.get("hospitalName"),
       availableSlots: slots,
     };
 
-    // TODO: send `payload` to your API.
+    // TODO: PATCH `payload` to your API.
     console.log("Update doctor profile:", payload);
 
     setIsSaving(false);
@@ -67,8 +104,80 @@ export default function DoctorProfileManagement() {
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          {/* Profile Photo */}
+          <div>
+            <label className="text-sm font-medium text-[#334155]">Profile Photo</label>
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                const file = e.dataTransfer.files?.[0];
+                if (file) {
+                  setPhotoFile(file);
+                  setPhotoPreview(URL.createObjectURL(file));
+                }
+              }}
+              className="mt-1.5 flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed border-[#CBD5E1] bg-[#F8FAFC] p-4 transition-colors hover:border-[#2563EB] hover:bg-[#EFF6FF]"
+            >
+              <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#E2E8F0]">
+                {photoPreview ? (
+                  <Image src={photoPreview} alt="Profile preview" fill className="object-cover" />
+                ) : (
+                  <svg className="h-6 w-6 text-[#94A3B8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z" />
+                    <circle cx="12" cy="13" r="4" />
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-[#0F172A]">
+                  {photoFile ? photoFile.name : "Click to upload or drag and drop"}
+                </p>
+                <p className="mt-0.5 text-xs text-[#94A3B8]">PNG or JPG, up to 5MB</p>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                name="photo"
+                accept="image/png, image/jpeg"
+                onChange={handlePhotoChange}
+                className="hidden"
+              />
+            </div>
+          </div>
+
+          {/* Clinical Specialties */}
+          <div>
+            <Label className="text-sm font-medium text-[#334155]">Clinical Specialties</Label>
+            <select
+              name="specialty"
+              required
+              defaultValue={initialProfile.specialty}
+              className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+            >
+              {specialties.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <TextField name="experience" type="number" defaultValue={initialProfile.experience} isRequired>
+              <Label className="text-sm font-medium text-[#334155]">Experience (Years)</Label>
+              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+            </TextField>
+            <TextField name="consultationFee" type="number" defaultValue={initialProfile.consultationFee} isRequired>
+              <Label className="text-sm font-medium text-[#334155]">Co-Pay Consultation Fee ($)</Label>
+              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+            </TextField>
+          </div>
+
+          {/* Qualifications Statement */}
           <TextField name="qualifications" defaultValue={initialProfile.qualifications} isRequired>
-            <Label className="text-sm font-medium text-[#334155]">Qualifications</Label>
+            <Label className="text-sm font-medium text-[#334155]">Qualifications Statement</Label>
             <TextArea
               rows={3}
               defaultValue={initialProfile.qualifications}
@@ -76,67 +185,14 @@ export default function DoctorProfileManagement() {
             />
           </TextField>
 
-          <div className="grid grid-cols-2 gap-4">
-            <TextField name="experience" type="number" defaultValue={initialProfile.experience} isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Experience (years)</Label>
-              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
-            </TextField>
-            <TextField name="consultationFee" type="number" defaultValue={initialProfile.consultationFee} isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Consultation Fee (৳)</Label>
-              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
-            </TextField>
-          </div>
-
-          {/* Available slots */}
-          <div>
-            <Label className="text-sm font-medium text-[#334155]">Available Slots</Label>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {slots.map((slot, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold text-[#2563EB]"
-                >
-                  {slot}
-                  <button
-                    type="button"
-                    onClick={() => removeSlot(i)}
-                    className="text-[#2563EB]/60 hover:text-[#2563EB]"
-                    aria-label="Remove slot"
-                  >
-                    <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 6 6 18" />
-                      <path d="m6 6 12 12" />
-                    </svg>
-                  </button>
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-3 flex gap-2">
-              <input
-                value={newSlot}
-                onChange={(e) => setNewSlot(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    addSlot();
-                  }
-                }}
-                placeholder="e.g. Tuesday 15:00–18:00"
-                className="flex-1 rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
-              />
-              <button
-                type="button"
-                onClick={addSlot}
-                className="shrink-0 rounded-xl border border-[#E2E8F0] px-4 text-sm font-semibold text-[#334155] hover:bg-[#F1F5F9]"
-              >
-                Add
-              </button>
-            </div>
-            <p className="mt-1.5 text-xs text-[#94A3B8]">
-              For recurring weekly slots with day-by-day control, use Manage Schedule instead.
-            </p>
-          </div>
+          {/* Attached Medical Hospital Name */}
+          <TextField name="hospitalName" defaultValue={initialProfile.hospitalName} isRequired>
+            <Label className="text-sm font-medium text-[#334155]">Attached Medical Hospital Name</Label>
+            <Input
+              placeholder="e.g. Dhaka Medical College Hospital"
+              className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+            />
+          </TextField>
 
           <Button
             type="submit"

@@ -78,15 +78,19 @@ const RegisterPage = () => {
       photoUrl: user.photoUrl,
     })
 
-    if(data) {
-      redirect('/')
-    }
-
     if(error) {
       alert("Registration failed: " + error.message);
+      setIsSubmitting(false);
+      return;
     }
 
-    console.log("Register user:", user);
+    if(data) {
+      if (user.role === "doctor") {
+        redirect('/verification-pending')
+      } else {
+        redirect('/')
+      }
+    }
 
     setIsSubmitting(false);
   };
@@ -284,6 +288,20 @@ const RegisterPage = () => {
                 </Radio>
               </div>
             </RadioGroup>
+
+            {role === "doctor" && (
+              <div className="flex items-start gap-2.5 rounded-xl border border-[#FDE68A] bg-[#FFFBEB] px-4 py-3">
+                <svg className="mt-0.5 h-4 w-4 shrink-0 text-[#B45309]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 8v4" />
+                  <path d="M12 16h.01" />
+                </svg>
+                <p className="text-xs leading-relaxed text-[#92400E]">
+                  Doctor accounts require admin verification before you can accept
+                  appointments. You&apos;ll be notified once your account is approved.
+                </p>
+              </div>
+            )}
 
             {/* Gender */}
             <RadioGroup name="gender" value={gender} onChange={setGender}>

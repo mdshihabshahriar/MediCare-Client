@@ -1,7 +1,8 @@
 "use client";
 
-import NextLink from "next/link";
+import Link from "next/link";
 import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
 
 const stats = [
   {
@@ -68,11 +69,12 @@ const todaysAppointments = [
 ];
 
 export default function DoctorOverview() {
+  const {data: session} = authClient.useSession();
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
-          Welcome back, Dr. Ross 👋
+          Welcome back, {session?.user?.name} 👋
         </h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Here&apos;s an overview of your practice today.
@@ -96,9 +98,9 @@ export default function DoctorOverview() {
       <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-bold text-[#0F172A]">Today&apos;s Appointments</h2>
-          <NextLink href="/dashboard/doctor/requests" className="text-xs font-semibold text-[#2563EB]">
+          <Link href="/dashboard/doctor/requests" className="text-xs font-semibold text-[#2563EB]">
             View all
-          </NextLink>
+          </Link>
         </div>
 
         <div className="mt-5 flex flex-col divide-y divide-[#E2E8F0]">
