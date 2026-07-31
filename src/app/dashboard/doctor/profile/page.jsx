@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
 const specialties = [
   "Cardiology",
@@ -12,30 +13,57 @@ const specialties = [
   "Dermatology",
 ];
 
-const initialProfile = {
-  photoUrl: "https://i.pravatar.cc/150?img=44",
-  specialty: "Cardiology",
-  experience: 12,
-  qualifications: "MBBS, FCPS (Cardiology), Fellowship in Interventional Cardiology",
-  consultationFee: 45,
-  hospitalName: "Dhaka Medical College Hospital",
-  availableSlots: ["Sunday 9:00–13:00", "Monday 9:00–13:00", "Monday 17:00–20:00", "Wednesday 10:00–14:00"],
+// Used only when the doctor has no profile document yet.
+const emptyProfile = {
+  photoUrl: "",
+  specialty: specialties[0],
+  experience: "",
+  qualifications: "",
+  consultationFee: "",
+  hospitalName: "",
+  availableSlots: [],
 };
 
-// TODO: replace with your real upload call (S3 / Cloudinary / imgbb / etc.),
-// same pattern as the Register page — only the returned URL is saved to the DB.
+// TODO: replace with your real upload call (S3 / Cloudinary / imgbb / etc.)
 async function uploadPhotoAndGetUrl(file) {
   return "https://your-cdn.com/uploads/placeholder.jpg";
 }
 
 export default function DoctorProfileManagement() {
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
+
   const fileInputRef = useRef(null);
+  const [profile, setProfile] = useState(null); // null = still loading
   const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(initialProfile.photoUrl);
-  const [slots, setSlots] = useState(initialProfile.availableSlots);
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [slots, setSlots] = useState([]);
   const [newSlot, setNewSlot] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+
+  // Load the doctor's existing profile (if any) once we know who they are.
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    const loadProfile = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}`
+        );
+        const existing = await res.json(); // null if this doctor has no profile yet
+        const data = existing || emptyProfile;
+
+        setProfile(data);
+        setPhotoPreview(data.photoUrl || null);
+        setSlots(data.availableSlots || []);
+      } catch (err) {
+        console.error("Failed to load doctor profile:", err);
+        setProfile(emptyProfile);
+      }
+    };
+
+    loadProfile();
+  }, [session?.user?.id]);
 
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0];
@@ -56,12 +84,14 @@ export default function DoctorProfileManagement() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!session?.user?.id) return;
+
     setIsSaving(true);
     setIsSaved(false);
 
     const formData = new FormData(e.currentTarget);
 
-    let photoUrl = initialProfile.photoUrl;
+    let photoUrl = profile.photoUrl;
     if (photoFile) {
       photoUrl = await uploadPhotoAndGetUrl(photoFile);
     }
@@ -76,12 +106,38 @@ export default function DoctorProfileManagement() {
       availableSlots: slots,
     };
 
-    // TODO: PATCH `payload` to your API.
-    console.log("Update doctor profile:", payload);
+    try {
+      // PUT + upsert on the backend -> creates the profile the first
+      // time, updates it every time after. Same call, both cases.
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
-    setIsSaving(false);
-    setIsSaved(true);
+      if (!res.ok) throw new Error("Failed to save profile");
+
+      setProfile(payload);
+      setIsSaved(true);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong while saving your profile.");
+    } finally {
+      setIsSaving(false);
+    }
   };
+
+  // Session or profile still loading
+  if (isSessionPending || profile === null) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -99,11 +155,14 @@ export default function DoctorProfileManagement() {
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
               <path d="m22 4-10 10-3-3" />
             </svg>
-            Your profile has been updated.
+            Your profile has been saved.
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        {/* key={photoUrl} forces the form to remount with fresh defaultValues
+            once the fetched profile arrives — avoids stale/uncontrolled
+            defaultValue issues after an async load. */}
+        <form key={profile.photoUrl} onSubmit={handleSubmit} className="flex flex-col gap-6">
           {/* Profile Photo */}
           <div>
             <label className="text-sm font-medium text-[#334155]">Profile Photo</label>
@@ -153,7 +212,7 @@ export default function DoctorProfileManagement() {
             <select
               name="specialty"
               required
-              defaultValue={initialProfile.specialty}
+              defaultValue={profile.specialty}
               className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
             >
               {specialties.map((s) => (
@@ -165,34 +224,73 @@ export default function DoctorProfileManagement() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <TextField name="experience" type="number" defaultValue={initialProfile.experience} isRequired>
+            <TextField name="experience" type="number" defaultValue={profile.experience} isRequired>
               <Label className="text-sm font-medium text-[#334155]">Experience (Years)</Label>
               <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
             </TextField>
-            <TextField name="consultationFee" type="number" defaultValue={initialProfile.consultationFee} isRequired>
+            <TextField name="consultationFee" type="number" defaultValue={profile.consultationFee} isRequired>
               <Label className="text-sm font-medium text-[#334155]">Co-Pay Consultation Fee ($)</Label>
               <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
             </TextField>
           </div>
 
-          {/* Qualifications Statement */}
-          <TextField name="qualifications" defaultValue={initialProfile.qualifications} isRequired>
+          <TextField name="qualifications" defaultValue={profile.qualifications} isRequired>
             <Label className="text-sm font-medium text-[#334155]">Qualifications Statement</Label>
             <TextArea
               rows={3}
-              defaultValue={initialProfile.qualifications}
               className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
             />
           </TextField>
 
-          {/* Attached Medical Hospital Name */}
-          <TextField name="hospitalName" defaultValue={initialProfile.hospitalName} isRequired>
+          <TextField name="hospitalName" defaultValue={profile.hospitalName} isRequired>
             <Label className="text-sm font-medium text-[#334155]">Attached Medical Hospital Name</Label>
             <Input
               placeholder="e.g. Dhaka Medical College Hospital"
               className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
             />
           </TextField>
+
+          {/* Available slots */}
+          {/* <div>
+            <Label className="text-sm font-medium text-[#334155]">Available Slots</Label>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {slots.map((slot, i) => (
+                <span key={i} className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold text-[#2563EB]">
+                  {slot}
+                  <button type="button" onClick={() => removeSlot(i)} className="text-[#2563EB]/60 hover:text-[#2563EB]" aria-label="Remove slot">
+                    <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
+                  </button>
+                </span>
+              ))}
+              {slots.length === 0 && (
+                <p className="text-xs text-[#94A3B8]">No slots added yet.</p>
+              )}
+            </div>
+
+            <div className="mt-3 flex gap-2">
+              <input
+                value={newSlot}
+                onChange={(e) => setNewSlot(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addSlot();
+                  }
+                }}
+                placeholder="e.g. Tuesday 15:00–18:00"
+                className="flex-1 rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+              />
+              <button type="button" onClick={addSlot} className="shrink-0 rounded-xl border border-[#E2E8F0] px-4 text-sm font-semibold text-[#334155] hover:bg-[#F1F5F9]">
+                Add
+              </button>
+            </div>
+            <p className="mt-1.5 text-xs text-[#94A3B8]">
+              For recurring weekly slots with day-by-day control, use Manage Schedule instead.
+            </p>
+          </div> */}
 
           <Button
             type="submit"

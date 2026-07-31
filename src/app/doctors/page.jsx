@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import DoctorCard from "@/components/DoctorCard";
 
 const specialtyOptions = [
   "All Specializations",
@@ -95,7 +96,7 @@ const sortOptions = [
   { value: "quality", label: "Sort: Quality (Top Rated)" },
 ];
 
-export default function FindDoctorsPage() {
+const FindDoctorsPage = () => {
   const [search, setSearch] = useState("");
   const [specialty, setSpecialty] = useState("All Specializations");
   const [sortBy, setSortBy] = useState("quality");
@@ -274,3 +275,4 @@ export default function FindDoctorsPage() {
     </main>
   );
 }
+export default FindDoctorsPage;
