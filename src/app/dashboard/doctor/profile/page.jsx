@@ -13,7 +13,6 @@ const specialties = [
   "Dermatology",
 ];
 
-// Used only when the doctor has no profile document yet.
 const emptyProfile = {
   photoUrl: "",
   specialty: specialties[0],
@@ -24,16 +23,32 @@ const emptyProfile = {
   availableSlots: [],
 };
 
-// TODO: replace with your real upload call (S3 / Cloudinary / imgbb / etc.)
 async function uploadPhotoAndGetUrl(file) {
-  return "https://your-cdn.com/uploads/placeholder.jpg";
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const res = await fetch(
+    `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+
+  const data = await res.json();
+
+  if (!data.success) {
+    throw new Error("Image upload failed");
+  }
+
+  return data.data.url;
 }
 
 export default function DoctorProfileManagement() {
-  const { data: session, isPending: isSessionPending } = authClient.useSession();
+  const { data: session, isPending: isSessionPending, refetch: refetchSession } = authClient.useSession();
 
   const fileInputRef = useRef(null);
-  const [profile, setProfile] = useState(null); // null = still loading
+  const [profile, setProfile] = useState(null); 
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [slots, setSlots] = useState([]);
@@ -41,7 +56,6 @@ export default function DoctorProfileManagement() {
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  // Load the doctor's existing profile (if any) once we know who they are.
   useEffect(() => {
     if (!session?.user?.id) return;
 
@@ -50,7 +64,7 @@ export default function DoctorProfileManagement() {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}`
         );
-        const existing = await res.json(); // null if this doctor has no profile yet
+        const existing = await res.json(); 
         const data = existing || emptyProfile;
 
         setProfile(data);
@@ -107,8 +121,6 @@ export default function DoctorProfileManagement() {
     };
 
     try {
-      // PUT + upsert on the backend -> creates the profile the first
-      // time, updates it every time after. Same call, both cases.
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}`,
         {
@@ -122,6 +134,7 @@ export default function DoctorProfileManagement() {
 
       setProfile(payload);
       setIsSaved(true);
+      await refetchSession()
     } catch (err) {
       console.error(err);
       alert("Something went wrong while saving your profile.");
@@ -130,7 +143,6 @@ export default function DoctorProfileManagement() {
     }
   };
 
-  // Session or profile still loading
   if (isSessionPending || profile === null) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
@@ -159,11 +171,7 @@ export default function DoctorProfileManagement() {
           </div>
         )}
 
-        {/* key={photoUrl} forces the form to remount with fresh defaultValues
-            once the fetched profile arrives — avoids stale/uncontrolled
-            defaultValue issues after an async load. */}
         <form key={profile.photoUrl} onSubmit={handleSubmit} className="flex flex-col gap-6">
-          {/* Profile Photo */}
           <div>
             <label className="text-sm font-medium text-[#334155]">Profile Photo</label>
             <div
@@ -181,7 +189,7 @@ export default function DoctorProfileManagement() {
             >
               <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#E2E8F0]">
                 {photoPreview ? (
-                  <Image src={photoPreview} alt="Profile preview" fill className="object-cover" />
+                  <Image src={photoPreview || null} alt="Profile preview" fill className="object-cover" />
                 ) : (
                   <svg className="h-6 w-6 text-[#94A3B8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z" />
@@ -206,7 +214,6 @@ export default function DoctorProfileManagement() {
             </div>
           </div>
 
-          {/* Clinical Specialties */}
           <div>
             <Label className="text-sm font-medium text-[#334155]">Clinical Specialties</Label>
             <select

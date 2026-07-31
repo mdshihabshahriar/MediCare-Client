@@ -7,7 +7,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { getNavForRole } from "@/lib/dashboard-nav";
 
-// Maps the `icon` string in dashboard-nav.js to an actual SVG path.
 const icons = {
   grid: (
     <>
@@ -82,11 +81,8 @@ export default function DashboardLayout({ children }) {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Better Auth's client hook — reactive, updates automatically on login/logout.
   const { data: session, isPending } = authClient.useSession();
 
-  // Still loading the session — show a lightweight skeleton instead of
-  // flashing the wrong nav or redirecting too early.
   if (isPending) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
@@ -95,8 +91,6 @@ export default function DashboardLayout({ children }) {
     );
   }
 
-  // No session — bounce to login. (Ideally caught earlier by middleware,
-  // this is just a client-side safety net.)
   if (!session) {
     router.replace("/login");
     return null;
@@ -125,19 +119,17 @@ export default function DashboardLayout({ children }) {
       </div>
 
       <div className="mx-auto flex max-w-350">
-        {/* Sidebar */}
         <aside
           className={`fixed inset-y-0 left-0 z-50 w-64 shrink-0 border-r border-[#E2E8F0] bg-white pt-16 transition-transform lg:sticky lg:top-16 lg:z-0 lg:h-[calc(100vh-4rem)] lg:translate-x-0 ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="flex h-full flex-col gap-1 overflow-y-auto p-4">
-            {/* User card */}
             <div className="mb-4 flex items-center gap-3 rounded-xl bg-[#F8FAFC] p-3">
               <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full">
                 <Image
-                  src={session.user.photoUrl || session.user.image || "https://i.pravatar.cc/150"}
-                  alt={session.user.name}
+                  src={session?.user?.photoUrl || "/default-avatar.png"}
+                  alt={session?.user?.name || "User"}
                   fill
                   className="object-cover"
                 />
@@ -156,7 +148,6 @@ export default function DashboardLayout({ children }) {
               </div>
             </div>
 
-            {/* Nav — filtered by role */}
             <nav className="flex flex-col gap-1">
               {navItems.map((item) => {
                 const isActive = pathname === item.href;
@@ -215,7 +206,6 @@ export default function DashboardLayout({ children }) {
           />
         )}
 
-        {/* Main content */}
         <main className="min-w-0 flex-1 px-4 py-8 pt-20 sm:px-6 lg:px-10 lg:pt-8">
           {children}
         </main>

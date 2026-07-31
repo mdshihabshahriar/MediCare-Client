@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Dropdown, Avatar } from "@heroui/react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
@@ -18,10 +18,22 @@ const navLinks = [
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { data: session } = authClient.useSession();
+  const { data: session, refetch: refetchSession } = authClient.useSession();
 
   const user = session?.user;
   // console.log("User in Navbar:", user);
+
+  useEffect(() => {
+  const handleSessionChange = () => {
+    refetchSession();
+  };
+
+  window.addEventListener('session-updated', handleSessionChange);
+  
+  return () => {
+    window.removeEventListener('session-updated', handleSessionChange);
+  };
+}, [refetchSession]);
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -59,7 +71,7 @@ const Navbar = () => {
                   <Avatar size="sm">
                     <Avatar.Image
                       alt="User"
-                      src={user?.photoUrl}
+                      src={user?.photoUrl || null}
                     />
                     <Avatar.Fallback delayMs={600}>U</Avatar.Fallback>
                   </Avatar>
