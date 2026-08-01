@@ -156,8 +156,8 @@ const FindDoctorsPage = () => {
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredDoctors.map((doc) => (
               <Link
-                key={doc._id}
-                href={`/doctors/${doc._id}`}
+                key={doc.userId}
+                href={`/doctors/${doc.userId}`}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="relative aspect-4/3 w-full overflow-hidden bg-[#F1F5F9]">
