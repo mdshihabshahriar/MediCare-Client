@@ -9,6 +9,7 @@ import { redirect } from "next/navigation";
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const session = authClient.useSession().data;
 
@@ -35,7 +36,7 @@ const LoginPage = () => {
     }
     if(error)
     {
-      alert(error.message)
+      setErrorMessage(error.message || "Your account has been suspended. Please contact support.");
     }
 
     setIsSubmitting(false);
@@ -89,6 +90,17 @@ const LoginPage = () => {
               Sign up
             </Link>
           </p>
+
+          {errorMessage && (
+            <div className="mt-5 flex items-start gap-2.5 rounded-xl border border-[#FECACA] bg-[#FEF2F2] px-4 py-3 text-sm text-[#B91C1C]">
+              <svg className="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 8v4" />
+                <path d="M12 16h.01" />
+              </svg>
+              {errorMessage}
+            </div>
+          )}
 
           {/* Google login */}
           <button

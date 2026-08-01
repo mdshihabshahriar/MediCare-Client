@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
 const client = new MongoClient(process.env.MONGODB_URI);
@@ -18,7 +18,7 @@ export const auth = betterAuth({
         type: "string",
         required: true,
         defaultValue: "patient",
-        input: true, // REQUIRED — lets the client set this on sign up
+        input: true, 
       },
       gender: {
         type: "string",
@@ -30,12 +30,39 @@ export const auth = betterAuth({
         required: false,
         input: true,
       },
-       verificationStatus: {
+      verificationStatus: {
         type: "string",
         required: false,
         defaultValue: "pending",
         input: false,
-       }
+      },
+      status: {
+        type: "string",
+        required: false,
+        defaultValue: "active",
+        input: false, 
+      },
     },
-}
+  },
+
+  databaseHooks: {
+    session: {
+      create: {
+        before: async (session) => {
+          const user = await db.collection("user").findOne(
+            { _id: new ObjectId(session.userId) },
+            { projection: { status: 1 } }
+          );
+
+          if (user?.status === "suspended") {
+            throw new APIError("FORBIDDEN", {
+              message: "Your account has been suspended. Please contact support.",
+            });
+          }
+
+          return { data: session };
+        },
+      },
+    },
+  },
 });
