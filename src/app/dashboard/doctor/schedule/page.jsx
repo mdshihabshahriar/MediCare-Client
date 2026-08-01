@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextField, Label, Input, Button } from "@heroui/react";
+import { authClient } from "@/lib/auth-client";
 
-const initialSlots = [
-  { id: "1", day: "Sunday", startTime: "09:00", endTime: "13:00" },
-  { id: "2", day: "Monday", startTime: "09:00", endTime: "13:00" },
-  { id: "3", day: "Monday", startTime: "17:00", endTime: "20:00" },
-  { id: "4", day: "Wednesday", startTime: "10:00", endTime: "14:00" },
+const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
-const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function Modal({ title, onClose, children }) {
   return (
@@ -86,12 +89,34 @@ function ScheduleForm({ initial, onSubmit, onCancel }) {
 }
 
 export default function ManageSchedule() {
-  const [slots, setSlots] = useState(initialSlots);
+  const [slots, setSlots] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const { data: session } = authClient.useSession();
 
-  const handleAdd = (e) => {
+  useEffect(() => {
+    loadSchedules();
+  }, []);
+
+  const loadSchedules = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/schedules/${session.user.id}`
+    );
+
+    const data = await res.json();
+    setSlots(data);
+  };
+
+  const formatTime = (time) => {
+    return new Date(`1970-01-01T${time}`).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const handleAdd = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const newSlot = {
@@ -100,12 +125,25 @@ export default function ManageSchedule() {
       startTime: formData.get("startTime"),
       endTime: formData.get("endTime"),
     };
-    // TODO: POST `newSlot` to your API.
-    setSlots((prev) => [...prev, newSlot]);
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schedules`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        doctorId: session.user.id,
+        day: formData.get("day"),
+        startTime: formData.get("startTime"),
+        endTime: formData.get("endTime"),
+      }),
+    });
+
+    await loadSchedules();
+    setIsAdding(false);
     setIsAdding(false);
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const updated = {
@@ -113,18 +151,34 @@ export default function ManageSchedule() {
       startTime: formData.get("startTime"),
       endTime: formData.get("endTime"),
     };
-    // TODO: PATCH the slot on your API.
-    setSlots((prev) => prev.map((s) => (s.id === editTarget.id ? { ...s, ...updated } : s)));
+
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/schedules/${editTarget._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updated),
+      }
+    );
+
+    await loadSchedules();
     setEditTarget(null);
   };
 
-  const handleDelete = () => {
-    // TODO: DELETE the slot on your API.
-    setSlots((prev) => prev.filter((s) => s.id !== deleteTarget.id));
+  const handleDelete = async () => {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/schedules/${deleteTarget._id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    await loadSchedules();
     setDeleteTarget(null);
   };
 
-  // Group slots by day for a cleaner weekly view
   const grouped = days
     .map((day) => ({ day, slots: slots.filter((s) => s.day === day) }))
     .filter((group) => group.slots.length > 0);
@@ -161,13 +215,13 @@ export default function ManageSchedule() {
               <p className="text-sm font-bold text-[#0F172A]">{group.day}</p>
               <div className="mt-3 flex flex-col divide-y divide-[#E2E8F0]">
                 {group.slots.map((slot) => (
-                  <div key={slot.id} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
+                  <div key={slot._id} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
                     <span className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-[#2563EB]">
                       <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="9" />
                         <path d="M12 7v5l3 3" />
                       </svg>
-                      {slot.startTime} – {slot.endTime}
+                      {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
                     </span>
                     <div className="flex items-center gap-2">
                       <button
