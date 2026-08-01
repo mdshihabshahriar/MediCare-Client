@@ -11,6 +11,7 @@ const specialties = [
   "Orthopedics",
   "Pediatrics",
   "Dermatology",
+  "Gynecology"
 ];
 
 const emptyProfile = {
@@ -20,7 +21,7 @@ const emptyProfile = {
   qualifications: "",
   consultationFee: "",
   hospitalName: "",
-  availableSlots: [],
+  // availableSlots: [],
 };
 
 async function uploadPhotoAndGetUrl(file) {
@@ -51,8 +52,8 @@ export default function DoctorProfileManagement() {
   const [profile, setProfile] = useState(null); 
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
-  const [slots, setSlots] = useState([]);
-  const [newSlot, setNewSlot] = useState("");
+  // const [slots, setSlots] = useState([]);
+  // const [newSlot, setNewSlot] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -69,7 +70,7 @@ export default function DoctorProfileManagement() {
 
         setProfile(data);
         setPhotoPreview(data.photoUrl || null);
-        setSlots(data.availableSlots || []);
+        // setSlots(data.availableSlots || []);
       } catch (err) {
         console.error("Failed to load doctor profile:", err);
         setProfile(emptyProfile);
@@ -86,15 +87,15 @@ export default function DoctorProfileManagement() {
     setPhotoPreview(URL.createObjectURL(file));
   };
 
-  const addSlot = () => {
-    if (!newSlot.trim()) return;
-    setSlots((prev) => [...prev, newSlot.trim()]);
-    setNewSlot("");
-  };
+  // const addSlot = () => {
+  //   if (!newSlot.trim()) return;
+  //   setSlots((prev) => [...prev, newSlot.trim()]);
+  //   setNewSlot("");
+  // };
 
-  const removeSlot = (index) => {
-    setSlots((prev) => prev.filter((_, i) => i !== index));
-  };
+  // const removeSlot = (index) => {
+  //   setSlots((prev) => prev.filter((_, i) => i !== index));
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -117,7 +118,7 @@ export default function DoctorProfileManagement() {
       qualifications: formData.get("qualifications"),
       consultationFee: Number(formData.get("consultationFee")),
       hospitalName: formData.get("hospitalName"),
-      availableSlots: slots,
+      // availableSlots: slots,
     };
 
     try {

@@ -1,9 +1,12 @@
 "use client";
 
-const stats = [
+import { useEffect, useState } from "react";
+import { formatTimeAgo } from "@/lib/formatTimeAgo";
+
+const statConfig = [
   {
+    key: "totalUsers",
     label: "Total Users",
-    value: "24,180",
     bg: "bg-[#DBEAFE]",
     iconColor: "text-[#1D4ED8]",
     icon: (
@@ -16,8 +19,8 @@ const stats = [
     ),
   },
   {
+    key: "totalDoctors",
     label: "Total Doctors",
-    value: "512",
     bg: "bg-[#DCFCE7]",
     iconColor: "text-[#15803D]",
     icon: (
@@ -28,22 +31,20 @@ const stats = [
     ),
   },
   {
-    label: "Total Appointments",
-    value: "58,940",
+    key: "totalPatients",
+    label: "Total Patients",
     bg: "bg-[#EDE9FE]",
     iconColor: "text-[#7E22CE]",
     icon: (
       <>
-        <rect x="3" y="4.5" width="18" height="16" rx="2" />
-        <path d="M16 2.5v4" />
-        <path d="M8 2.5v4" />
-        <path d="M3 9.5h18" />
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" />
       </>
     ),
   },
   {
+    key: "pendingVerifications",
     label: "Pending Verifications",
-    value: "9",
     bg: "bg-[#FEF3C7]",
     iconColor: "text-[#B45309]",
     icon: (
@@ -56,14 +57,37 @@ const stats = [
   },
 ];
 
-const recentActivity = [
-  { text: "Dr. Nusrat Jahan requested doctor verification", time: "12 minutes ago" },
-  { text: "New user Rafiq Ahmed registered as a patient", time: "48 minutes ago" },
-  { text: "Payment of ৳1,800 recorded for appointment #5821", time: "1 hour ago" },
-  { text: "Dr. Omar Siddique's account was suspended", time: "3 hours ago" },
-];
-
 export default function AdminOverview() {
+  const [stats, setStats] = useState(null); // null = loading
+  const [recentActivity, setRecentActivity] = useState(null); // null = loading
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/stats`);
+        const data = await res.json();
+        setStats(data);
+      } catch (err) {
+        console.error("Failed to load admin stats:", err);
+        setStats({ totalUsers: 0, totalDoctors: 0, totalPatients: 0, pendingVerifications: 0 });
+      }
+    };
+
+    const loadActivity = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/recent-activity`);
+        const data = await res.json();
+        setRecentActivity(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to load recent activity:", err);
+        setRecentActivity([]);
+      }
+    };
+
+    loadStats();
+    loadActivity();
+  }, []);
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -74,14 +98,16 @@ export default function AdminOverview() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <div key={stat.label} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
+        {statConfig.map((stat) => (
+          <div key={stat.key} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
             <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
               <svg className={`h-5 w-5 ${stat.iconColor}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 {stat.icon}
               </svg>
             </span>
-            <p className="mt-4 text-2xl font-extrabold text-[#0F172A]">{stat.value}</p>
+            <p className="mt-4 text-2xl font-extrabold text-[#0F172A]">
+              {stats === null ? "—" : stats[stat.key]}
+            </p>
             <p className="mt-1 text-xs font-medium text-[#64748B]">{stat.label}</p>
           </div>
         ))}
@@ -90,12 +116,18 @@ export default function AdminOverview() {
       <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
         <h2 className="text-base font-bold text-[#0F172A]">Recent Activity</h2>
         <div className="mt-5 flex flex-col divide-y divide-[#E2E8F0]">
-          {recentActivity.map((item, i) => (
-            <div key={i} className="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0">
-              <p className="text-sm text-[#334155]">{item.text}</p>
-              <p className="shrink-0 text-xs text-[#94A3B8]">{item.time}</p>
-            </div>
-          ))}
+          {recentActivity === null ? (
+            <p className="py-3.5 text-sm text-[#94A3B8]">Loading…</p>
+          ) : recentActivity.length === 0 ? (
+            <p className="py-3.5 text-sm text-[#94A3B8]">No recent activity yet.</p>
+          ) : (
+            recentActivity.map((item, i) => (
+              <div key={i} className="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0">
+                <p className="text-sm text-[#334155]">{item.text}</p>
+                <p className="shrink-0 text-xs text-[#94A3B8]">{formatTimeAgo(item.createdAt)}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
