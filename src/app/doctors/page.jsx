@@ -1,9 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import DoctorCard from "@/components/DoctorCard";
 
 const specialtyOptions = [
   "All Specializations",
@@ -12,6 +11,7 @@ const specialtyOptions = [
   "Orthopedics",
   "Pediatrics",
   "Dermatology",
+  "Gynecology",
 ];
 
 const specialtyBadgeStyles = {
@@ -20,86 +20,34 @@ const specialtyBadgeStyles = {
   Orthopedics: "bg-[#DCFCE7] text-[#166534]",
   Pediatrics: "bg-[#FEF3C7] text-[#92400E]",
   Dermatology: "bg-[#FCE7F3] text-[#9D174D]",
+  Gynecology: "bg-[#E0F2FE] text-[#0369A1]",
 };
 
-const doctors = [
-  {
-    id: "1",
-    name: "Dr. Amanda Ross",
-    photo: "https://i.pravatar.cc/300?img=44",
-    specialty: "Cardiology",
-    qualifications: "MBBS, FCPS (Cardiology), Fellowship in Interventional Cardiology",
-    experience: 12,
-    fee: 1500,
-    hospital: "Dhaka Medical College Hospital",
-    rating: 4.9,
-  },
-  {
-    id: "2",
-    name: "Dr. Michael Chen",
-    photo: "https://i.pravatar.cc/300?img=12",
-    specialty: "Neurology",
-    qualifications: "MBBS, MD (Neurology)",
-    experience: 9,
-    fee: 1800,
-    hospital: "Square Hospital",
-    rating: 4.8,
-  },
-  {
-    id: "3",
-    name: "Dr. James Wilson",
-    photo: "https://i.pravatar.cc/300?img=53",
-    specialty: "Orthopedics",
-    qualifications: "MBBS, MS (Orthopedics), Fellowship in Joint Replacement",
-    experience: 15,
-    fee: 2000,
-    hospital: "United Hospital",
-    rating: 5.0,
-  },
-  {
-    id: "4",
-    name: "Dr. Amara Rahman",
-    photo: "https://i.pravatar.cc/300?img=32",
-    specialty: "Pediatrics",
-    qualifications: "MBBS, DCH, FCPS (Pediatrics)",
-    experience: 7,
-    fee: 1000,
-    hospital: "Bangladesh Shishu Hospital",
-    rating: 4.7,
-  },
-  {
-    id: "5",
-    name: "Dr. Nusrat Jahan",
-    photo: "https://i.pravatar.cc/300?img=28",
-    specialty: "Dermatology",
-    qualifications: "MBBS, DDV, Diploma in Cosmetic Dermatology",
-    experience: 6,
-    fee: 1200,
-    hospital: "Apollo Hospitals Dhaka",
-    rating: 4.6,
-  },
-  {
-    id: "6",
-    name: "Dr. Tanvir Hasan",
-    photo: "https://i.pravatar.cc/300?img=13",
-    specialty: "Cardiology",
-    qualifications: "MBBS, MD (Cardiology)",
-    experience: 10,
-    fee: 1400,
-    hospital: "Evercare Hospital Dhaka",
-    rating: 4.5,
-  },
-];
-
 const sortOptions = [
-  { value: "fee", label: "Sort: Clinic Fee (Low to High)" },
+  { value: "feeLow", label: "Sort: Clinic Fee (Low to High)" },
+  { value: "feeHigh", label: "Sort: Clinic Fee (High to Low)" },
+  { value: "experience", label: "Experience (High to Low)" },
   { value: "quality", label: "Sort: Quality (Top Rated)" },
 ];
 
 const FindDoctorsPage = () => {
   const [search, setSearch] = useState("");
   const [specialty, setSpecialty] = useState("All Specializations");
-  const [sortBy, setSortBy] = useState("quality");
+  const [sortBy, setSortBy] = useState("feeLow");
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+  const loadDoctors = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/doctors?verifiedOnly=true`
+    );
+
+    const data = await res.json();
+    setDoctors(data);
+  };
+
+  loadDoctors();
+}, []);
 
   const filteredDoctors = useMemo(() => {
     let result = doctors.filter((doc) => {
@@ -109,17 +57,28 @@ const FindDoctorsPage = () => {
       return matchesSearch && matchesSpecialty;
     });
 
-    result = [...result].sort((a, b) =>
-      sortBy === "fee" ? a.fee - b.fee : b.rating - a.rating
-    );
+  result = [...result].sort((a, b) => {
+    if (sortBy === "feeLow") {
+      return Number(a.consultationFee) - Number(b.consultationFee);
+    }
+
+    if (sortBy === "feeHigh") {
+      return Number(b.consultationFee) - Number(a.consultationFee);
+    }
+
+    if (sortBy === "experience") {
+      return Number(b.experience) - Number(a.experience);
+    }
+
+    return Number(b.rating || 0) - Number(a.rating || 0);
+  });
 
     return result;
-  }, [search, specialty, sortBy]);
+  }, [doctors,search, specialty, sortBy]);
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Page header */}
         <div className="max-w-2xl">
           <h1 className="text-3xl font-extrabold text-[#0F172A] sm:text-4xl">Find Doctors</h1>
           <p className="mt-2 text-sm text-[#64748B] sm:text-base">
@@ -127,10 +86,8 @@ const FindDoctorsPage = () => {
           </p>
         </div>
 
-        {/* Filter bar */}
         <div className="sticky top-16 z-30 mt-8 rounded-2xl border border-[#E2E8F0] bg-white/90 p-4 shadow-sm backdrop-blur-md sm:p-5">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-            {/* Search */}
             <div className="relative flex-1">
               <svg
                 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]"
@@ -151,8 +108,6 @@ const FindDoctorsPage = () => {
                 className="w-full rounded-xl border border-[#E2E8F0] bg-white py-2.5 pl-10 pr-4 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
               />
             </div>
-
-            {/* Specialty filter */}
             <div className="relative lg:w-64">
               <select
                 value={specialty}
@@ -169,8 +124,6 @@ const FindDoctorsPage = () => {
                 <path d="m6 9 6 6 6-6" />
               </svg>
             </div>
-
-            {/* Sort */}
             <div className="relative lg:w-64">
               <select
                 value={sortBy}
@@ -189,13 +142,9 @@ const FindDoctorsPage = () => {
             </div>
           </div>
         </div>
-
-        {/* Results count */}
         <p className="mt-6 text-sm text-[#64748B]">
           {filteredDoctors.length} doctor{filteredDoctors.length !== 1 ? "s" : ""} found
         </p>
-
-        {/* Doctor grid */}
         {filteredDoctors.length === 0 ? (
           <div className="mt-6 rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-14 text-center">
             <p className="text-sm font-semibold text-[#0F172A]">No doctors found</p>
@@ -207,13 +156,13 @@ const FindDoctorsPage = () => {
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredDoctors.map((doc) => (
               <Link
-                key={doc.id}
-                href={`/doctors/${doc.id}`}
+                key={doc._id}
+                href={`/doctors/${doc._id}`}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="relative aspect-4/3 w-full overflow-hidden bg-[#F1F5F9]">
                   <Image
-                    src={doc.photo}
+                    src={doc.photoUrl}
                     alt={doc.name}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -223,8 +172,6 @@ const FindDoctorsPage = () => {
                     {doc.rating}
                   </div>
                 </div>
-
-                {/* Info */}
                 <div className="flex flex-1 flex-col p-5">
                   <span
                     className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${specialtyBadgeStyles[doc.specialty]}`}
@@ -254,13 +201,14 @@ const FindDoctorsPage = () => {
                       <path d="M9 12v.01" />
                       <path d="M9 15v.01" />
                     </svg>
-                    <span className="line-clamp-1">{doc.hospital}</span>
+                    <span className="line-clamp-1">{doc.hospitalName}</span>
                   </div>
 
                   <div className="mt-4 flex items-center justify-between border-t border-[#E2E8F0] pt-4">
                     <div>
                       <p className="text-xs text-[#94A3B8]">Consultation Fee</p>
-                      <p className="text-base font-bold text-[#2563EB]">৳{doc.fee}</p>
+                      <p className="text-base font-bold text-[#2563EB]">${doc.consultationFee
+                      }</p>
                     </div>
                     <span className="rounded-full bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white transition-colors group-hover:bg-[#1D4ED8]">
                       Book Now
