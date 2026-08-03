@@ -270,7 +270,7 @@ const RegisterPage = () => {
               <div className="mt-2 grid grid-cols-2 gap-3">
                 <Radio
                   value="patient"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-4 py-3 text-sm font-semibold text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-8 py-4 text-sm font-semibold text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -279,7 +279,7 @@ const RegisterPage = () => {
                 </Radio>
                 <Radio
                   value="doctor"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-4 py-3 text-sm font-semibold text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-8 py-4 text-sm font-semibold text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -309,7 +309,7 @@ const RegisterPage = () => {
               <div className="mt-2 grid grid-cols-3 gap-3">
                 <Radio
                   value="male"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-3 py-2.5 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-7 py-3 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -318,7 +318,7 @@ const RegisterPage = () => {
                 </Radio>
                 <Radio
                   value="female"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-3 py-2.5 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-7 py-3 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -327,7 +327,7 @@ const RegisterPage = () => {
                 </Radio>
                 <Radio
                   value="other"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-3 py-2.5 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-7 py-3 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
