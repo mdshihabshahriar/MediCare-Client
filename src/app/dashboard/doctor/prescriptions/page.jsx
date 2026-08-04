@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 
@@ -99,13 +98,12 @@ function PrescriptionForm({ initial, onSubmit, onCancel }) {
 
   return (
     <form onSubmit={(e) => onSubmit(e, medicines)} className="flex flex-col gap-5">
-      <TextField name="patient" defaultValue={initial?.patient} isRequired>
-        <Label className="text-sm font-medium text-[#334155]">Patient Name</Label>
-        <Input
-          readOnly={Boolean(initial?.patient)}
-          className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 read-only:bg-[#F8FAFC]"
-        />
-      </TextField>
+      <div>
+        <Label className="text-sm font-medium text-[#334155]">Patient</Label>
+        <div className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2.5 text-sm font-semibold text-[#0F172A]">
+          {initial?.patient}
+        </div>
+      </div>
 
       <TextField name="diagnosis" defaultValue={initial?.diagnosis} isRequired>
         <Label className="text-sm font-medium text-[#334155]">Diagnosis</Label>
@@ -127,7 +125,7 @@ function PrescriptionForm({ initial, onSubmit, onCancel }) {
           Cancel
         </button>
         <Button type="submit" className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-sm font-bold text-white hover:bg-[#1D4ED8]">
-          {initial ? "Save Changes" : "Create Prescription"}
+          Save Changes
         </Button>
       </div>
     </form>
@@ -135,15 +133,10 @@ function PrescriptionForm({ initial, onSubmit, onCancel }) {
 }
 
 export default function PrescriptionManagement() {
-  const searchParams = useSearchParams();
-  const appointmentId = searchParams.get("appointmentId");
-
   const { data: session, isPending: isSessionPending } = authClient.useSession();
 
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [appointment, setAppointment] = useState(null); 
-  const [isCreating, setIsCreating] = useState(false);
   const [editTarget, setEditTarget] = useState(null);
 
   useEffect(() => {
@@ -167,58 +160,11 @@ export default function PrescriptionManagement() {
     loadPrescriptions();
   }, [session]);
 
-  useEffect(() => {
-    if (!appointmentId) return;
-
-    const loadAppointment = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${appointmentId}`);
-        const data = await res.json();
-        setAppointment(data);
-        setIsCreating(true);
-      } catch (err) {
-        console.error("Failed to load appointment:", err);
-      }
-    };
-
-    loadAppointment();
-  }, [appointmentId]);
-
-  const handleCreate = async (e, medicines) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-
-    const newPrescription = {
-      doctorId: session.user.id,
-      patientId: appointment?.patientId || null,
-      appointmentId: appointmentId || null,
-      patient: formData.get("patient"),
-      diagnosis: formData.get("diagnosis"),
-      advice: formData.get("advice"),
-      medicines: medicines.filter((m) => m.name.trim() !== ""),
-    };
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prescriptions`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newPrescription),
-    });
-    const result = await res.json();
-
-    setPrescriptions((prev) => [
-      { ...newPrescription, _id: result.insertedId, createdAt: new Date() },
-      ...prev,
-    ]);
-    setIsCreating(false);
-    setAppointment(null);
-  };
-
   const handleUpdate = async (e, medicines) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
     const updated = {
-      patient: formData.get("patient"),
       diagnosis: formData.get("diagnosis"),
       advice: formData.get("advice"),
       medicines: medicines.filter((m) => m.name.trim() !== ""),
@@ -246,40 +192,18 @@ export default function PrescriptionManagement() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Prescription Management</h1>
-          <p className="mt-1 text-sm text-[#64748B]">
-            Create and update prescriptions for your patients.
-          </p>
-        </div>
-        <button
-          onClick={() => setIsCreating(true)}
-          className="inline-flex w-fit items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8]"
-        >
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 5v14" />
-            <path d="M5 12h14" />
-          </svg>
-          Create Prescription
-        </button>
+      <div>
+        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Prescription Management</h1>
+        <p className="mt-1 text-sm text-[#64748B]">
+          Update prescriptions you&apos;ve issued. New prescriptions are
+          created from a completed appointment — see Appointment Requests.
+        </p>
       </div>
-
-      {appointmentId && appointment && (
-        <div className="flex items-center gap-2 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 text-sm text-[#1D4ED8]">
-          <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 8v4" />
-            <path d="M12 16h.01" />
-          </svg>
-          Creating a prescription for {appointment.patient?.name}&apos;s completed appointment.
-        </div>
-      )}
 
       <div className="flex flex-col gap-4">
         {prescriptions.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
-            No prescriptions yet.
+            No prescriptions yet. Mark an appointment as completed to write your first one.
           </div>
         ) : (
           prescriptions.map((rx) => (
@@ -330,25 +254,6 @@ export default function PrescriptionManagement() {
           ))
         )}
       </div>
-
-      {isCreating && (
-        <Modal
-          title="Create Prescription"
-          onClose={() => {
-            setIsCreating(false);
-            setAppointment(null);
-          }}
-        >
-          <PrescriptionForm
-            initial={appointment ? { patient: appointment.patient?.name } : null}
-            onSubmit={handleCreate}
-            onCancel={() => {
-              setIsCreating(false);
-              setAppointment(null);
-            }}
-          />
-        </Modal>
-      )}
 
       {editTarget && (
         <Modal title="Update Prescription" onClose={() => setEditTarget(null)}>
