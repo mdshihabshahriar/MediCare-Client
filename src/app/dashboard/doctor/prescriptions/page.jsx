@@ -1,22 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
-
-const initialPrescriptions = [
-  {
-    id: "1",
-    patient: "David Okafor",
-    date: "2026-07-25",
-    diagnosis: "Seasonal allergic rhinitis",
-    medicines: [
-      { name: "Cetirizine 10mg", dosage: "1 tablet at night", duration: "7 days" },
-      { name: "Fluticasone Nasal Spray", dosage: "2 sprays each nostril", duration: "14 days" },
-    ],
-    advice: "Avoid dust exposure. Return if symptoms persist beyond 2 weeks.",
-  },
-];
+import { authClient } from "@/lib/auth-client";
 
 function Modal({ title, onClose, children }) {
   return (
@@ -114,7 +101,10 @@ function PrescriptionForm({ initial, onSubmit, onCancel }) {
     <form onSubmit={(e) => onSubmit(e, medicines)} className="flex flex-col gap-5">
       <TextField name="patient" defaultValue={initial?.patient} isRequired>
         <Label className="text-sm font-medium text-[#334155]">Patient Name</Label>
-        <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+        <Input
+          readOnly={Boolean(initial?.patient)}
+          className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20 read-only:bg-[#F8FAFC]"
+        />
       </TextField>
 
       <TextField name="diagnosis" defaultValue={initial?.diagnosis} isRequired>
@@ -128,17 +118,12 @@ function PrescriptionForm({ initial, onSubmit, onCancel }) {
         <Label className="text-sm font-medium text-[#334155]">Advice / Notes</Label>
         <TextArea
           rows={3}
-          defaultValue={initial?.advice}
           className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
         />
       </TextField>
 
       <div className="mt-1 flex gap-3">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]"
-        >
+        <button type="button" onClick={onCancel} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">
           Cancel
         </button>
         <Button type="submit" className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-sm font-bold text-white hover:bg-[#1D4ED8]">
@@ -153,41 +138,111 @@ export default function PrescriptionManagement() {
   const searchParams = useSearchParams();
   const appointmentId = searchParams.get("appointmentId");
 
-  const [prescriptions, setPrescriptions] = useState(initialPrescriptions);
-  // Auto-open the create form if we arrived here from "Mark Completed".
-  const [isCreating, setIsCreating] = useState(Boolean(appointmentId));
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
+
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [appointment, setAppointment] = useState(null); 
+  const [isCreating, setIsCreating] = useState(false);
   const [editTarget, setEditTarget] = useState(null);
 
-  const handleCreate = (e, medicines) => {
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    const loadPrescriptions = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/prescriptions/doctor/${session.user.id}`
+        );
+        const data = await res.json();
+        setPrescriptions(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to load prescriptions:", err);
+        setPrescriptions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPrescriptions();
+  }, [session]);
+
+  useEffect(() => {
+    if (!appointmentId) return;
+
+    const loadAppointment = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${appointmentId}`);
+        const data = await res.json();
+        setAppointment(data);
+        setIsCreating(true);
+      } catch (err) {
+        console.error("Failed to load appointment:", err);
+      }
+    };
+
+    loadAppointment();
+  }, [appointmentId]);
+
+  const handleCreate = async (e, medicines) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
     const newPrescription = {
-      id: crypto.randomUUID(),
+      doctorId: session.user.id,
+      patientId: appointment?.patientId || null,
+      appointmentId: appointmentId || null,
       patient: formData.get("patient"),
       diagnosis: formData.get("diagnosis"),
       advice: formData.get("advice"),
       medicines: medicines.filter((m) => m.name.trim() !== ""),
-      date: new Date().toISOString().slice(0, 10),
-      // appointmentId, // TODO: link back to the appointment on your API
     };
-    // TODO: POST `newPrescription` (with appointmentId) to your API.
-    setPrescriptions((prev) => [newPrescription, ...prev]);
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prescriptions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newPrescription),
+    });
+    const result = await res.json();
+
+    setPrescriptions((prev) => [
+      { ...newPrescription, _id: result.insertedId, createdAt: new Date() },
+      ...prev,
+    ]);
     setIsCreating(false);
+    setAppointment(null);
   };
 
-  const handleUpdate = (e, medicines) => {
+  const handleUpdate = async (e, medicines) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+
     const updated = {
       patient: formData.get("patient"),
       diagnosis: formData.get("diagnosis"),
       advice: formData.get("advice"),
       medicines: medicines.filter((m) => m.name.trim() !== ""),
     };
-    // TODO: PATCH the prescription on your API.
-    setPrescriptions((prev) => prev.map((p) => (p.id === editTarget.id ? { ...p, ...updated } : p)));
+
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prescriptions/${editTarget._id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated),
+    });
+
+    setPrescriptions((prev) =>
+      prev.map((p) => (p._id === editTarget._id ? { ...p, ...updated } : p))
+    );
     setEditTarget(null);
   };
+
+  if (isSessionPending || loading) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -210,14 +265,14 @@ export default function PrescriptionManagement() {
         </button>
       </div>
 
-      {appointmentId && (
+      {appointmentId && appointment && (
         <div className="flex items-center gap-2 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 text-sm text-[#1D4ED8]">
           <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="9" />
             <path d="M12 8v4" />
             <path d="M12 16h.01" />
           </svg>
-          Creating a prescription for appointment #{appointmentId}.
+          Creating a prescription for {appointment.patient?.name}&apos;s completed appointment.
         </div>
       )}
 
@@ -228,11 +283,13 @@ export default function PrescriptionManagement() {
           </div>
         ) : (
           prescriptions.map((rx) => (
-            <div key={rx.id} className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+            <div key={rx._id} className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-sm font-bold text-[#0F172A]">{rx.patient}</p>
-                  <p className="text-xs text-[#94A3B8]">{rx.diagnosis} · {rx.date}</p>
+                  <p className="text-xs text-[#94A3B8]">
+                    {rx.diagnosis} · {rx.createdAt ? new Date(rx.createdAt).toLocaleDateString("en-GB") : ""}
+                  </p>
                 </div>
                 <button
                   onClick={() => setEditTarget(rx)}
@@ -252,7 +309,7 @@ export default function PrescriptionManagement() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E2E8F0]">
-                    {rx.medicines.map((med, i) => (
+                    {(rx.medicines || []).map((med, i) => (
                       <tr key={i}>
                         <td className="px-4 py-2 font-medium text-[#0F172A]">{med.name}</td>
                         <td className="px-4 py-2 text-[#334155]">{med.dosage}</td>
@@ -275,8 +332,21 @@ export default function PrescriptionManagement() {
       </div>
 
       {isCreating && (
-        <Modal title="Create Prescription" onClose={() => setIsCreating(false)}>
-          <PrescriptionForm onSubmit={handleCreate} onCancel={() => setIsCreating(false)} />
+        <Modal
+          title="Create Prescription"
+          onClose={() => {
+            setIsCreating(false);
+            setAppointment(null);
+          }}
+        >
+          <PrescriptionForm
+            initial={appointment ? { patient: appointment.patient?.name } : null}
+            onSubmit={handleCreate}
+            onCancel={() => {
+              setIsCreating(false);
+              setAppointment(null);
+            }}
+          />
         </Modal>
       )}
 
