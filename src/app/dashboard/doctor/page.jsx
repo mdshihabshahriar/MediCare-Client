@@ -1,13 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 
-const stats = [
+const statConfig = [
   {
+    key: "totalPatients",
     label: "Total Patients",
-    value: "284",
     bg: "bg-[#DBEAFE]",
     iconColor: "text-[#1D4ED8]",
     icon: (
@@ -20,8 +21,8 @@ const stats = [
     ),
   },
   {
-    label: "Today's Appointments",
-    value: "6",
+    key: "upcomingAppointments",
+    label: "Upcoming Appointments",
     bg: "bg-[#DCFCE7]",
     iconColor: "text-[#15803D]",
     icon: (
@@ -34,8 +35,8 @@ const stats = [
     ),
   },
   {
+    key: "reviewsReceived",
     label: "Reviews Received",
-    value: "132",
     bg: "bg-[#FEF3C7]",
     iconColor: "text-[#B45309]",
     icon: (
@@ -44,32 +45,73 @@ const stats = [
   },
 ];
 
-const todaysAppointments = [
-  {
-    id: "1",
-    patient: "Rafiq Ahmed",
-    reason: "Follow-up consultation",
-    time: "10:00 AM",
-    photo: "https://i.pravatar.cc/150?img=12",
-  },
-  {
-    id: "2",
-    patient: "Fatima Noor",
-    reason: "Chest pain evaluation",
-    time: "11:30 AM",
-    photo: "https://i.pravatar.cc/150?img=32",
-  },
-  {
-    id: "3",
-    patient: "David Okafor",
-    reason: "Routine checkup",
-    time: "2:15 PM",
-    photo: "https://i.pravatar.cc/150?img=15",
-  },
-];
-
 export default function DoctorOverview() {
-  const {data: session} = authClient.useSession();
+  const { data: session, isPending: isSessionPending } =
+    authClient.useSession();
+
+  const [stats, setStats] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+  const [loadingAppointments, setLoadingAppointments] = useState(true);
+
+  useEffect(() => {
+    if (!session?.user?.id) return;
+
+    const loadStats = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}/stats`,
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        setStats(data);
+      } catch (err) {
+        console.error("Failed to load doctor stats:", err);
+        setStats({
+          totalPatients: 0,
+          upcomingAppointments: 0,
+          reviewsReceived: 0,
+        });
+      }
+    };
+
+    const loadAppointments = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/appointments/doctor/${session.user.id}`,
+        );
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : [];
+        // Only show accepted (upcoming) visits here, newest first, capped to 5.
+        setAppointments(
+          list
+            .filter((a) => a.status === "accepted")
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+            .slice(0, 5),
+        );
+      } catch (err) {
+        console.error("Failed to load appointments:", err);
+        setAppointments([]);
+      } finally {
+        setLoadingAppointments(false);
+      }
+    };
+
+    loadStats();
+    loadAppointments();
+  }, [session]);
+
+  if (isSessionPending) {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -82,40 +124,85 @@ export default function DoctorOverview() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {stats.map((stat) => (
-          <div key={stat.label} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
-            <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
-              <svg className={`h-5 w-5 ${stat.iconColor}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        {statConfig.map((stat) => (
+          <div
+            key={stat.key}
+            className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+          >
+            <span
+              className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}
+            >
+              <svg
+                className={`h-5 w-5 ${stat.iconColor}`}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 {stat.icon}
               </svg>
             </span>
-            <p className="mt-4 text-2xl font-extrabold text-[#0F172A]">{stat.value}</p>
-            <p className="mt-1 text-xs font-medium text-[#64748B]">{stat.label}</p>
+            <p className="mt-4 text-2xl font-extrabold text-[#0F172A]">
+              {stats === null ? "—" : stats[stat.key]}
+            </p>
+            <p className="mt-1 text-xs font-medium text-[#64748B]">
+              {stat.label}
+            </p>
           </div>
         ))}
       </div>
 
       <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-[#0F172A]">Today&apos;s Appointments</h2>
-          <Link href="/dashboard/doctor/requests" className="text-xs font-semibold text-[#2563EB]">
+          <h2 className="text-base font-bold text-[#0F172A]">
+            Upcoming Appointments
+          </h2>
+          <Link
+            href="/dashboard/doctor/requests"
+            className="text-xs font-semibold text-[#2563EB]"
+          >
             View all
           </Link>
         </div>
 
         <div className="mt-5 flex flex-col divide-y divide-[#E2E8F0]">
-          {todaysAppointments.map((apt) => (
-            <div key={apt.id} className="flex items-center gap-4 py-4 first:pt-0 last:pb-0">
-              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full">
-                <Image src={apt.photo} alt={apt.patient} fill className="object-cover" />
+          {loadingAppointments ? (
+            <p className="py-3.5 text-sm text-[#94A3B8]">Loading…</p>
+          ) : appointments.length === 0 ? (
+            <p className="py-3.5 text-sm text-[#94A3B8]">
+              No upcoming appointments right now.
+            </p>
+          ) : (
+            appointments.map((apt) => (
+              <div
+                key={apt._id}
+                className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
+              >
+                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
+                  <Image
+                    src={
+                      apt.patient?.photoUrl ||
+                      "https://i.pravatar.cc/150?u=" + apt.patientId
+                    }
+                    alt={apt.patient?.name || "Patient"}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-bold text-[#0F172A]">
+                    {apt.patient?.name}
+                  </p>
+                  <p className="text-xs text-[#94A3B8]">{apt.symptoms}</p>
+                </div>
+                <span className="shrink-0 rounded-full bg-[#DBEAFE] px-2.5 py-1 text-xs font-semibold text-[#1D4ED8]">
+                  {apt.status}
+                </span>
               </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold text-[#0F172A]">{apt.patient}</p>
-                <p className="text-xs text-[#94A3B8]">{apt.reason}</p>
-              </div>
-              <p className="shrink-0 text-xs font-semibold text-[#0F172A]">{apt.time}</p>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </div>
     </div>
