@@ -243,7 +243,7 @@ export default function DoctorOverview() {
               className="flex items-start gap-4 border-b py-4 last:border-none"
             >
               <Image
-                src={review.patientPhoto}
+                src={review.patientPhoto || "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"}
                 alt={review.patientName}
                 width={50}
                 height={50}
