@@ -43,6 +43,17 @@ const statConfig = [
       <path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.8-4.6 6.6-.9L12 2.5Z" />
     ),
   },
+  {
+    key: "averageRating",
+    label: "Average Rating",
+    bg: "bg-yellow-100",
+    iconColor: "text-yellow-600",
+    icon: (
+      <>
+        <path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.8-4.6 6.6-.9L12 2.5Z" />
+      </>
+    ),
+  },
 ];
 
 export default function DoctorOverview() {
@@ -52,6 +63,7 @@ export default function DoctorOverview() {
   const [stats, setStats] = useState(null);
   const [appointments, setAppointments] = useState([]);
   const [loadingAppointments, setLoadingAppointments] = useState(true);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     if (!session?.user?.id) return;
@@ -85,7 +97,6 @@ export default function DoctorOverview() {
         );
         const data = await res.json();
         const list = Array.isArray(data) ? data : [];
-        // Only show accepted (upcoming) visits here, newest first, capped to 5.
         setAppointments(
           list
             .filter((a) => a.status === "accepted")
@@ -100,8 +111,23 @@ export default function DoctorOverview() {
       }
     };
 
+    const loadReviews = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/reviews/doctor/${session.user.id}`,
+        );
+
+        const data = await res.json();
+
+        setReviews(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     loadStats();
     loadAppointments();
+    loadReviews();
   }, [session]);
 
   if (isSessionPending) {
@@ -123,7 +149,7 @@ export default function DoctorOverview() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         {statConfig.map((stat) => (
           <div
             key={stat.key}
@@ -204,6 +230,36 @@ export default function DoctorOverview() {
             ))
           )}
         </div>
+      </div>
+      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-bold mb-5">Recent Reviews</h2>
+
+        {reviews.length === 0 ? (
+          <p className="text-gray-500">No reviews yet.</p>
+        ) : (
+          reviews.map((review) => (
+            <div
+              key={review._id}
+              className="flex items-start gap-4 border-b py-4 last:border-none"
+            >
+              <Image
+                src={review.patientPhoto}
+                alt={review.patientName}
+                width={50}
+                height={50}
+                className="rounded-full"
+              />
+
+              <div className="flex-1">
+                <h3 className="font-semibold">{review.patientName}</h3>
+
+                <p className="text-yellow-500">{"⭐".repeat(review.rating)}</p>
+
+                <p className="text-gray-600 mt-1">{review.comment}</p>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
