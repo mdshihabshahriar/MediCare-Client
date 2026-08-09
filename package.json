@@ -12,12 +12,14 @@
     "@better-auth/mongo-adapter": "^1.6.23",
     "@heroui/react": "^3.2.2",
     "@heroui/styles": "^3.2.2",
+    "@stripe/stripe-js": "^9.13.0",
     "better-auth": "^1.6.23",
     "mongodb": "^7.5.0",
-    "next": "16.2.10",
+    "next": "^16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "recharts": "^3.10.0"
+    "recharts": "^3.10.0",
+    "stripe": "^22.4.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
