@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 const specialties = [
   "Cardiology",
@@ -130,6 +131,7 @@ export default function DoctorProfileManagement() {
           body: JSON.stringify(payload),
         }
       );
+      toast.success("Profile updated successfully");
 
       if (!res.ok) throw new Error("Failed to save profile");
 

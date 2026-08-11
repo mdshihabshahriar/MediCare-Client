@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TextField, Label, Input, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 const days = [
   "Sunday",
@@ -141,6 +142,7 @@ export default function ManageSchedule() {
     await loadSchedules();
     setIsAdding(false);
     setIsAdding(false);
+    toast.success("Schedule slot added successfully");
   };
 
   const handleUpdate = async (e) => {
@@ -165,6 +167,7 @@ export default function ManageSchedule() {
 
     await loadSchedules();
     setEditTarget(null);
+    toast.success("Schedule slot updated successfully");
   };
 
   const handleDelete = async () => {
@@ -177,6 +180,7 @@ export default function ManageSchedule() {
 
     await loadSchedules();
     setDeleteTarget(null);
+    toast.success("Schedule slot removed successfully");
   };
 
   const grouped = days
@@ -194,7 +198,7 @@ export default function ManageSchedule() {
         </div>
         <button
           onClick={() => setIsAdding(true)}
-          className="inline-flex w-fit items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8]"
+          className="inline-flex w-fit cursor-pointer items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8]"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 5v14" />

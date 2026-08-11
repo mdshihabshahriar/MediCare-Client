@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 const statusStyles = {
   pending: "bg-[#FEF3C7] text-[#B45309]",
@@ -34,10 +35,7 @@ function Modal({ title, onClose, children }) {
 
 export default function AppointmentRequests() {
   const router = useRouter();
-  // isPending: true while the session is still loading. This is the
-  // key fix — we never touch session.user.id until this is false AND
-  // session actually exists, which prevents "Cannot read properties
-  // of null (reading 'id')" on first render.
+
   const { data: session, isPending: isSessionPending } = authClient.useSession();
 
   const [requests, setRequests] = useState([]);
@@ -47,7 +45,6 @@ export default function AppointmentRequests() {
   const [completeTarget, setCompleteTarget] = useState(null);
 
   useEffect(() => {
-    // Guard: do nothing until we actually know who the doctor is.
     if (!session?.user?.id) return;
     loadRequests();
   }, [session]);
@@ -83,17 +80,17 @@ export default function AppointmentRequests() {
   const handleReject = async () => {
     await updateStatus(rejectTarget._id, "rejected");
     setRejectTarget(null);
+    toast.success("Appointment rejected successfully");
   };
 
   const handleMarkCompleted = async () => {
     const appointmentId = completeTarget._id;
     await updateStatus(appointmentId, "completed");
     setCompleteTarget(null);
+    toast.success("Appointment marked as completed");
     router.push(`/dashboard/doctor/prescriptions/new?appointmentId=${appointmentId}`);
   };
 
-  // Still loading the session, or loading the requests — show one
-  // consistent loading state instead of crashing on a null session.
   if (isSessionPending || loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">

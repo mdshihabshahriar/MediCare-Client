@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 function Modal({ title, onClose, children }) {
   return (
@@ -175,6 +176,7 @@ export default function PrescriptionManagement() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),
     });
+    toast.success("Prescription updated successfully");
 
     setPrescriptions((prev) =>
       prev.map((p) => (p._id === editTarget._id ? { ...p, ...updated } : p))

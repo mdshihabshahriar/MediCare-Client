@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 function MedicineRows({ medicines, setMedicines }) {
   const updateRow = (index, field, value) => {
@@ -118,6 +119,7 @@ export default function CreatePrescriptionPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newPrescription),
       });
+      toast.success("Prescription issued successfully");
 
       router.push("/dashboard/doctor/prescriptions");
     } catch (err) {

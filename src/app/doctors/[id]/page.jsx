@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 export default function DoctorDetailsPage() {
   const { id } = useParams();
@@ -20,9 +21,7 @@ export default function DoctorDetailsPage() {
   }, []);
 
   const loadDoctor = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/doctors/${id}`
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors/${id}`);
 
     const data = await res.json();
     setDoctor(data);
@@ -30,7 +29,7 @@ export default function DoctorDetailsPage() {
 
   const loadSchedules = async () => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`,
     );
 
     const data = await res.json();
@@ -54,18 +53,15 @@ export default function DoctorDetailsPage() {
       status: "pending",
     };
 
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/appointments`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(appointment),
-      }
-    );
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(appointment),
+    });
 
-    alert("Appointment Booked Successfully");
+    toast.success("Appointment Booked Successfully");
   };
 
   if (!doctor) {
@@ -85,10 +81,8 @@ export default function DoctorDetailsPage() {
     <div className="min-h-screen bg-[#F8FAFC] pt-24 pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-5">
-
           <div className="lg:col-span-2">
             <div className="sticky top-24 overflow-hidden rounded-[2rem] border border-[#E2E8F0] bg-white shadow-sm">
-
               <div className="relative">
                 <div className="relative h-72 w-full overflow-hidden bg-[#F1F5F9]">
                   <Image
@@ -117,13 +111,23 @@ export default function DoctorDetailsPage() {
 
                 <div className="mt-7 flex flex-col gap-3">
                   <div className="flex items-start gap-2.5 rounded-xl bg-[#F8FAFC] p-4">
-                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <path d="M3 21h18" />
                       <path d="M5 21V7l8-4v18" />
                       <path d="M19 21V11l-6-4" />
                     </svg>
                     <div>
-                      <p className="text-xs font-medium text-[#94A3B8]">Hospital</p>
+                      <p className="text-xs font-medium text-[#94A3B8]">
+                        Hospital
+                      </p>
                       <p className="mt-0.5 text-sm font-bold text-[#0F172A]">
                         {doctor.hospitalName}
                       </p>
@@ -131,12 +135,22 @@ export default function DoctorDetailsPage() {
                   </div>
 
                   <div className="flex items-start gap-2.5 rounded-xl bg-[#F8FAFC] p-4">
-                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <circle cx="12" cy="12" r="9" />
                       <path d="M12 7v5l3 3" />
                     </svg>
                     <div>
-                      <p className="text-xs font-medium text-[#94A3B8]">Experience</p>
+                      <p className="text-xs font-medium text-[#94A3B8]">
+                        Experience
+                      </p>
                       <p className="mt-0.5 text-sm font-bold text-[#0F172A]">
                         {doctor.experience} Years
                       </p>
@@ -144,7 +158,9 @@ export default function DoctorDetailsPage() {
                   </div>
 
                   <div className="rounded-xl bg-[#F8FAFC] p-4">
-                    <p className="text-xs font-medium text-[#94A3B8]">Qualification</p>
+                    <p className="text-xs font-medium text-[#94A3B8]">
+                      Qualification
+                    </p>
                     <p className="mt-1 text-sm font-semibold leading-relaxed text-[#0F172A]">
                       {doctor.qualifications}
                     </p>
@@ -165,7 +181,6 @@ export default function DoctorDetailsPage() {
 
           <div className="lg:col-span-3">
             <div className="rounded-[2rem] border border-[#E2E8F0] bg-white p-7 shadow-sm sm:p-8">
-
               <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
                 BOOK APPOINTMENT
@@ -206,11 +221,20 @@ export default function DoctorDetailsPage() {
                               {slot.day}
                             </p>
                             <p className="mt-1 flex items-center gap-1.5 text-xs text-[#64748B]">
-                              <svg className="h-3.5 w-3.5 shrink-0 text-[#94A3B8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <svg
+                                className="h-3.5 w-3.5 shrink-0 text-[#94A3B8]"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
                                 <circle cx="12" cy="12" r="9" />
                                 <path d="M12 7v5l3 3" />
                               </svg>
-                              {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
+                              {formatTime(slot.startTime)} –{" "}
+                              {formatTime(slot.endTime)}
                             </p>
                           </div>
 
@@ -220,7 +244,9 @@ export default function DoctorDetailsPage() {
                             className="h-4 w-4 shrink-0 accent-[#2563EB]"
                             value={slot._id}
                             checked={isSelected}
-                            onChange={(e) => setSelectedSchedule(e.target.value)}
+                            onChange={(e) =>
+                              setSelectedSchedule(e.target.value)
+                            }
                           />
                         </label>
                       );
@@ -251,7 +277,6 @@ export default function DoctorDetailsPage() {
               </button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
