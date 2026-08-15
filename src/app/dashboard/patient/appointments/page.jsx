@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function MyAppointmentsPage() {
   const { data: session, isPending } = authClient.useSession();
 
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingPayment, setLoadingPayment] = useState(false);
 
   const [cancelAppointment, setCancelAppointment] = useState(null);
   const [reviewAppointment, setReviewAppointment] = useState(null);
@@ -36,6 +38,53 @@ export default function MyAppointmentsPage() {
       setAppointments(data);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePayment = async (appointment) => {
+    try {
+      if (!session?.user?.id) {
+        toast.error("Please login first.");
+        return;
+      }
+
+      setLoadingPayment(true);
+
+      const paymentData = {
+        appointmentId: String(appointment._id),
+        patientId: String(session.user.id),
+      };
+
+      console.log("========== PAY NOW ==========");
+      console.log("Appointment:", appointment);
+      console.log("Payment Data:", paymentData);
+
+      const res = await fetch("/api/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(paymentData),
+      });
+
+      const data = await res.json();
+
+      console.log("Payment API Response:", data);
+
+      if (!res.ok) {
+        throw new Error(data.message || "Payment session creation failed");
+      }
+
+      if (!data.url) {
+        throw new Error("Stripe checkout URL not found.");
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      console.error("Payment Error:", error);
+      toast.error(error.message);
+    } finally {
+      setLoadingPayment(false);
     }
   };
 
@@ -187,7 +236,7 @@ export default function MyAppointmentsPage() {
                           </p>
 
                           <p className="font-semibold">
-                            💳 ৳{appointment.doctor.consultationFee}
+                            💳 ${appointment.doctor.consultationFee}
                           </p>
                         </div>
 
@@ -222,8 +271,12 @@ export default function MyAppointmentsPage() {
 
                       <div className="mt-6 flex flex-col gap-3">
                         {appointment.paymentStatus !== "paid" && (
-                          <button className="rounded-xl bg-green-700 px-6 py-3 font-semibold text-white hover:bg-green-800">
-                            Pay Now
+                          <button
+                            onClick={() => handlePayment(appointment)}
+                            disabled={loadingPayment}
+                            className="rounded-xl bg-green-700 cursor-pointer px-6 py-3 font-semibold text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {loadingPayment ? "Redirecting..." : "Pay Now"}
                           </button>
                         )}
 
