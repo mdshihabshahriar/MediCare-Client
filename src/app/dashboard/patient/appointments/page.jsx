@@ -120,21 +120,34 @@ export default function MyAppointmentsPage() {
   };
 
   const handleCancel = async () => {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/appointments/${cancelAppointment._id}/status`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/appointments/${cancelAppointment._id}/status`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: "cancelled",
+          }),
         },
-        body: JSON.stringify({
-          status: "cancelled",
-        }),
-      },
-    );
+      );
 
-    setCancelAppointment(null);
-    loadAppointments();
+      const data = await res.json();
+
+      if (data.refunded) {
+        toast.success("Appointment cancelled. Payment marked as refunded.");
+      } else {
+        toast.success("Appointment cancelled.");
+      }
+    } catch (error) {
+      console.error("Cancel Error:", error);
+      toast.error("Failed to cancel appointment.");
+    } finally {
+      setCancelAppointment(null);
+      loadAppointments();
+    }
   };
 
   const loadSchedules = async (doctorId) => {
@@ -270,15 +283,16 @@ export default function MyAppointmentsPage() {
                       </span>
 
                       <div className="mt-6 flex flex-col gap-3">
-                        {appointment.paymentStatus !== "paid" && (
-                          <button
-                            onClick={() => handlePayment(appointment)}
-                            disabled={loadingPayment}
-                            className="rounded-xl bg-green-700 cursor-pointer px-6 py-3 font-semibold text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
-                          >
-                            {loadingPayment ? "Redirecting..." : "Pay Now"}
-                          </button>
-                        )}
+                        {appointment.paymentStatus !== "paid" &&
+                          appointment.status !== "cancelled" && (
+                            <button
+                              onClick={() => handlePayment(appointment)}
+                              disabled={loadingPayment}
+                              className="rounded-xl bg-green-700 cursor-pointer px-6 py-3 font-semibold text-white hover:bg-green-800 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              {loadingPayment ? "Redirecting..." : "Pay Now"}
+                            </button>
+                          )}
 
                         {appointment.status === "pending" && (
                           <>
