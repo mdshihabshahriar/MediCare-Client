@@ -1,52 +1,69 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const Banner = () => {
   return (
     <section className="px-4 pt-28 pb-16 sm:px-6 sm:pt-32 lg:px-8">
       <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-banner-card px-6 py-14 sm:px-10 sm:py-16 lg:px-14 bg-accent">
         <div className="relative grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          {/* Left: copy */}
           <div>
-        
-            {/* Heading */}
-            <h1 className="text-4xl font-extrabold leading-[1.1] sm:text-5xl lg:text-6xl text-white">
+
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="text-4xl font-extrabold leading-[1.1] sm:text-5xl lg:text-6xl text-white"
+            >
               Quality Healthcare <br />
               <span className="text-sky-400">Just a Click Away</span>
-            </h1>
+            </motion.h1>
 
-            {/* Paragraph */}
-            <p className="mt-6 max-w-md text-base leading-relaxed text-banner-paragraph sm:text-lg text-white font-semibold">
-              Book appointments with trusted doctors, manage your health records and get the best medical care — all in one place.
-            </p>
-
-            {/* CTA */}
-            <Link
-              href="/find-doctors"
-              className="btn bg-sky-500 text-white mt-9 inline-flex items-center gap-2 rounded-full bg-banner-cta px-6 py-6 text-sm font-bold text-banner-cta-text transition-colors hover:bg-banner-cta-hover sm:text-base border-none"
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
+              className="mt-6 max-w-md text-base leading-relaxed text-banner-paragraph sm:text-lg text-white font-semibold"
             >
-              Find a Specialist
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              Book appointments with trusted doctors, manage your health records and get the best medical care — all in one place.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
+            >
+              <Link
+                href="/doctors"
+                className="btn bg-sky-500 text-white mt-9 inline-flex items-center gap-2 rounded-full bg-banner-cta px-6 py-6 text-sm font-bold text-banner-cta-text transition-colors hover:bg-banner-cta-hover sm:text-base border-none"
               >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </Link>
+                Find a Specialist
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </Link>
+            </motion.div>
           </div>
 
-          {/* Right: image */}
           <div className="relative">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl shadow-2xl">
-              {/* Replace src below with your own doctor/clinic photo */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+              className="relative aspect-4/3 w-full overflow-hidden rounded-2xl shadow-2xl"
+            >
+
               <Image
                 src="/assets/banner.jpg"
                 alt="Doctor Image"
@@ -54,10 +71,14 @@ const Banner = () => {
                 priority
                 className="object-cover"
               />
-            </div>
+            </motion.div>
 
-            {/* Floating status card */}
-            <div className="absolute left-5 top-5 rounded-xl bg-banner-status-bg px-4 py-3 shadow-lg backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.6 }}
+              className="absolute left-5 top-5 rounded-xl bg-banner-status-bg px-4 py-3 shadow-lg backdrop-blur-sm"
+            >
               <div className="flex items-center gap-1.5 text-sm font-bold">
                 <span className="text-warning">★★★★★</span>
                 <span className="text-accent">Active</span>
@@ -65,7 +86,7 @@ const Banner = () => {
               <p className="mt-0.5 text-xs font-medium text-white">
                 Clinical Schedulers Live
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

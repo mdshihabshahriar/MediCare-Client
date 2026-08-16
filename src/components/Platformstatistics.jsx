@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
-/** Animates a number from 0 -> target once it scrolls into view. */
 function useCountUp(target, { duration = 1800, decimals = 0 } = {}) {
   const [display, setDisplay] = useState(0);
   const ref = useRef(null);
@@ -118,14 +118,35 @@ const stats = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 const StatItem = ({ stat }) => {
   const { ref, formatted } = useCountUp(stat.target, {
     decimals: stat.decimals,
   });
 
   return (
-    <div ref={ref} className="flex flex-col items-center px-6 py-12 text-center">
-      {/* Icon with soft glow */}
+    <motion.div
+      ref={ref}
+      variants={itemVariants}
+      className="flex flex-col items-center px-6 py-12 text-center"
+    >
       <div className="relative flex h-14 w-14 items-center justify-center">
         <span className={`absolute inset-0 rounded-full ${stat.glow} blur-lg`} />
         <span
@@ -145,7 +166,6 @@ const StatItem = ({ stat }) => {
         </span>
       </div>
 
-      {/* Animated number */}
       <p className="mt-7 text-4xl font-extrabold tracking-tight text-heading tabular-nums sm:text-5xl">
         {formatted}
         <span className="text-primary">{stat.suffix}</span>
@@ -153,7 +173,6 @@ const StatItem = ({ stat }) => {
 
       <p className="mt-2 text-sm font-medium text-paragraph">{stat.label}</p>
 
-      {/* Trend badge */}
       <span className="mt-3 inline-flex items-center gap-1 rounded-full border border-border bg-bg-section px-2.5 py-1 text-[11px] font-medium text-muted">
         <svg
           className="h-3 w-3 text-accent"
@@ -169,7 +188,7 @@ const StatItem = ({ stat }) => {
         </svg>
         {stat.trend}
       </span>
-    </div>
+    </motion.div>
   );
 };
 
@@ -187,13 +206,17 @@ const PlatformStatistics = () => {
           }}
         />
 
-        {/* Decorative glow blobs */}
         <div className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
 
         <div className="relative">
-          {/* Section header */}
-          <div className="mx-auto max-w-2xl text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="mx-auto max-w-2xl text-center"
+          >
             <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-bg-card px-4 py-1.5 text-xs font-bold tracking-widest text-primary">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               OUR IMPACT
@@ -205,14 +228,19 @@ const PlatformStatistics = () => {
               Real numbers from a growing community of doctors and patients
               who rely on us for reliable healthcare.
             </p>
-          </div>
+          </motion.div>
 
-          {/* Stat bar */}
-          <div className="mt-14 grid grid-cols-2 divide-y divide-border rounded-2xl border border-border bg-bg-card/80 shadow-sm backdrop-blur-sm sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={containerVariants}
+            className="mt-14 grid grid-cols-2 divide-y divide-border rounded-2xl border border-border bg-bg-card/80 shadow-sm backdrop-blur-sm sm:grid-cols-4 sm:divide-x sm:divide-y-0"
+          >
             {stats.map((stat) => (
               <StatItem key={stat.label} stat={stat} />
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

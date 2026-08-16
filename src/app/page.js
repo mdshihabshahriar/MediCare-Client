@@ -1,4 +1,5 @@
 import Banner from "@/components/Banner";
+import FeaturedDoctors from "@/components/FeaturedDoctors";
 import MedicalSpecializations from "@/components/Medicalspecializations";
 import PatientSuccessStories from "@/components/PatientSuccessStories";
 import PlatformStatistics from "@/components/Platformstatistics";
@@ -10,6 +11,7 @@ export default function Home() {
     <div>
        <Banner />
        <MedicalSpecializations />
+       <FeaturedDoctors />
        <PlatformStatistics />
        <PatientSuccessStories />
        <WhyChooseUs />

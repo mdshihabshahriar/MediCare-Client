@@ -1,4 +1,7 @@
+'use client';
+
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const testimonials = [
   {
@@ -69,8 +72,7 @@ const StarRow = ({ rating }) => (
 );
 
 const TestimonialCard = ({ testimonial }) => (
-  <div className="group relative w-[380px] shrink-0 rounded-2xl border border-border bg-bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 sm:w-[420px]">
-    {/* Watermark quote mark */}
+  <div className="group relative w-95 shrink-0 rounded-2xl border border-border bg-bg-card p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/5 sm:w-105">
     <svg
       className="absolute right-6 top-6 h-9 w-9 text-primary/10 transition-colors duration-300 group-hover:text-primary/20"
       viewBox="0 0 24 24"
@@ -81,12 +83,10 @@ const TestimonialCard = ({ testimonial }) => (
 
     <StarRow rating={testimonial.rating} />
 
-    {/* Quote */}
     <p className="relative mt-4 text-sm leading-relaxed text-paragraph">
       &ldquo;{testimonial.quote}&rdquo;
     </p>
 
-    {/* Patient */}
     <div className="mt-6 flex items-center gap-3 border-t border-border pt-5">
       <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full ring-2 ring-primary/10">
         <Image
@@ -127,17 +127,12 @@ const MarqueeRow = ({ items, speed = 55 }) => (
 );
 
 const PatientSuccessStories = () => {
-  // Duplicate the list so the marquee loop looks seamless
+
   const loop = [...testimonials, ...testimonials];
 
   return (
     <section className="overflow-hidden py-16">
-      {/*
-        Plain <style> (not styled-jsx) on purpose — styled-jsx injects a
-        "jsx-xxxx" scoping class that can mismatch between the server and
-        client render in the App Router and trigger a hydration error.
-        A plain global stylesheet has no such class, so it's hydration-safe.
-      */}
+
       <style>{`
         @keyframes patient-marquee {
           from { transform: translateX(0); }
@@ -156,8 +151,14 @@ const PatientSuccessStories = () => {
       `}</style>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-2xl text-center"
+        >
           <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-bg-card px-4 py-1.5 text-xs font-bold tracking-widest text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             PATIENT STORIES
@@ -170,7 +171,6 @@ const PatientSuccessStories = () => {
             doctors on our platform.
           </p>
 
-          {/* Trust strip */}
           <div className="mt-6 flex items-center justify-center gap-6 text-sm text-muted">
             <div className="flex items-center gap-1.5">
               <StarRow rating={5} />
@@ -182,12 +182,15 @@ const PatientSuccessStories = () => {
               reviews
             </span>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Marquee */}
-      <div
-        className="relative mt-14 overflow-hidden [&:hover>div]:[animation-play-state:paused]"
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, amount: 0.1 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        className="relative mt-14 overflow-hidden [&:hover>div]:paused"
         style={{
           maskImage:
             "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
@@ -196,7 +199,7 @@ const PatientSuccessStories = () => {
         }}
       >
         <MarqueeRow items={loop} speed={55} />
-      </div>
+      </motion.div>
     </section>
   );
 };

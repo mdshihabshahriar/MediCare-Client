@@ -1,3 +1,7 @@
+'use client';
+
+import { motion } from "framer-motion";
+
 const features = [
   {
     title: "Verified Specialists",
@@ -95,12 +99,35 @@ const features = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 const WhyChooseUs = () => {
   return (
     <section className="bg-bg-alt px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-2xl text-center"
+        >
           <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-border bg-bg-card px-4 py-1.5 text-xs font-bold tracking-widest text-primary">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             WHY CHOOSE US
@@ -112,16 +139,21 @@ const WhyChooseUs = () => {
             Everything you need for reliable, hassle-free healthcare — built
             around trust, speed, and your peace of mind.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Feature grid */}
-        <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={containerVariants}
+          className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {features.map((feature) => (
-            <div
+            <motion.div
               key={feature.title}
+              variants={cardVariants}
               className={`group relative overflow-hidden rounded-2xl ${feature.cardBg} p-8 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg`}
             >
-              {/* Top accent bar */}
               <span
                 className={`absolute inset-x-0 top-0 h-1 ${feature.accent}`}
               />
@@ -148,9 +180,9 @@ const WhyChooseUs = () => {
               <p className="mt-2 text-sm leading-relaxed text-paragraph">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

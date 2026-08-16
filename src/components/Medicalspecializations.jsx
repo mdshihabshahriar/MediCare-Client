@@ -1,11 +1,12 @@
-import Link from "next/link";
+'use client';
 
-// Specialization data — colors match the brand's specialization palette
+import Link from "next/link";
+import { motion } from "framer-motion";
+
 const specializations = [
   {
     name: "Cardiology",
     description: "Heart & vascular care",
-    href: "/find-doctors?specialization=cardiology",
     bg: "bg-[#FEE2E2]",
     iconColor: "text-[#DC2626]",
     icon: (
@@ -15,7 +16,6 @@ const specializations = [
   {
     name: "Neurology",
     description: "Brain & nervous system",
-    href: "/find-doctors?specialization=neurology",
     bg: "bg-[#DBEAFE]",
     iconColor: "text-[#1D4ED8]",
     icon: (
@@ -28,7 +28,6 @@ const specializations = [
   {
     name: "Orthopedics",
     description: "Bones, joints & muscles",
-    href: "/find-doctors?specialization=orthopedics",
     bg: "bg-[#DCFCE7]",
     iconColor: "text-[#15803D]",
     icon: (
@@ -38,7 +37,6 @@ const specializations = [
   {
     name: "Pediatrics",
     description: "Child & infant health",
-    href: "/find-doctors?specialization=pediatrics",
     bg: "bg-[#FEF3C7]",
     iconColor: "text-[#B45309]",
     icon: (
@@ -51,7 +49,6 @@ const specializations = [
   {
     name: "Dermatology",
     description: "Skin, hair & nails",
-    href: "/find-doctors?specialization=dermatology",
     bg: "bg-[#FCE7F3]",
     iconColor: "text-[#BE185D]",
     icon: (
@@ -61,7 +58,6 @@ const specializations = [
   {
     name: "Gynecology",
     description: "Women's health",
-    href: "/find-doctors?specialization=gynecology",
     bg: "bg-[#F3E8FF]",
     iconColor: "text-[#7E22CE]",
     icon: (
@@ -75,7 +71,6 @@ const specializations = [
   {
     name: "ENT",
     description: "Ear, nose & throat",
-    href: "/find-doctors?specialization=ent",
     bg: "bg-[#E0F2FE]",
     iconColor: "text-[#0369A1]",
     icon: (
@@ -85,7 +80,6 @@ const specializations = [
   {
     name: "Ophthalmology",
     description: "Eye & vision care",
-    href: "/find-doctors?specialization=ophthalmology",
     bg: "bg-[#ECFCCB]",
     iconColor: "text-[#4D7C0F]",
     icon: (
@@ -97,12 +91,35 @@ const specializations = [
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 const MedicalSpecializations = () => {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mx-auto max-w-2xl text-center"
+        >
           <h2 className="text-3xl font-extrabold text-heading sm:text-4xl">
             Our Medical Specializations
           </h2>
@@ -110,37 +127,45 @@ const MedicalSpecializations = () => {
             Access primary, pediatric, neural, and dermatological healthcare
             resources with validated physician consultants.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Specialization grid */}
-        <div className="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={containerVariants}
+          className="mt-12 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4"
+        >
           {specializations.map((spec) => (
-            <Link
-              key={spec.name}
-              href={spec.href}
-              className="group flex flex-col items-center rounded-2xl border border-border bg-bg-card px-5 py-8 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
-            >
-              <span
-                className={`flex h-14 w-14 items-center justify-center rounded-full ${spec.bg} transition-transform group-hover:scale-110`}
+            <motion.div key={spec.name} variants={cardVariants}>
+              <Link
+                href={'/'}
+                className="group flex flex-col items-center rounded-2xl border border-border bg-bg-card px-5 py-8 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
               >
-                <svg
-                  className={`h-6 w-6 ${spec.iconColor}`}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                <span
+                  className={`flex h-14 w-14 items-center justify-center rounded-full ${spec.bg} transition-transform group-hover:scale-110`}
                 >
-                  {spec.icon}
-                </svg>
-              </span>
+                  <svg
+                    className={`h-6 w-6 ${spec.iconColor}`}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    {spec.icon}
+                  </svg>
+                </span>
 
-              <h3 className="mt-4 text-base font-bold text-heading">{spec.name}</h3>
-              <p className="mt-1 text-xs text-muted">{spec.description}</p>
-            </Link>
+                <h3 className="mt-4 text-base font-bold text-heading">
+                  {spec.name}
+                </h3>
+                <p className="mt-1 text-xs text-muted">{spec.description}</p>
+              </Link>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
