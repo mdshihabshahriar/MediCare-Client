@@ -42,16 +42,15 @@ const LoginPage = () => {
     setIsSubmitting(false);
   };
 
-  const handleGoogleLogin = () => {
-    // TODO: trigger your Google OAuth flow here, e.g.:
-    // signIn("google");
-    console.log("Google login clicked");
+  const handleGoogleLogin = async () => {
+    const data = await authClient.signIn.social({
+    provider: "google",
+  });
   };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 pb-10 pt-24 sm:px-6">
       <div className="grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-[2rem] border border-[#E2E8F0] bg-white shadow-xl lg:grid-cols-2">
-        {/* Left: accent banner */}
         <div className="relative hidden flex-col justify-between bg-accent p-10 text-white lg:flex">
           <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
@@ -81,7 +80,6 @@ const LoginPage = () => {
           </p>
         </div>
 
-        {/* Right: form */}
         <div className="p-8 sm:p-10 lg:p-12">
           <h1 className="text-2xl font-extrabold text-[#0F172A]">Welcome back</h1>
           <p className="mt-1.5 text-sm text-[#64748B]">
@@ -102,11 +100,10 @@ const LoginPage = () => {
             </div>
           )}
 
-          {/* Google login */}
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="mt-7 flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-2.5 text-sm font-semibold text-[#334155] transition-colors hover:bg-[#F8FAFC]"
+            className="mt-7 cursor-pointer flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-2.5 text-sm font-semibold text-[#334155] transition-colors hover:bg-[#F8FAFC]"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path

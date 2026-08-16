@@ -178,24 +178,6 @@ export default function DashboardLayout({ children }) {
                 );
               })}
             </nav>
-
-            <div className="mt-auto">
-              <button
-                type="button"
-                onClick={async () => {
-                  await authClient.signOut();
-                  router.push("/login");
-                }}
-                className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[#EF4444] transition-colors hover:bg-[#FEF2F2]"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                  <path d="M16 17l5-5-5-5" />
-                  <path d="M21 12H9" />
-                </svg>
-                Log Out
-              </button>
-            </div>
           </div>
         </aside>
 
