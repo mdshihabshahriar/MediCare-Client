@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button, Dropdown, Avatar } from "@heroui/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 const navLinks = [
@@ -17,6 +18,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const { data: session, refetch: refetchSession } = authClient.useSession();
 
@@ -40,6 +42,8 @@ const Navbar = () => {
     window.location.href = "/login";
   };
 
+  const isActive = (href) => pathname === href;
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/30 dark:bg-black/30 backdrop-blur-lg backdrop-saturate-150 shadow-sm">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -51,12 +55,23 @@ const Navbar = () => {
         <ul className="hidden items-center gap-8 sm:flex">
           {navLinks.slice(0, 4).map((link) => (
             <li key={link.href}>
-              <Link href={link.href} className="text-sm font-medium">
+              <Link
+                href={link.href}
+                className={`text-sm font-medium underline-offset-4 transition-colors ${
+                  isActive(link.href)
+                    ? "text-accent underline"
+                    : "no-underline hover:text-accent"
+                }`}
+              >
                 {link.name}
               </Link>
             </li>
           ))}
-          <li>{user ? <><Link href={`/dashboard/${user.role}`}>Dashboard</Link></> : null}</li>
+          <li>{user ? <><Link href={`/dashboard/${user.role}`} className={`text-sm font-medium underline-offset-4 transition-colors ${
+                  isActive(`/dashboard/${user.role}`)
+                    ? "text-accent underline"
+                    : "no-underline hover:text-accent"
+                }`}>Dashboard</Link></> : null}</li>
         </ul>
 
         <div className="hidden items-center gap-4 sm:flex">
@@ -156,7 +171,11 @@ const Navbar = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="block py-2 text-base font-medium"
+                  className={`block py-2 text-base font-medium underline-offset-4 transition-colors ${
+                    isActive(link.href)
+                      ? "text-accent underline"
+                      : "no-underline hover:text-accent"
+                  }`}
                   onPress={() => setIsMenuOpen(false)}
                 >
                   {link.name}
@@ -169,7 +188,11 @@ const Navbar = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="block py-2 text-base font-medium"
+                  className={`block py-2 text-base font-medium underline-offset-4 transition-colors ${
+                    isActive(link.href)
+                      ? "text-accent underline"
+                      : "no-underline hover:text-accent"
+                  }`}
                   onPress={() => setIsMenuOpen(false)}
                 >
                   {link.name}
