@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const verificationStyles = {
   verified: "bg-[#DCFCE7] text-[#15803D]",
@@ -9,10 +10,41 @@ const verificationStyles = {
   rejected: "bg-[#FEE2E2] text-[#DC2626]",
 };
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.07 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.32, ease: "easeOut" },
+  },
+};
+
 function Modal({ title, onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
           <button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]" aria-label="Close">
@@ -23,8 +55,8 @@ function Modal({ title, onClose, children }) {
           </button>
         </div>
         <div className="mt-5">{children}</div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -108,15 +140,24 @@ export default function ManageDoctors() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Manage Doctors</h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Review and verify doctors before they can accept patients.
         </p>
-      </div>
+      </motion.div>
 
       {/* Filter tabs */}
-      <div className="flex flex-wrap gap-2">
+      <motion.div
+        className="flex flex-wrap gap-2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut", delay: 0.05 }}
+      >
         {["all", "pending", "verified", "rejected"].map((f) => (
           <button
             key={f}
@@ -130,11 +171,23 @@ export default function ManageDoctors() {
             {f}
           </button>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+      <motion.div
+        className="grid grid-cols-1 gap-5 lg:grid-cols-2"
+        initial="hidden"
+        animate="show"
+        variants={containerVariants}
+        key={filter}
+      >
         {filtered.map((doc) => (
-          <div key={doc.userId} className="flex flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm">
+          <motion.div
+            key={doc.userId}
+            variants={cardVariants}
+            whileHover={{ y: -3, boxShadow: "0 8px 20px rgba(15, 23, 42, 0.08)" }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm"
+          >
             <div className="flex gap-4 p-5 sm:p-6">
               {/* Photo */}
               <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F1F5F9] sm:h-24 sm:w-24">
@@ -243,47 +296,53 @@ export default function ManageDoctors() {
                 </button>
               )}
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {verifyTarget && (
-        <Modal title="Verify Doctor" onClose={() => setVerifyTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            Verify <span className="font-semibold text-[#0F172A]">{verifyTarget.name}</span>? They&apos;ll
-            immediately become visible to patients and able to accept appointments.
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setVerifyTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
-            <button type="button" onClick={handleVerify} className="flex-1 rounded-full bg-[#10B981] py-2.5 text-sm font-bold text-white hover:bg-[#059669]">Yes, Verify</button>
-          </div>
-        </Modal>
-      )}
+      <AnimatePresence>
+        {verifyTarget && (
+          <Modal key="verify-modal" title="Verify Doctor" onClose={() => setVerifyTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              Verify <span className="font-semibold text-[#0F172A]">{verifyTarget.name}</span>? They&apos;ll
+              immediately become visible to patients and able to accept appointments.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button type="button" onClick={() => setVerifyTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={handleVerify} className="flex-1 rounded-full bg-[#10B981] py-2.5 text-sm font-bold text-white hover:bg-[#059669]">Yes, Verify</button>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
 
-      {rejectTarget && (
-        <Modal title="Reject License" onClose={() => setRejectTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            Reject the verification request from <span className="font-semibold text-[#0F172A]">{rejectTarget.name}</span>?
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
-            <button type="button" onClick={handleReject} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Reject</button>
-          </div>
-        </Modal>
-      )}
+      <AnimatePresence>
+        {rejectTarget && (
+          <Modal key="reject-modal" title="Reject License" onClose={() => setRejectTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              Reject the verification request from <span className="font-semibold text-[#0F172A]">{rejectTarget.name}</span>?
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={handleReject} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Reject</button>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
 
-      {statusTarget && (
-        <Modal title="Cancel Verify" onClose={() => setStatusTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            Revoke <span className="font-semibold text-[#0F172A]">{statusTarget.name}</span>&apos;s verified
-            status? They&apos;ll be hidden from patients until re-verified.
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setStatusTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep Verified</button>
-            <button type="button" onClick={handleUnverify} className="flex-1 rounded-full bg-[#F59E0B] py-2.5 text-sm font-bold text-white hover:bg-[#D97706]">Yes, Revoke</button>
-          </div>
-        </Modal>
-      )}
+      <AnimatePresence>
+        {statusTarget && (
+          <Modal key="status-modal" title="Cancel Verify" onClose={() => setStatusTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              Revoke <span className="font-semibold text-[#0F172A]">{statusTarget.name}</span>&apos;s verified
+              status? They&apos;ll be hidden from patients until re-verified.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button type="button" onClick={() => setStatusTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep Verified</button>
+              <button type="button" onClick={handleUnverify} className="flex-1 rounded-full bg-[#F59E0B] py-2.5 text-sm font-bold text-white hover:bg-[#D97706]">Yes, Revoke</button>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

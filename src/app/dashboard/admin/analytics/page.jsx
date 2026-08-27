@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import {
   BarChart,
   Bar,
@@ -32,6 +33,23 @@ function CustomTooltip({ active, payload, label }) {
     </div>
   );
 }
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: "easeOut" },
+  },
+};
 
 export default function Analytics() {
   const [stats, setStats] = useState({});
@@ -110,20 +128,28 @@ export default function Analytics() {
   
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
+    <motion.div
+      className="flex flex-col gap-6"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
+    >
+      <motion.div variants={cardVariants}>
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
           Analytics
         </h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Platform-wide performance and growth trends.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <motion.div className="grid grid-cols-1 gap-4 sm:grid-cols-3" variants={containerVariants}>
         {summaryStats.map((stat) => (
-          <div
+          <motion.div
             key={stat.label}
+            variants={cardVariants}
+            whileHover={{ y: -3, boxShadow: "0 8px 20px rgba(15, 23, 42, 0.08)" }}
+            transition={{ duration: 0.2 }}
             className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
           >
             <span
@@ -141,17 +167,26 @@ export default function Analytics() {
                 {stat.icon}
               </svg>
             </span>
-            <p className="mt-4 text-2xl font-extrabold text-[#0F172A]">
+            <motion.p
+              key={stat.value}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25 }}
+              className="mt-4 text-2xl font-extrabold text-[#0F172A]"
+            >
               {stat.value}
-            </p>
+            </motion.p>
             <p className="mt-1 text-xs font-medium text-[#64748B]">
               {stat.label}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+      <motion.div
+        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+        variants={cardVariants}
+      >
         <h2 className="text-base font-bold text-[#0F172A]">
           Doctor Performance (by Rating)
         </h2>
@@ -174,7 +209,13 @@ export default function Analytics() {
 
               <Tooltip />
 
-              <Bar dataKey="averageRating" fill="#2563EB" radius={[8, 8, 0, 0]}>
+              <Bar
+                dataKey="averageRating"
+                fill="#2563EB"
+                radius={[8, 8, 0, 0]}
+                animationDuration={900}
+                animationEasing="ease-out"
+              >
                 <LabelList
                   dataKey="averageRating"
                   position="top"
@@ -184,9 +225,12 @@ export default function Analytics() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+      <motion.div
+        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+        variants={cardVariants}
+      >
         <h2 className="text-base font-bold text-[#0F172A]">Growth Trend</h2>
         <p className="mt-1 text-xs text-[#64748B]">
           Total patients and appointments over the last 6 months.
@@ -223,6 +267,8 @@ export default function Analytics() {
                 stroke="#2563EB"
                 strokeWidth={2.5}
                 dot={{ r: 3 }}
+                animationDuration={900}
+                animationEasing="ease-out"
               />
               <Line
                 type="monotone"
@@ -231,11 +277,13 @@ export default function Analytics() {
                 stroke="#10B981"
                 strokeWidth={2.5}
                 dot={{ r: 3 }}
+                animationDuration={900}
+                animationEasing="ease-out"
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

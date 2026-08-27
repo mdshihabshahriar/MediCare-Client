@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const roleStyles = {
   patient: "bg-[#DBEAFE] text-[#1D4ED8]",
@@ -14,10 +15,41 @@ const statusStyles = {
   suspended: "bg-[#FEE2E2] text-[#DC2626]",
 };
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 },
+  },
+};
+
+const rowVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
+};
+
 function Modal({ title, onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
           <button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]" aria-label="Close">
@@ -28,13 +60,13 @@ function Modal({ title, onClose, children }) {
           </button>
         </div>
         <div className="mt-5">{children}</div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
 export default function ManageUsers() {
-  const [users, setUsers] = useState(null); // null = loading
+  const [users, setUsers] = useState(null); 
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [suspendTarget, setSuspendTarget] = useState(null);
@@ -97,15 +129,24 @@ export default function ManageUsers() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Manage Users</h1>
         <p className="mt-1 text-sm text-[#64748B]">
           View, suspend, or remove patient and doctor accounts.
         </p>
-      </div>
+      </motion.div>
 
       {/* Filters */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <motion.div
+        className="flex flex-col gap-3 sm:flex-row sm:items-center"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut", delay: 0.05 }}
+      >
         <div className="relative flex-1">
           <svg className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
@@ -133,7 +174,7 @@ export default function ManageUsers() {
             </button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* Table */}
       <div className="hidden overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm md:block">
@@ -147,9 +188,14 @@ export default function ManageUsers() {
               <th className="px-6 py-3.5 font-semibold text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#E2E8F0]">
+          <motion.tbody
+            className="divide-y divide-[#E2E8F0]"
+            initial="hidden"
+            animate="show"
+            variants={containerVariants}
+          >
             {filtered.map((u) => (
-              <tr key={u._id}>
+              <motion.tr key={u._id} variants={rowVariants}>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
                     <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
@@ -187,16 +233,21 @@ export default function ManageUsers() {
                     </button>
                   </div>
                 </td>
-              </tr>
+              </motion.tr>
             ))}
-          </tbody>
+          </motion.tbody>
         </table>
       </div>
 
       {/* Cards (mobile) */}
-      <div className="flex flex-col gap-4 md:hidden">
+      <motion.div
+        className="flex flex-col gap-4 md:hidden"
+        initial="hidden"
+        animate="show"
+        variants={containerVariants}
+      >
         {filtered.map((u) => (
-          <div key={u._id} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
+          <motion.div key={u._id} variants={rowVariants} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
             <div className="flex items-center gap-3">
               <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
                 <Image
@@ -225,37 +276,41 @@ export default function ManageUsers() {
               </button>
               <button onClick={() => setDeleteTarget(u)} className="flex-1 rounded-lg border border-[#EF4444] py-1.5 text-xs font-semibold text-[#EF4444]">Delete</button>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      {suspendTarget && (
-        <Modal title={suspendTarget.status === "suspended" ? "Reactivate User" : "Suspend User"} onClose={() => setSuspendTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            {suspendTarget.status === "suspended"
-              ? <>Reactivate <span className="font-semibold text-[#0F172A]">{suspendTarget.name}</span>&apos;s account? They&apos;ll be able to log in again.</>
-              : <>Suspend <span className="font-semibold text-[#0F172A]">{suspendTarget.name}</span>? They won&apos;t be able to log in until reactivated.</>}
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setSuspendTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
-            <button type="button" onClick={handleToggleSuspend} className="flex-1 rounded-full bg-[#F59E0B] py-2.5 text-sm font-bold text-white hover:bg-[#D97706]">
-              {suspendTarget.status === "suspended" ? "Reactivate" : "Suspend"}
-            </button>
-          </div>
-        </Modal>
-      )}
+      <AnimatePresence>
+        {suspendTarget && (
+          <Modal key="suspend-modal" title={suspendTarget.status === "suspended" ? "Reactivate User" : "Suspend User"} onClose={() => setSuspendTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              {suspendTarget.status === "suspended"
+                ? <>Reactivate <span className="font-semibold text-[#0F172A]">{suspendTarget.name}</span>&apos;s account? They&apos;ll be able to log in again.</>
+                : <>Suspend <span className="font-semibold text-[#0F172A]">{suspendTarget.name}</span>? They won&apos;t be able to log in until reactivated.</>}
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button type="button" onClick={() => setSuspendTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={handleToggleSuspend} className="flex-1 rounded-full bg-[#F59E0B] py-2.5 text-sm font-bold text-white hover:bg-[#D97706]">
+                {suspendTarget.status === "suspended" ? "Reactivate" : "Suspend"}
+              </button>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
 
-      {deleteTarget && (
-        <Modal title="Delete User" onClose={() => setDeleteTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            Permanently delete <span className="font-semibold text-[#0F172A]">{deleteTarget.name}</span>&apos;s account? This can&apos;t be undone.
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setDeleteTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep User</button>
-            <button type="button" onClick={handleDelete} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Delete</button>
-          </div>
-        </Modal>
-      )}
+      <AnimatePresence>
+        {deleteTarget && (
+          <Modal key="delete-modal" title="Delete User" onClose={() => setDeleteTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              Permanently delete <span className="font-semibold text-[#0F172A]">{deleteTarget.name}</span>&apos;s account? This can&apos;t be undone.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button type="button" onClick={() => setDeleteTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep User</button>
+              <button type="button" onClick={handleDelete} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Delete</button>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

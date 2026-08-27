@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { formatTimeAgo } from "@/lib/formatTimeAgo";
 
 const statConfig = [
@@ -57,9 +58,37 @@ const statConfig = [
   },
 ];
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: "easeOut" },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, x: -8 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
+};
+
 export default function AdminOverview() {
-  const [stats, setStats] = useState(null); // null = loading
-  const [recentActivity, setRecentActivity] = useState(null); // null = loading
+  const [stats, setStats] = useState(null); 
+  const [recentActivity, setRecentActivity] = useState(null); 
 
   useEffect(() => {
     const loadStats = async () => {
@@ -89,31 +118,51 @@ export default function AdminOverview() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-8">
-      <div>
+    <motion.div
+      className="flex flex-col gap-8"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
+    >
+      <motion.div variants={cardVariants}>
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Admin Overview</h1>
         <p className="mt-1 text-sm text-[#64748B]">
           A snapshot of everything happening on the platform.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <motion.div className="grid grid-cols-2 gap-4 lg:grid-cols-4" variants={containerVariants}>
         {statConfig.map((stat) => (
-          <div key={stat.key} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
+          <motion.div
+            key={stat.key}
+            className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+            variants={cardVariants}
+            whileHover={{ y: -3, boxShadow: "0 8px 20px rgba(15, 23, 42, 0.08)" }}
+            transition={{ duration: 0.2 }}
+          >
             <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
               <svg className={`h-5 w-5 ${stat.iconColor}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 {stat.icon}
               </svg>
             </span>
-            <p className="mt-4 text-2xl font-extrabold text-[#0F172A]">
+            <motion.p
+              key={stats === null ? "loading" : stats[stat.key]}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.25 }}
+              className="mt-4 text-2xl font-extrabold text-[#0F172A]"
+            >
               {stats === null ? "—" : stats[stat.key]}
-            </p>
+            </motion.p>
             <p className="mt-1 text-xs font-medium text-[#64748B]">{stat.label}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+      <motion.div
+        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+        variants={cardVariants}
+      >
         <h2 className="text-base font-bold text-[#0F172A]">Recent Activity</h2>
         <div className="mt-5 flex flex-col divide-y divide-[#E2E8F0]">
           {recentActivity === null ? (
@@ -121,15 +170,21 @@ export default function AdminOverview() {
           ) : recentActivity.length === 0 ? (
             <p className="py-3.5 text-sm text-[#94A3B8]">No recent activity yet.</p>
           ) : (
-            recentActivity.map((item, i) => (
-              <div key={i} className="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0">
-                <p className="text-sm text-[#334155]">{item.text}</p>
-                <p className="shrink-0 text-xs text-[#94A3B8]">{formatTimeAgo(item.createdAt)}</p>
-              </div>
-            ))
+            <motion.div initial="hidden" animate="show" variants={containerVariants}>
+              {recentActivity.map((item, i) => (
+                <motion.div
+                  key={i}
+                  variants={itemVariants}
+                  className="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0"
+                >
+                  <p className="text-sm text-[#334155]">{item.text}</p>
+                  <p className="shrink-0 text-xs text-[#94A3B8]">{formatTimeAgo(item.createdAt)}</p>
+                </motion.div>
+              ))}
+            </motion.div>
           )}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

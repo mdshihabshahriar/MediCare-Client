@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const statusStyles = {
   upcoming: "bg-[#DBEAFE] text-[#1D4ED8]",
@@ -14,6 +15,23 @@ const mapStatus = (status) => {
   if (status === "completed") return "completed";
   if (status === "cancelled" || status === "rejected") return "cancelled";
   return status;
+};
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.05 },
+  },
+};
+
+const rowVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
 };
 
 export default function AdminManageAppointments() {
@@ -85,16 +103,25 @@ export default function AdminManageAppointments() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
           Manage Appointments
         </h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Monitor every appointment across the platform.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <motion.div
+        className="flex flex-col gap-3 sm:flex-row sm:items-center"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut", delay: 0.05 }}
+      >
         <div className="relative flex-1">
           <svg
             className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]"
@@ -130,106 +157,132 @@ export default function AdminManageAppointments() {
             </button>
           ))}
         </div>
-      </div>
+      </motion.div>
 
-      {filtered.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-16 text-center">
-          <h2 className="text-lg font-semibold text-[#0F172A]">
-            No Appointments Found
-          </h2>
-          <p className="mt-2 text-sm text-[#94A3B8]">
-            Try a different filter or search term.
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="hidden overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm md:block">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-xs uppercase tracking-wide text-[#64748B]">
-                <tr>
-                  <th className="px-6 py-3.5 font-semibold">ID</th>
-                  <th className="px-6 py-3.5 font-semibold">Patient</th>
-                  <th className="px-6 py-3.5 font-semibold">Doctor</th>
-                  <th className="px-6 py-3.5 font-semibold">Date &amp; Time</th>
-                  <th className="px-6 py-3.5 font-semibold">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#E2E8F0]">
-                {filtered.map((apt) => (
-                  <tr key={apt.id}>
-                    <td className="px-6 py-4 font-mono text-xs text-[#64748B]">
-                      #{String(apt.id).slice(-6)}
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-[#0F172A]">
-                      {apt.patient}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2.5">
-                        <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
-                          <Image
-                            src={apt.photo}
-                            alt={apt.doctor}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <span className="text-[#334155]">{apt.doctor}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-[#334155]">
-                      {apt.date} · {formatTime(apt.time)}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${statusStyles[apt.status]}`}
-                      >
-                        {apt.status}
-                      </span>
-                    </td>
+      <AnimatePresence mode="wait">
+        {filtered.length === 0 ? (
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-16 text-center"
+          >
+            <h2 className="text-lg font-semibold text-[#0F172A]">
+              No Appointments Found
+            </h2>
+            <p className="mt-2 text-sm text-[#94A3B8]">
+              Try a different filter or search term.
+            </p>
+          </motion.div>
+        ) : (
+          <motion.div
+            key={`results-${filter}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="hidden overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm md:block">
+              <table className="w-full text-left text-sm">
+                <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-xs uppercase tracking-wide text-[#64748B]">
+                  <tr>
+                    <th className="px-6 py-3.5 font-semibold">ID</th>
+                    <th className="px-6 py-3.5 font-semibold">Patient</th>
+                    <th className="px-6 py-3.5 font-semibold">Doctor</th>
+                    <th className="px-6 py-3.5 font-semibold">Date &amp; Time</th>
+                    <th className="px-6 py-3.5 font-semibold">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <motion.tbody
+                  className="divide-y divide-[#E2E8F0]"
+                  initial="hidden"
+                  animate="show"
+                  variants={containerVariants}
+                >
+                  {filtered.map((apt) => (
+                    <motion.tr key={apt.id} variants={rowVariants}>
+                      <td className="px-6 py-4 font-mono text-xs text-[#64748B]">
+                        #{String(apt.id).slice(-6)}
+                      </td>
+                      <td className="px-6 py-4 font-semibold text-[#0F172A]">
+                        {apt.patient}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2.5">
+                          <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full">
+                            <Image
+                              src={apt.photo}
+                              alt={apt.doctor}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <span className="text-[#334155]">{apt.doctor}</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-[#334155]">
+                        {apt.date} · {formatTime(apt.time)}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${statusStyles[apt.status]}`}
+                        >
+                          {apt.status}
+                        </span>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </motion.tbody>
+              </table>
+            </div>
 
-          <div className="flex flex-col gap-4 md:hidden">
-            {filtered.map((apt) => (
-              <div
-                key={apt.id}
-                className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <p className="font-mono text-xs text-[#94A3B8]">
-                    #{String(apt.id).slice(-6)}
-                  </p>
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${statusStyles[apt.status]}`}
-                  >
-                    {apt.status}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm font-bold text-[#0F172A]">
-                  {apt.patient}
-                </p>
-                <div className="mt-1 flex items-center gap-2">
-                  <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full">
-                    <Image
-                      src={apt.photo}
-                      alt={apt.doctor}
-                      fill
-                      className="object-cover"
-                    />
+            <motion.div
+              className="flex flex-col gap-4 md:hidden"
+              initial="hidden"
+              animate="show"
+              variants={containerVariants}
+            >
+              {filtered.map((apt) => (
+                <motion.div
+                  key={apt.id}
+                  variants={rowVariants}
+                  className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <p className="font-mono text-xs text-[#94A3B8]">
+                      #{String(apt.id).slice(-6)}
+                    </p>
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${statusStyles[apt.status]}`}
+                    >
+                      {apt.status}
+                    </span>
                   </div>
-                  <p className="text-xs text-[#64748B]">{apt.doctor}</p>
-                </div>
-                <p className="mt-2 text-xs text-[#94A3B8]">
-                  {apt.date} · {formatTime(apt.time)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+                  <p className="mt-2 text-sm font-bold text-[#0F172A]">
+                    {apt.patient}
+                  </p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <div className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full">
+                      <Image
+                        src={apt.photo}
+                        alt={apt.doctor}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <p className="text-xs text-[#64748B]">{apt.doctor}</p>
+                  </div>
+                  <p className="mt-2 text-xs text-[#94A3B8]">
+                    {apt.date} · {formatTime(apt.time)}
+                  </p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
