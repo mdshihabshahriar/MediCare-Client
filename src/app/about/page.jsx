@@ -1,6 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-
+import { motion } from "framer-motion";
 
 const values = [
   {
@@ -88,23 +90,37 @@ const milestones = [
   { value: "8", label: "Cities Covered" },
 ];
 
-
 function PageHero() {
   return (
     <section className="px-4 pt-20 pb-16 sm:px-6 sm:pt-24 lg:px-8">
       <div className="mx-auto max-w-3xl text-center">
-        <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]"
+        >
           <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
           ABOUT US
-        </div>
-        <h1 className="mt-5 text-4xl font-extrabold leading-tight text-[#0F172A] sm:text-5xl">
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mt-5 text-4xl font-extrabold leading-tight text-[#0F172A] sm:text-5xl"
+        >
           Healthcare that puts{" "}
           <span className="text-accent">people first</span>
-        </h1>
-        <p className="mt-5 text-lg leading-relaxed text-[#64748B]">
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="mt-5 text-lg leading-relaxed text-[#64748B]"
+        >
           MediCareConnect was built on a simple belief — finding the right
           doctor and getting the care you need should never be complicated.
-        </p>
+        </motion.p>
       </div>
     </section>
   );
@@ -114,7 +130,13 @@ function OurStory() {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 lg:grid-cols-2">
-        <div className="relative order-2 lg:order-1">
+        <motion.div
+          className="relative order-2 lg:order-1"
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
           <div className="relative aspect-4/3 w-full overflow-hidden rounded-[2rem] shadow-xl">
             <Image
               src="/assets/medical.jpg"
@@ -127,9 +149,15 @@ function OurStory() {
             <p className="text-3xl font-extrabold text-[#0F172A]">2021</p>
             <p className="text-xs font-medium text-[#94A3B8]">Founded in Dhaka</p>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="order-1 lg:order-2">
+        <motion.div
+          className="order-1 lg:order-2"
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
           <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
             OUR STORY
@@ -148,7 +176,7 @@ function OurStory() {
             verified specialists every month — with transparent pricing,
             real-time availability, and digital records that travel with you.
           </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -158,15 +186,22 @@ function Milestones() {
   return (
     <section className="px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-5 rounded-[2rem] border border-[#E2E8F0] bg-white px-6 py-10 shadow-sm sm:grid-cols-4">
-        {milestones.map((item) => (
-          <div key={item.label} className="text-center">
+        {milestones.map((item, index) => (
+          <motion.div
+            key={item.label}
+            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+            viewport={{ once: true }}
+          >
             <p className="text-3xl font-extrabold text-[#0F172A] sm:text-4xl">
               {item.value}
             </p>
             <p className="mt-1 text-sm font-medium text-[#64748B]">
               {item.label}
             </p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>
@@ -177,7 +212,13 @@ function CoreValues() {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mx-auto max-w-2xl text-center">
+        <motion.div
+          className="mx-auto max-w-2xl text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
           <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
             WHAT WE STAND FOR
@@ -189,13 +230,17 @@ function CoreValues() {
             The principles that guide every decision we make, from product
             design to partnerships.
           </p>
-        </div>
+        </motion.div>
 
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {values.map((value) => (
-            <div
+          {values.map((value, index) => (
+            <motion.div
               key={value.title}
               className="rounded-2xl border border-[#E2E8F0] bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }}
             >
               <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${value.bg}`}>
                 <svg
@@ -216,7 +261,7 @@ function CoreValues() {
               <p className="mt-2 text-sm leading-relaxed text-[#64748B]">
                 {value.description}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -228,7 +273,13 @@ function TeamSection() {
   return (
     <section className="bg-[#F8FAFC] px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mx-auto max-w-2xl text-center">
+        <motion.div
+          className="mx-auto max-w-2xl text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
           <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
             OUR TEAM
@@ -240,11 +291,18 @@ function TeamSection() {
             A small team of doctors, engineers, and designers working to make
             healthcare simpler.
           </p>
-        </div>
+        </motion.div>
 
         <div className="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-4">
-          {team.map((member) => (
-            <div key={member.name} className="text-center">
+          {team.map((member, index) => (
+            <motion.div
+              key={member.name}
+              className="text-center"
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
               <div className="relative mx-auto h-24 w-24 overflow-hidden rounded-full shadow-md sm:h-28 sm:w-28">
                 <Image src={member.photo} alt={member.name} fill className="object-cover" />
               </div>
@@ -252,7 +310,7 @@ function TeamSection() {
                 {member.name}
               </h3>
               <p className="mt-0.5 text-xs text-[#94A3B8]">{member.role}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -263,7 +321,12 @@ function TeamSection() {
 function CtaBanner() {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] px-6 py-14 text-center sm:px-10 sm:py-16 bg-accent"
+      <motion.div
+        className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] px-6 py-14 text-center sm:px-10 sm:py-16 bg-accent"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
       >
         <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
           Ready to experience better healthcare?
@@ -281,7 +344,7 @@ function CtaBanner() {
             <path d="m12 5 7 7-7 7" />
           </svg>
         </Link>
-      </div>
+      </motion.div>
     </section>
   );
 }

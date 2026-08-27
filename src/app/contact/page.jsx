@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { TextField, Label, Input, TextArea, FieldError, Button } from "@heroui/react";
 
 const contactInfo = [
@@ -71,7 +72,6 @@ const ContactPage = () => {
     };
 
     console.log("Contact payload:", payload);
-    // TODO: send `payload` to your API / server action here.
 
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -83,30 +83,57 @@ const ContactPage = () => {
       {/* Page hero */}
       <section className="px-4 pb-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]"
+          >
             <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
             CONTACT US
-          </div>
-          <h1 className="mt-5 text-4xl font-extrabold leading-tight text-[#0F172A] sm:text-5xl">
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mt-5 text-4xl font-extrabold leading-tight text-[#0F172A] sm:text-5xl"
+          >
             We&apos;d love to <span className="text-[#2563EB]">hear from you</span>
-          </h1>
-          <p className="mt-5 text-lg leading-relaxed text-[#64748B]">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-5 text-lg leading-relaxed text-[#64748B]"
+          >
             Questions about booking, billing, or partnering with us? Our team
             is here to help.
-          </p>
+          </motion.p>
         </div>
       </section>
 
       {/* Contact info cards */}
       <section className="px-4 pb-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 sm:grid-cols-3">
-          {contactInfo.map((item) => (
-            <div
+          {contactInfo.map((item, index) => (
+            <motion.div
               key={item.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }}
               className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
             >
               <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${item.bg}`}>
-                <svg className={`h-5 w-5 ${item.iconColor}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  className={`h-5 w-5 ${item.iconColor}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   {item.icon}
                 </svg>
               </span>
@@ -116,7 +143,7 @@ const ContactPage = () => {
                   {line}
                 </p>
               ))}
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
@@ -125,20 +152,39 @@ const ContactPage = () => {
       <section className="px-4 pb-20 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Contact form */}
-          <div className="rounded-[2rem] border border-[#E2E8F0] bg-white p-8 shadow-sm sm:p-10 lg:col-span-2">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="rounded-[2rem] border border-[#E2E8F0] bg-white p-8 shadow-sm sm:p-10 lg:col-span-2"
+          >
             <h2 className="text-2xl font-extrabold text-[#0F172A]">Send us a message</h2>
             <p className="mt-1.5 text-sm text-[#64748B]">
               Fill out the form and we&apos;ll get back to you within 24 hours.
             </p>
 
             {isSubmitted && (
-              <div className="mt-6 flex items-center gap-2 rounded-xl border border-[#BBF7D0] bg-[#F0FDF4] px-4 py-3 text-sm font-medium text-[#15803D]">
-                <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="mt-6 flex items-center gap-2 rounded-xl border border-[#BBF7D0] bg-[#F0FDF4] px-4 py-3 text-sm font-medium text-[#15803D]"
+              >
+                <svg
+                  className="h-5 w-5 shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                   <path d="m22 4-10 10-3-3" />
                 </svg>
                 Thanks! Your message has been sent — we&apos;ll be in touch soon.
-              </div>
+              </motion.div>
             )}
 
             <form onSubmit={handleSubmit} className="mt-7 flex flex-col gap-6">
@@ -187,22 +233,45 @@ const ContactPage = () => {
                 className="inline-flex w-fit items-center gap-2 rounded-full bg-[#2563EB] px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-60"
               >
                 {isSubmitting ? "Sending…" : "Send Message"}
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M5 12h14" />
                   <path d="m12 5 7 7-7 7" />
                 </svg>
               </Button>
             </form>
-          </div>
+          </motion.div>
 
           {/* Sidebar: Emergency + FAQ */}
-          <div className="flex flex-col gap-6">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="flex flex-col gap-6"
+          >
             {/* Emergency hotline */}
             <div className="rounded-2xl border border-[#FECACA] bg-[#FEF2F2] p-6">
               <div className="flex items-center gap-3">
                 <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FEE2E2]">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#EF4444]/30" />
-                  <svg className="relative h-5 w-5 text-[#DC2626]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    className="relative h-5 w-5 text-[#DC2626]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z" />
                   </svg>
                 </span>
@@ -223,15 +292,22 @@ const ContactPage = () => {
             <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6">
               <h3 className="text-sm font-bold text-[#0F172A]">Quick Answers</h3>
               <div className="mt-4 flex flex-col divide-y divide-[#E2E8F0]">
-                {faqs.map((faq) => (
-                  <div key={faq.q} className="py-4 first:pt-0 last:pb-0">
+                {faqs.map((faq, index) => (
+                  <motion.div
+                    key={faq.q}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="py-4 first:pt-0 last:pb-0"
+                  >
                     <p className="text-sm font-semibold text-[#0F172A]">{faq.q}</p>
                     <p className="mt-1.5 text-xs leading-relaxed text-[#64748B]">{faq.a}</p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </main>
