@@ -87,7 +87,7 @@ export default function ManageDoctors() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors`);
         const data = await res.json();
 
-        const safeData = Array.isArray(data) ? data.filter(Boolean) : [];
+        const safeData = Array.isArray(data.doctors) ? data.doctors.filter(Boolean) : [];
         setDoctors(safeData);
       } catch (err) {
         console.error("Failed to load doctors:", err);

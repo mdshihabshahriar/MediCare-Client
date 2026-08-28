@@ -13,7 +13,13 @@ const specialties = [
   "Orthopedics",
   "Pediatrics",
   "Dermatology",
-  "Gynecology"
+  "Gynecology",
+  "Ophthalmology",
+  "Medicine",
+  "ENT",
+  "Psychiatry",
+  "Urology",
+  "Oncology",
 ];
 
 const emptyProfile = {
