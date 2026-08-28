@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { TextField, Label, Input, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
@@ -18,8 +19,20 @@ const days = [
 
 function Modal({ title, onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+      >
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
           <button
@@ -35,8 +48,8 @@ function Modal({ title, onClose, children }) {
           </button>
         </div>
         <div className="mt-5">{children}</div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -187,16 +200,42 @@ export default function ManageSchedule() {
     .map((day) => ({ day, slots: slots.filter((s) => s.day === day) }))
     .filter((group) => group.slots.length > 0);
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  };
+
+  const slotVariants = {
+    hidden: { opacity: 0, x: -10 },
+    show: { opacity: 1, x: 0, transition: { duration: 0.25, ease: "easeOut" } },
+  };
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <motion.div
+      className="flex flex-col gap-6"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
+    >
+      <motion.div variants={itemVariants} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Manage Schedule</h1>
           <p className="mt-1 text-sm text-[#64748B]">
             Set the days and times you&apos;re available for appointments.
           </p>
         </div>
-        <button
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
           onClick={() => setIsAdding(true)}
           className="inline-flex w-fit cursor-pointer items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8]"
         >
@@ -205,85 +244,114 @@ export default function ManageSchedule() {
             <path d="M5 12h14" />
           </svg>
           Add Schedule
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
       {grouped.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+        <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
           No available slots yet. Add your first schedule slot.
-        </div>
+        </motion.div>
       ) : (
-        <div className="flex flex-col gap-4">
-          {grouped.map((group) => (
-            <div key={group.day} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
-              <p className="text-sm font-bold text-[#0F172A]">{group.day}</p>
-              <div className="mt-3 flex flex-col divide-y divide-[#E2E8F0]">
-                {group.slots.map((slot) => (
-                  <div key={slot._id} className="flex items-center justify-between py-3 first:pt-0 last:pb-0">
-                    <span className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-[#2563EB]">
-                      <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="9" />
-                        <path d="M12 7v5l3 3" />
-                      </svg>
-                      {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setEditTarget(slot)}
-                        className="rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9]"
+        <motion.div className="flex flex-col gap-4" variants={containerVariants}>
+          <AnimatePresence>
+            {grouped.map((group) => (
+              <motion.div
+                key={group.day}
+                variants={itemVariants}
+                initial="hidden"
+                animate="show"
+                exit={{ opacity: 0, y: -10, transition: { duration: 0.2 } }}
+                className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+              >
+                <p className="text-sm font-bold text-[#0F172A]">{group.day}</p>
+                <motion.div
+                  className="mt-3 flex flex-col divide-y divide-[#E2E8F0]"
+                  initial="hidden"
+                  animate="show"
+                  variants={containerVariants}
+                >
+                  <AnimatePresence>
+                    {group.slots.map((slot) => (
+                      <motion.div
+                        key={slot._id}
+                        variants={slotVariants}
+                        initial="hidden"
+                        animate="show"
+                        exit={{ opacity: 0, x: -10, transition: { duration: 0.2 } }}
+                        className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
                       >
-                        Update
-                      </button>
-                      <button
-                        onClick={() => setDeleteTarget(slot)}
-                        className="rounded-lg border border-[#EF4444] px-3 py-1.5 text-xs font-semibold text-[#EF4444] hover:bg-[#FEF2F2]"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                        <span className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-[#2563EB]">
+                          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M12 7v5l3 3" />
+                          </svg>
+                          {formatTime(slot.startTime)} – {formatTime(slot.endTime)}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setEditTarget(slot)}
+                            className="rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9]"
+                          >
+                            Update
+                          </button>
+                          <button
+                            onClick={() => setDeleteTarget(slot)}
+                            className="rounded-lg border border-[#EF4444] px-3 py-1.5 text-xs font-semibold text-[#EF4444] hover:bg-[#FEF2F2]"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      )}
+
+      <AnimatePresence>
+        {isAdding && (
+          <Modal title="Add Schedule Slot" onClose={() => setIsAdding(false)}>
+            <ScheduleForm onSubmit={handleAdd} onCancel={() => setIsAdding(false)} />
+          </Modal>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {editTarget && (
+          <Modal title="Update Schedule Slot" onClose={() => setEditTarget(null)}>
+            <ScheduleForm initial={editTarget} onSubmit={handleUpdate} onCancel={() => setEditTarget(null)} />
+          </Modal>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {deleteTarget && (
+          <Modal title="Remove Schedule Slot" onClose={() => setDeleteTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              Remove <span className="font-semibold text-[#0F172A]">{deleteTarget.day}, {deleteTarget.startTime}–{deleteTarget.endTime}</span> from your availability?
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setDeleteTarget(null)}
+                className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]"
+              >
+                Keep Slot
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]"
+              >
+                Yes, Remove
+              </button>
             </div>
-          ))}
-        </div>
-      )}
-
-      {isAdding && (
-        <Modal title="Add Schedule Slot" onClose={() => setIsAdding(false)}>
-          <ScheduleForm onSubmit={handleAdd} onCancel={() => setIsAdding(false)} />
-        </Modal>
-      )}
-
-      {editTarget && (
-        <Modal title="Update Schedule Slot" onClose={() => setEditTarget(null)}>
-          <ScheduleForm initial={editTarget} onSubmit={handleUpdate} onCancel={() => setEditTarget(null)} />
-        </Modal>
-      )}
-
-      {deleteTarget && (
-        <Modal title="Remove Schedule Slot" onClose={() => setDeleteTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            Remove <span className="font-semibold text-[#0F172A]">{deleteTarget.day}, {deleteTarget.startTime}–{deleteTarget.endTime}</span> from your availability?
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button
-              type="button"
-              onClick={() => setDeleteTarget(null)}
-              className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]"
-            >
-              Keep Slot
-            </button>
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]"
-            >
-              Yes, Remove
-            </button>
-          </div>
-        </Modal>
-      )}
-    </div>
+          </Modal>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
@@ -16,8 +17,20 @@ const statusStyles = {
 
 function Modal({ title, onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+      >
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
           <button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]" aria-label="Close">
@@ -28,8 +41,8 @@ function Modal({ title, onClose, children }) {
           </button>
         </div>
         <div className="mt-5">{children}</div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -91,10 +104,28 @@ export default function AppointmentRequests() {
     router.push(`/dashboard/doctor/prescriptions/new?appointmentId=${appointmentId}`);
   };
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.07 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  };
+
   if (isSessionPending || loading) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+        />
       </div>
     );
   }
@@ -103,18 +134,25 @@ export default function AppointmentRequests() {
   const filtered = filter === "all" ? requests : requests.filter((r) => r.status === filter);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
+    <motion.div
+      className="flex flex-col gap-6"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
+    >
+      <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Appointment Requests</h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Accept or reject incoming requests, and mark visits as completed.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="flex flex-wrap gap-2">
+      <motion.div variants={itemVariants} className="flex flex-wrap gap-2">
         {filters.map((f) => (
-          <button
+          <motion.button
             key={f}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setFilter(f)}
             className={`rounded-full border px-4 py-1.5 text-xs font-semibold capitalize transition-colors ${
               filter === f
@@ -123,107 +161,127 @@ export default function AppointmentRequests() {
             }`}
           >
             {f}
-          </button>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="flex flex-col gap-4">
+      <motion.div className="flex flex-col gap-4" variants={containerVariants}>
         {filtered.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+          <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
             No {filter !== "all" ? filter : ""} requests.
-          </div>
+          </motion.div>
         ) : (
-          filtered.map((req) => (
-            <div key={req._id} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm sm:p-6">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
-                    <Image
-                      src={req.patient?.photoUrl || "https://i.pravatar.cc/150?u=" + req.patientId}
-                      alt={req.patient?.name || "Patient"}
-                      fill
-                      className="object-cover"
-                    />
+          <AnimatePresence>
+            {filtered.map((req) => (
+              <motion.div
+                key={req._id}
+                variants={itemVariants}
+                initial="hidden"
+                animate="show"
+                exit={{ opacity: 0, x: -12, transition: { duration: 0.2 } }}
+                layout
+                className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm sm:p-6"
+              >
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
+                      <Image
+                        src={req.patient?.photoUrl || "https://i.pravatar.cc/150?u=" + req.patientId}
+                        alt={req.patient?.name || "Patient"}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-[#0F172A]">{req.patient?.name}</p>
+                      <p className="text-xs text-[#94A3B8]">{req.symptoms}</p>
+                      <p className="mt-0.5 text-xs text-[#64748B]">
+                        {req.schedule?.day} · {req.schedule?.startTime}–{req.schedule?.endTime}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-[#0F172A]">{req.patient?.name}</p>
-                    <p className="text-xs text-[#94A3B8]">{req.symptoms}</p>
-                    <p className="mt-0.5 text-xs text-[#64748B]">
-                      {req.schedule?.day} · {req.schedule?.startTime}–{req.schedule?.endTime}
-                    </p>
-                  </div>
+
+                  <span className={`w-fit rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${statusStyles[req.status] || statusStyles.pending}`}>
+                    {req.status}
+                  </span>
                 </div>
 
-                <span className={`w-fit rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${statusStyles[req.status] || statusStyles.pending}`}>
-                  {req.status}
-                </span>
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-[#E2E8F0] pt-4">
-                {req.status === "pending" && (
-                  <>
-                    <button
-                      onClick={() => handleAccept(req._id)}
-                      className="rounded-lg bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1D4ED8]"
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-[#E2E8F0] pt-4">
+                  {req.status === "pending" && (
+                    <>
+                      <motion.button
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.96 }}
+                        onClick={() => handleAccept(req._id)}
+                        className="rounded-lg bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1D4ED8]"
+                      >
+                        Accept
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.04 }}
+                        whileTap={{ scale: 0.96 }}
+                        onClick={() => setRejectTarget(req)}
+                        className="rounded-lg border border-[#EF4444] px-4 py-2 text-xs font-semibold text-[#EF4444] hover:bg-[#FEF2F2]"
+                      >
+                        Reject
+                      </motion.button>
+                    </>
+                  )}
+                  {req.status === "accepted" && (
+                    <motion.button
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => setCompleteTarget(req)}
+                      className="rounded-lg bg-[#10B981] px-4 py-2 text-xs font-semibold text-white hover:bg-[#059669]"
                     >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() => setRejectTarget(req)}
-                      className="rounded-lg border border-[#EF4444] px-4 py-2 text-xs font-semibold text-[#EF4444] hover:bg-[#FEF2F2]"
-                    >
-                      Reject
-                    </button>
-                  </>
-                )}
-                {req.status === "accepted" && (
-                  <button
-                    onClick={() => setCompleteTarget(req)}
-                    className="rounded-lg bg-[#10B981] px-4 py-2 text-xs font-semibold text-white hover:bg-[#059669]"
-                  >
-                    Mark Completed
-                  </button>
-                )}
-                {req.status === "completed" && (
-                  <span className="text-xs font-medium text-[#94A3B8]">
-                    Visit completed — prescription created.
-                  </span>
-                )}
-                {req.status === "rejected" && (
-                  <span className="text-xs font-medium text-[#94A3B8]">This request was rejected.</span>
-                )}
-              </div>
-            </div>
-          ))
+                      Mark Completed
+                    </motion.button>
+                  )}
+                  {req.status === "completed" && (
+                    <span className="text-xs font-medium text-[#94A3B8]">
+                      Visit completed — prescription created.
+                    </span>
+                  )}
+                  {req.status === "rejected" && (
+                    <span className="text-xs font-medium text-[#94A3B8]">This request was rejected.</span>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         )}
-      </div>
+      </motion.div>
 
-      {rejectTarget && (
-        <Modal title="Reject Appointment" onClose={() => setRejectTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            Reject the appointment request from{" "}
-            <span className="font-semibold text-[#0F172A]">{rejectTarget.patient?.name}</span>?
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep Pending</button>
-            <button type="button" onClick={handleReject} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Reject</button>
-          </div>
-        </Modal>
-      )}
+      <AnimatePresence>
+        {rejectTarget && (
+          <Modal title="Reject Appointment" onClose={() => setRejectTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              Reject the appointment request from{" "}
+              <span className="font-semibold text-[#0F172A]">{rejectTarget.patient?.name}</span>?
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep Pending</button>
+              <button type="button" onClick={handleReject} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Reject</button>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
 
-      {completeTarget && (
-        <Modal title="Mark as Completed" onClose={() => setCompleteTarget(null)}>
-          <p className="text-sm text-[#64748B]">
-            Mark the visit with{" "}
-            <span className="font-semibold text-[#0F172A]">{completeTarget.patient?.name}</span> as
-            completed? You&apos;ll be taken to create their prescription next.
-          </p>
-          <div className="mt-6 flex gap-3">
-            <button type="button" onClick={() => setCompleteTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
-            <button type="button" onClick={handleMarkCompleted} className="flex-1 rounded-full bg-[#10B981] py-2.5 text-sm font-bold text-white hover:bg-[#059669]">Complete &amp; Continue</button>
-          </div>
-        </Modal>
-      )}
-    </div>
+      <AnimatePresence>
+        {completeTarget && (
+          <Modal title="Mark as Completed" onClose={() => setCompleteTarget(null)}>
+            <p className="text-sm text-[#64748B]">
+              Mark the visit with{" "}
+              <span className="font-semibold text-[#0F172A]">{completeTarget.patient?.name}</span> as
+              completed? You&apos;ll be taken to create their prescription next.
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button type="button" onClick={() => setCompleteTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={handleMarkCompleted} className="flex-1 rounded-full bg-[#10B981] py-2.5 text-sm font-bold text-white hover:bg-[#059669]">Complete &amp; Continue</button>
+            </div>
+          </Modal>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

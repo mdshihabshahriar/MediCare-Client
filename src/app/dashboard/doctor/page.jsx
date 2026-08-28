@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { authClient } from "@/lib/auth-client";
 
 const statConfig = [
@@ -130,29 +131,63 @@ export default function DoctorOverview() {
     loadReviews();
   }, [session]);
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
+  };
+
+  const rowVariants = {
+    hidden: { opacity: 0, x: -12 },
+    show: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  };
+
   if (isSessionPending) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+        />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <div>
+    <motion.div
+      className="flex flex-col gap-8"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
+    >
+      <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
           Welcome back, {session?.user?.name} 👋
         </h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Here&apos;s an overview of your practice today.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+      <motion.div
+        className="grid grid-cols-1 gap-4 sm:grid-cols-4"
+        variants={containerVariants}
+      >
         {statConfig.map((stat) => (
-          <div
+          <motion.div
             key={stat.key}
+            variants={itemVariants}
+            whileHover={{ y: -4, boxShadow: "0 8px 20px rgba(15,23,42,0.08)" }}
+            transition={{ duration: 0.2 }}
             className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
           >
             <span
@@ -176,11 +211,14 @@ export default function DoctorOverview() {
             <p className="mt-1 text-xs font-medium text-[#64748B]">
               {stat.label}
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+      <motion.div
+        variants={itemVariants}
+        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+      >
         <div className="flex items-center justify-between">
           <h2 className="text-base font-bold text-[#0F172A]">
             Upcoming Appointments
@@ -193,7 +231,12 @@ export default function DoctorOverview() {
           </Link>
         </div>
 
-        <div className="mt-5 flex flex-col divide-y divide-[#E2E8F0]">
+        <motion.div
+          className="mt-5 flex flex-col divide-y divide-[#E2E8F0]"
+          initial="hidden"
+          animate="show"
+          variants={containerVariants}
+        >
           {loadingAppointments ? (
             <p className="py-3.5 text-sm text-[#94A3B8]">Loading…</p>
           ) : appointments.length === 0 ? (
@@ -202,8 +245,9 @@ export default function DoctorOverview() {
             </p>
           ) : (
             appointments.map((apt) => (
-              <div
+              <motion.div
                 key={apt._id}
+                variants={rowVariants}
                 className="flex items-center gap-4 py-4 first:pt-0 last:pb-0"
               >
                 <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
@@ -226,41 +270,48 @@ export default function DoctorOverview() {
                 <span className="shrink-0 rounded-full bg-[#DBEAFE] px-2.5 py-1 text-xs font-semibold text-[#1D4ED8]">
                   {apt.status}
                 </span>
-              </div>
+              </motion.div>
             ))
           )}
-        </div>
-      </div>
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        variants={itemVariants}
+        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+      >
         <h2 className="text-lg font-bold mb-5">Recent Reviews</h2>
 
         {reviews.length === 0 ? (
           <p className="text-gray-500">No reviews yet.</p>
         ) : (
-          reviews.map((review) => (
-            <div
-              key={review._id}
-              className="flex items-start gap-4 border-b py-4 last:border-none"
-            >
-              <Image
-                src={review.patientPhoto || "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"}
-                alt={review.patientName}
-                width={50}
-                height={50}
-                className="rounded-full"
-              />
+          <motion.div initial="hidden" animate="show" variants={containerVariants}>
+            {reviews.map((review) => (
+              <motion.div
+                key={review._id}
+                variants={rowVariants}
+                className="flex items-start gap-4 border-b py-4 last:border-none"
+              >
+                <Image
+                  src={review.patientPhoto || "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"}
+                  alt={review.patientName}
+                  width={50}
+                  height={50}
+                  className="rounded-full"
+                />
 
-              <div className="flex-1">
-                <h3 className="font-semibold">{review.patientName}</h3>
+                <div className="flex-1">
+                  <h3 className="font-semibold">{review.patientName}</h3>
 
-                <p className="text-yellow-500">{"⭐".repeat(review.rating)}</p>
+                  <p className="text-yellow-500">{"⭐".repeat(review.rating)}</p>
 
-                <p className="text-gray-600 mt-1">{review.comment}</p>
-              </div>
-            </div>
-          ))
+                  <p className="text-gray-600 mt-1">{review.comment}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

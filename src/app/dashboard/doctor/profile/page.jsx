@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { TextField, Label, Input, TextArea, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
@@ -146,36 +147,77 @@ export default function DoctorProfileManagement() {
     }
   };
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 14 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  };
+
   if (isSessionPending || profile === null) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+        />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
+    <motion.div
+      className="flex flex-col gap-6"
+      initial="hidden"
+      animate="show"
+      variants={containerVariants}
+    >
+      <motion.div variants={itemVariants}>
         <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Profile Management</h1>
         <p className="mt-1 text-sm text-[#64748B]">
           Keep your professional details up to date for patients to see.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="max-w-2xl rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm sm:p-8">
-        {isSaved && (
-          <div className="mb-6 flex items-center gap-2 rounded-xl border border-[#BBF7D0] bg-[#F0FDF4] px-4 py-3 text-sm font-medium text-[#15803D]">
-            <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <path d="m22 4-10 10-3-3" />
-            </svg>
-            Your profile has been saved.
-          </div>
-        )}
+      <motion.div
+        variants={itemVariants}
+        className="max-w-2xl rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm sm:p-8"
+      >
+        <AnimatePresence>
+          {isSaved && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+              animate={{ opacity: 1, height: "auto", marginBottom: 24 }}
+              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="flex items-center gap-2 overflow-hidden rounded-xl border border-[#BBF7D0] bg-[#F0FDF4] px-4 py-3 text-sm font-medium text-[#15803D]"
+            >
+              <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <path d="m22 4-10 10-3-3" />
+              </svg>
+              Your profile has been saved.
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <form key={profile.photoUrl} onSubmit={handleSubmit} className="flex flex-col gap-6">
-          <div>
+        <motion.form
+          key={profile.photoUrl}
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-6"
+          initial="hidden"
+          animate="show"
+          variants={containerVariants}
+        >
+          <motion.div variants={itemVariants}>
             <label className="text-sm font-medium text-[#334155]">Profile Photo</label>
             <div
               onClick={() => fileInputRef.current?.click()}
@@ -215,9 +257,9 @@ export default function DoctorProfileManagement() {
                 className="hidden"
               />
             </div>
-          </div>
+          </motion.div>
 
-          <div>
+          <motion.div variants={itemVariants}>
             <Label className="text-sm font-medium text-[#334155]">Clinical Specialties</Label>
             <select
               name="specialty"
@@ -231,9 +273,9 @@ export default function DoctorProfileManagement() {
                 </option>
               ))}
             </select>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
             <TextField name="experience" type="number" defaultValue={profile.experience} isRequired>
               <Label className="text-sm font-medium text-[#334155]">Experience (Years)</Label>
               <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
@@ -242,23 +284,27 @@ export default function DoctorProfileManagement() {
               <Label className="text-sm font-medium text-[#334155]">Co-Pay Consultation Fee ($)</Label>
               <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
             </TextField>
-          </div>
+          </motion.div>
 
-          <TextField name="qualifications" defaultValue={profile.qualifications} isRequired>
-            <Label className="text-sm font-medium text-[#334155]">Qualifications Statement</Label>
-            <TextArea
-              rows={3}
-              className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
-            />
-          </TextField>
+          <motion.div variants={itemVariants}>
+            <TextField name="qualifications" defaultValue={profile.qualifications} isRequired>
+              <Label className="text-sm font-medium text-[#334155]">Qualifications Statement</Label>
+              <TextArea
+                rows={3}
+                className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+              />
+            </TextField>
+          </motion.div>
 
-          <TextField name="hospitalName" defaultValue={profile.hospitalName} isRequired>
-            <Label className="text-sm font-medium text-[#334155]">Attached Medical Hospital Name</Label>
-            <Input
-              placeholder="e.g. Dhaka Medical College Hospital"
-              className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
-            />
-          </TextField>
+          <motion.div variants={itemVariants}>
+            <TextField name="hospitalName" defaultValue={profile.hospitalName} isRequired>
+              <Label className="text-sm font-medium text-[#334155]">Attached Medical Hospital Name</Label>
+              <Input
+                placeholder="e.g. Dhaka Medical College Hospital"
+                className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+              />
+            </TextField>
+          </motion.div>
 
           {/* Available slots */}
           {/* <div>
@@ -302,15 +348,19 @@ export default function DoctorProfileManagement() {
             </p>
           </div> */}
 
-          <Button
-            type="submit"
-            isDisabled={isSaving}
-            className="mt-2 w-fit rounded-full bg-[#2563EB] px-7 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-60"
-          >
-            {isSaving ? "Saving…" : "Save Changes"}
-          </Button>
-        </form>
-      </div>
-    </div>
+          <motion.div variants={itemVariants}>
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-fit">
+              <Button
+                type="submit"
+                isDisabled={isSaving}
+                className="mt-2 w-fit rounded-full bg-[#2563EB] px-7 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-60"
+              >
+                {isSaving ? "Saving…" : "Save Changes"}
+              </Button>
+            </motion.div>
+          </motion.div>
+        </motion.form>
+      </motion.div>
+    </motion.div>
   );
 }
