@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { authClient } from "@/lib/auth-client";
 
 const verificationStyles = {
   verified: "bg-[#DCFCE7] text-[#15803D]",
@@ -26,6 +27,8 @@ const cardVariants = {
     transition: { duration: 0.32, ease: "easeOut" },
   },
 };
+
+const PAGE_SIZE = 6;
 
 function Modal({ title, onClose, children }) {
   return (
@@ -77,6 +80,7 @@ function InfoRow({ icon, label, value }) {
 export default function ManageDoctors() {
   const [doctors, setDoctors] = useState(null); 
   const [filter, setFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
   const [verifyTarget, setVerifyTarget] = useState(null);
   const [rejectTarget, setRejectTarget] = useState(null);
   const [statusTarget, setStatusTarget] = useState(null); 
@@ -84,7 +88,10 @@ export default function ManageDoctors() {
   useEffect(() => {
     const loadDoctors = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors`);
+        const { data: tokenData } = await authClient.token();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors?limit=1000`, {
+          headers: { authorization: `Bearer ${tokenData?.token}` },
+        });
         const data = await res.json();
 
         const safeData = Array.isArray(data.doctors) ? data.doctors.filter(Boolean) : [];
@@ -97,6 +104,10 @@ export default function ManageDoctors() {
     loadDoctors();
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
+
   const filtered =
     doctors === null
       ? []
@@ -104,10 +115,17 @@ export default function ManageDoctors() {
       ? doctors
       : doctors.filter((d) => d.verificationStatus === filter);
 
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paginated = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+
   const updateVerification = async (userId, status) => {
+    const { data: tokenData } = await authClient.token();
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/doctors/${userId}/verification`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", authorization: `Bearer ${tokenData?.token}` },
       body: JSON.stringify({ status }),
     });
     setDoctors((prev) =>
@@ -151,7 +169,6 @@ export default function ManageDoctors() {
         </p>
       </motion.div>
 
-      {/* Filter tabs */}
       <motion.div
         className="flex flex-wrap gap-2"
         initial={{ opacity: 0, y: 10 }}
@@ -178,9 +195,9 @@ export default function ManageDoctors() {
         initial="hidden"
         animate="show"
         variants={containerVariants}
-        key={filter}
+        key={`${filter} - ${currentPage}`}
       >
-        {filtered.map((doc) => (
+        {paginated.map((doc) => (
           <motion.div
             key={doc.userId}
             variants={cardVariants}
@@ -261,7 +278,6 @@ export default function ManageDoctors() {
               />
             </div>
 
-            {/* Actions */}
             <div className="mt-auto flex flex-wrap gap-2 border-t border-[#E2E8F0] bg-[#F8FAFC] px-5 py-4 sm:px-6">
               {doc.verificationStatus === "pending" && (
                 <>
@@ -299,6 +315,40 @@ export default function ManageDoctors() {
           </motion.div>
         ))}
       </motion.div>
+
+      {filtered.length > 0 && (
+        <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-4">
+          <p className="text-xs text-[#64748B]">
+            Showing {(currentPage - 1) * PAGE_SIZE + 1}
+            –{Math.min(currentPage * PAGE_SIZE, filtered.length)} of {filtered.length}
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Previous
+            </button>
+            <span className="text-xs font-medium text-[#64748B]">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+
+      {filtered.length === 0 && (
+        <div className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+          No doctors found for this filter.
+        </div>
+      )}
 
       <AnimatePresence>
         {verifyTarget && (

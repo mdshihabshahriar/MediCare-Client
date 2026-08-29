@@ -29,8 +29,12 @@ export default function PaymentHistory() {
 
   const loadTransactions = async () => {
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/appointments/patient/${session.user.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/appointments/patient/${session.user.id}`,
+        {
+            headers: { authorization: `Bearer ${tokenData?.token}` },
+        }
       );
 
       if (!res.ok) {

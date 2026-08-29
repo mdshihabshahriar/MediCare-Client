@@ -66,8 +66,10 @@ export default function AppointmentRequests() {
     if (!session?.user?.id) return;
 
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/appointments/doctor/${session.user.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/appointments/doctor/${session.user.id}`,
+        { headers: { authorization: `Bearer ${tokenData?.token}` } }
       );
       const data = await res.json();
       setRequests(Array.isArray(data) ? data : []);
@@ -80,9 +82,10 @@ export default function AppointmentRequests() {
   };
 
   const updateStatus = async (id, status) => {
+    const { data: tokenData } = await authClient.token();
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${id}/status`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", authorization: `Bearer ${tokenData?.token}`, },
       body: JSON.stringify({ status }),
     });
     await loadRequests();
@@ -195,9 +198,6 @@ export default function AppointmentRequests() {
                     <div>
                       <p className="text-sm font-bold text-[#0F172A]">{req.patient?.name}</p>
                       <p className="text-xs text-[#94A3B8]">{req.symptoms}</p>
-                      <p className="mt-0.5 text-xs text-[#64748B]">
-                        {req.schedule?.day} · {req.schedule?.startTime}–{req.schedule?.endTime}
-                      </p>
                     </div>
                   </div>
 

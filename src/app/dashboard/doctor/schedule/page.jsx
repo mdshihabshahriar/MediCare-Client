@@ -114,8 +114,10 @@ export default function ManageSchedule() {
   }, []);
 
   const loadSchedules = async () => {
+    const { data: tokenData } = await authClient.token();
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/schedules/${session.user.id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/schedules/${session.user.id}`,
+      { headers: { authorization: `Bearer ${tokenData?.token}` } }
     );
 
     const data = await res.json();
@@ -133,6 +135,7 @@ export default function ManageSchedule() {
   const handleAdd = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    const { data: tokenData } = await authClient.token();
     const newSlot = {
       id: crypto.randomUUID(),
       day: formData.get("day"),
@@ -143,6 +146,7 @@ export default function ManageSchedule() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${tokenData?.token}`
       },
       body: JSON.stringify({
         doctorId: session.user.id,
@@ -167,12 +171,15 @@ export default function ManageSchedule() {
       endTime: formData.get("endTime"),
     };
 
+    const { data: tokenData } = await authClient.token();
+
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/schedules/${editTarget._id}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`
         },
         body: JSON.stringify(updated),
       }
@@ -184,10 +191,12 @@ export default function ManageSchedule() {
   };
 
   const handleDelete = async () => {
+    const { data: tokenData } = await authClient.token();
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/schedules/${deleteTarget._id}`,
       {
         method: "DELETE",
+        headers: { authorization: `Bearer ${tokenData?.token}` },
       }
     );
 
@@ -200,7 +209,6 @@ export default function ManageSchedule() {
     .map((day) => ({ day, slots: slots.filter((s) => s.day === day) }))
     .filter((group) => group.slots.length > 0);
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {

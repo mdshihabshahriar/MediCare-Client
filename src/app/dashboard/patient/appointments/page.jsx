@@ -31,8 +31,12 @@ export default function MyAppointmentsPage() {
     if (!session?.user?.id) return;
 
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/appointments/patient/${session.user.id}`,
+        {
+            headers: { authorization: `Bearer ${tokenData?.token}` },
+        }
       );
 
       const data = await res.json();
@@ -56,21 +60,24 @@ export default function MyAppointmentsPage() {
         patientId: String(session.user.id),
       };
 
-      console.log("========== PAY NOW ==========");
-      console.log("Appointment:", appointment);
-      console.log("Payment Data:", paymentData);
+      // console.log("========== PAY NOW ==========");
+      // console.log("Appointment:", appointment);
+      // console.log("Payment Data:", paymentData);
+
+      const { data: tokenData } = await authClient.token();
 
       const res = await fetch("/api/payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`
         },
         body: JSON.stringify(paymentData),
       });
 
       const data = await res.json();
 
-      console.log("Payment API Response:", data);
+      // console.log("Payment API Response:", data);
 
       if (!res.ok) {
         throw new Error(data.message || "Payment session creation failed");
@@ -122,12 +129,14 @@ export default function MyAppointmentsPage() {
 
   const handleCancel = async () => {
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/appointments/${cancelAppointment._id}/status`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${tokenData?.token}`
           },
           body: JSON.stringify({
             status: "cancelled",
@@ -152,8 +161,12 @@ export default function MyAppointmentsPage() {
   };
 
   const loadSchedules = async (doctorId) => {
+    const { data: tokenData } = await authClient.token();
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/schedules/${doctorId}`,
+      {
+          headers: { authorization: `Bearer ${tokenData?.token}` },
+      }
     );
 
     const data = await res.json();
@@ -161,12 +174,14 @@ export default function MyAppointmentsPage() {
   };
 
   const handleReschedule = async () => {
+    const { data: tokenData } = await authClient.token();
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/appointments/${rescheduleAppointment._id}/reschedule`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`
         },
         body: JSON.stringify({
           scheduleId: selectedSchedule,
@@ -185,7 +200,6 @@ export default function MyAppointmentsPage() {
     setReviewAppointment(null);
   };
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {

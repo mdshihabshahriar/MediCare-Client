@@ -54,8 +54,12 @@ export default function MyProfile() {
 
     const loadProfile = async () => {
       try {
+        const { data:d } = await authClient.token();
+        const token = d?.token;
         const url = `${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}`;
-        const res = await fetch(url);
+        const res = await fetch(url, {
+            headers: { authorization: `Bearer ${token}` },
+        });
 
         if (!res.ok) {
           const text = await res.text();
@@ -122,11 +126,13 @@ export default function MyProfile() {
     };
 
     try {
+      const { data } = await authClient.token();
+      const token = data?.token;
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", authorization: `Bearer ${token}` },
           body: JSON.stringify(payload),
         }
       );
@@ -150,7 +156,6 @@ export default function MyProfile() {
     }
   };
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {

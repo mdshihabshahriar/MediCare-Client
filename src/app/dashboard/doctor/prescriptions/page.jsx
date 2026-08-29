@@ -169,8 +169,10 @@ export default function PrescriptionManagement() {
 
     const loadPrescriptions = async () => {
       try {
+        const { data: tokenData } = await authClient.token();
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/prescriptions/doctor/${session.user.id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/prescriptions/doctor/${session.user.id}`,
+          { headers: { authorization: `Bearer ${tokenData?.token}` } }
         );
         const data = await res.json();
         setPrescriptions(Array.isArray(data) ? data : []);
@@ -195,9 +197,14 @@ export default function PrescriptionManagement() {
       medicines: medicines.filter((m) => m.name.trim() !== ""),
     };
 
+    const { data: tokenData } = await authClient.token();
+
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prescriptions/${editTarget._id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json", 
+        authorization: `Bearer ${tokenData?.token}`
+      },
       body: JSON.stringify(updated),
     });
     toast.success("Prescription updated successfully");

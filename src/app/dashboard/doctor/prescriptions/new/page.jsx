@@ -82,7 +82,10 @@ export default function CreatePrescriptionPage() {
 
     const loadAppointment = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${appointmentId}`);
+        const { data: tokenData } = await authClient.token();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/${appointmentId}`,
+          { headers: { authorization: `Bearer ${tokenData?.token}` } }
+        );
         const data = await res.json();
         setAppointment(data);
       } catch (err) {
@@ -114,9 +117,10 @@ export default function CreatePrescriptionPage() {
     };
 
     try {
+      const { data: tokenData } = await authClient.token();
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/prescriptions`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", authorization: `Bearer ${tokenData?.token}` },
         body: JSON.stringify(newPrescription),
       });
       toast.success("Prescription issued successfully");

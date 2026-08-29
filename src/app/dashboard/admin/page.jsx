@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { formatTimeAgo } from "@/lib/formatTimeAgo";
+import { authClient } from "@/lib/auth-client";
 
 const statConfig = [
   {
@@ -93,7 +94,10 @@ export default function AdminOverview() {
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/stats`);
+        const { data: tokenData } = await authClient.token();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/stats`, {
+        headers: { authorization: `Bearer ${tokenData?.token}` },
+      });
         const data = await res.json();
         setStats(data);
       } catch (err) {
@@ -104,7 +108,10 @@ export default function AdminOverview() {
 
     const loadActivity = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/recent-activity`);
+        const { data: tokenData } = await authClient.token();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/recent-activity`, {
+        headers: { authorization: `Bearer ${tokenData?.token}` },
+      });
         const data = await res.json();
         setRecentActivity(Array.isArray(data) ? data : []);
       } catch (err) {

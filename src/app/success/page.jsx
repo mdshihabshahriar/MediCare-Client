@@ -3,6 +3,7 @@ import "server-only";
 import { stripe } from "@/lib/stripe";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { getTokenServer } from "@/lib/getTokenServer";
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;
@@ -33,9 +34,12 @@ export default async function Success({ searchParams }) {
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+    const token = await getTokenServer();
+    const authHeader = { authorization: `Bearer ${token}` };
+
     const appointmentRes = await fetch(
       `${apiUrl}/appointments/${appointmentId}`,
-      { cache: "no-store" },
+      { cache: "no-store", headers: authHeader },
     );
 
     if (!appointmentRes.ok) {
@@ -57,6 +61,7 @@ export default async function Success({ searchParams }) {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            ...authHeader,
           },
           body: JSON.stringify({
             transactionId: session.payment_intent

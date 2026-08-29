@@ -70,8 +70,10 @@ export default function DoctorProfileManagement() {
 
     const loadProfile = async () => {
       try {
+        const { data: tokenData } = await authClient.token();
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}`,
+          { headers: { authorization: `Bearer ${tokenData?.token}` } }
         );
         const existing = await res.json(); 
         const data = existing || emptyProfile;
@@ -130,11 +132,12 @@ export default function DoctorProfileManagement() {
     };
 
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", authorization: `Bearer ${tokenData?.token}` },
           body: JSON.stringify(payload),
         }
       );
@@ -153,7 +156,6 @@ export default function DoctorProfileManagement() {
     }
   };
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {

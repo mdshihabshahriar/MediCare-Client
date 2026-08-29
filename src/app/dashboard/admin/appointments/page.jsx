@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { authClient } from "@/lib/auth-client";
 
 const statusStyles = {
   upcoming: "bg-[#DBEAFE] text-[#1D4ED8]",
@@ -46,8 +47,10 @@ export default function AdminManageAppointments() {
 
   const loadAppointments = async () => {
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/appointments`,
+        { headers: { authorization: `Bearer ${tokenData?.token}` } }
       );
 
       if (!res.ok) {

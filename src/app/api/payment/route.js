@@ -30,10 +30,21 @@ export async function POST(request) {
       );
     }
 
+    const incomingHeaders = await headers();
+    const authorization = incomingHeaders.get("authorization");
+
+    if (!authorization) {
+      return NextResponse.json(
+        { message: "Missing authorization token" },
+        { status: 401 }
+      );
+    }
+
     const appointmentRes = await fetch(
       `${apiUrl}/appointments/${appointmentId}`,
       {
         cache: "no-store",
+        headers: { authorization },
       }
     );
 

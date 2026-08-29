@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { authClient } from "@/lib/auth-client";
 
 const statusStyles = {
   paid: "bg-[#DCFCE7] text-[#15803D]",
@@ -46,8 +47,10 @@ export default function PaymentManagement() {
 
   const loadTransactions = async () => {
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/appointments`
+        `${process.env.NEXT_PUBLIC_API_URL}/appointments`,
+        { headers: { authorization: `Bearer ${tokenData?.token}` } }
       );
 
       if (!res.ok) {

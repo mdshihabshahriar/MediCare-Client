@@ -80,9 +80,15 @@ export default function MyReviews() {
 
     const load = async () => {
       try {
+        const { data: tokenData } = await authClient.token();
+        const authHeader = { authorization: `Bearer ${tokenData?.token}` };
         const [reviewsRes, appointmentsRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/patient/${session.user.id}`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/patient/${session.user.id}`),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/patient/${session.user.id}`,{
+              headers: authHeader,
+          }),
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/appointments/patient/${session.user.id}`,{
+              headers: authHeader,
+          }),
         ]);
 
         const reviewsData = await reviewsRes.json();
@@ -155,14 +161,16 @@ export default function MyReviews() {
     console.log(newReview);
 
     try {
+      const { data: tokenData } = await authClient.token();
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", authorization: `Bearer ${tokenData?.token}` },
         body: JSON.stringify(newReview),
       });
       const result = await res.json();
 
-      console.log("Review submitted successfully:", result);
+      // console.log("Review submitted successfully:", result);
 
       const doctor = reviewableDoctors.find((d) => d.doctorId === newReview.doctorId);
       setReviews((prev) => [
@@ -189,9 +197,10 @@ export default function MyReviews() {
     const updated = { rating, comment: formData.get("comment") };
 
     try {
+      const { data: tokenData } = await authClient.token();
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/${editTarget._id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", authorization: `Bearer ${tokenData?.token}` },
         body: JSON.stringify(updated),
       });
 
@@ -204,8 +213,10 @@ export default function MyReviews() {
 
   const handleDelete = async () => {
     try {
+      const { data: tokenData } = await authClient.token();
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/${deleteTarget._id}`, {
         method: "DELETE",
+        headers: { authorization: `Bearer ${tokenData?.token}` },
       });
       setReviews((prev) => prev.filter((r) => r._id !== deleteTarget._id));
       setDeleteTarget(null);
@@ -214,7 +225,6 @@ export default function MyReviews() {
     }
   };
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {

@@ -14,7 +14,8 @@ const specialtyOptions = [
   "Dermatology",
   "Gynecology",
   "Ophthalmology",
-  "Medicine"
+  "Medicine",
+  "ENT"
 ];
 
 const specialtyBadgeStyles = {
@@ -26,6 +27,7 @@ const specialtyBadgeStyles = {
   Gynecology: "bg-[#E0F2FE] text-[#0369A1]",
   Ophthalmology: "bg-[#FEEBC8] text-[#C2410C]",
   Medicine: "bg-[#EDE9FE] text-[#5B21B6]",
+  ENT: "bg-[#DCFCE7] text-[#166534]",
 };
 
 const sortOptions = [

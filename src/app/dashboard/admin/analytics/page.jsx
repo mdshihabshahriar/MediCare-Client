@@ -15,6 +15,7 @@ import {
   Legend,
   LabelList,
 } from "recharts";
+import { authClient } from "@/lib/auth-client";
 
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
@@ -104,16 +105,20 @@ export default function Analytics() {
   }, []);
 
   const loadAnalytics = async () => {
+    const { data: tokenData } = await authClient.token();
+    const authHeader = { authorization: `Bearer ${tokenData?.token}` };
+
     const [summary, doctors, trend] = await Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/summary`).then((r) =>
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/summary`, {headers: authHeader,}).then((r) =>
         r.json(),
       ),
       fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/analytics/doctor-performance`,
-      ).then((r) => r.json()),
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/monthly-trend`).then(
-        (r) => r.json(),
-      ),
+        `${process.env.NEXT_PUBLIC_API_URL}/analytics/doctor-performance`, {
+        headers: authHeader,
+      }).then((r) => r.json()),
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/analytics/monthly-trend`, {
+        headers: authHeader,
+      }).then((r) => r.json()),
     ]);
 
     setStats(summary);

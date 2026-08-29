@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { authClient } from "@/lib/auth-client";
 
 const roleStyles = {
   patient: "bg-[#DBEAFE] text-[#1D4ED8]",
@@ -75,7 +76,10 @@ export default function ManageUsers() {
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+        const { data: tokenData } = await authClient.token();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+        headers: { authorization: `Bearer ${tokenData?.token}` },
+      });
         const data = await res.json();
         setUsers(Array.isArray(data) ? data.filter(Boolean) : []);
       } catch (err) {
@@ -98,9 +102,11 @@ export default function ManageUsers() {
     const isSuspended = suspendTarget.status === "suspended";
     const newStatus = isSuspended ? "active" : "suspended";
 
+    const { data: tokenData } = await authClient.token();
+
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${suspendTarget._id}/status`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", authorization: `Bearer ${tokenData?.token}`, },
       body: JSON.stringify({ status: newStatus }),
     });
 
@@ -111,8 +117,10 @@ export default function ManageUsers() {
   };
 
   const handleDelete = async () => {
+    const { data: tokenData } = await authClient.token();
     await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${deleteTarget._id}`, {
       method: "DELETE",
+      headers: { authorization: `Bearer ${tokenData?.token}` },
     });
 
     setUsers((prev) => prev.filter((u) => u._id !== deleteTarget._id));

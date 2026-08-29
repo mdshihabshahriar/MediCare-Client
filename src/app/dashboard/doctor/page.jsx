@@ -71,8 +71,10 @@ export default function DoctorOverview() {
 
     const loadStats = async () => {
       try {
+        const { data: tokenData } = await authClient.token();
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/doctors/${session.user.id}/stats`,
+          { headers: { authorization: `Bearer ${tokenData?.token}` } }
         );
 
         if (!res.ok) {
@@ -93,8 +95,10 @@ export default function DoctorOverview() {
 
     const loadAppointments = async () => {
       try {
+        const { data: tokenData } = await authClient.token();
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/appointments/doctor/${session.user.id}`,
+          { headers: { authorization: `Bearer ${tokenData?.token}` } }
         );
         const data = await res.json();
         const list = Array.isArray(data) ? data : [];
@@ -114,8 +118,10 @@ export default function DoctorOverview() {
 
     const loadReviews = async () => {
       try {
+        const { data: tokenData } = await authClient.token();
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/reviews/doctor/${session.user.id}`,
+          { headers: { authorization: `Bearer ${tokenData?.token}` } }
         );
 
         const data = await res.json();

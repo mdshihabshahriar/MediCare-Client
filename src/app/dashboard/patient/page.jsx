@@ -19,8 +19,13 @@ export default function DashboardOverview() {
 
   const loadAppointments = async () => {
     try {
+      const { data:d } = await authClient.token();
+      const token = d?.token;
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/appointments/patient/${session.user.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/appointments/patient/${session.user.id}`,
+        {
+            headers: { authorization: `Bearer ${token}` },
+        }
       );
 
       if (!res.ok) {

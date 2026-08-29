@@ -46,8 +46,10 @@ export default function DoctorDetailsPage() {
 
   const loadSchedules = async () => {
     try {
+      const { data: tokenData } = await authClient.token();
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`,
+        { headers: { authorization: `Bearer ${tokenData?.token}` } }
       );
 
       if (!res.ok) {
@@ -105,7 +107,9 @@ export default function DoctorDetailsPage() {
         paymentMethod: "stripe",
       };
 
-      console.log("Creating appointment before payment:", appointmentData);
+      // console.log("Creating appointment before payment:", appointmentData);
+
+      const { data: tokenData } = await authClient.token();
 
       const appointmentRes = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/appointments`,
@@ -113,6 +117,7 @@ export default function DoctorDetailsPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${tokenData?.token}`, 
           },
           body: JSON.stringify(appointmentData),
         },
@@ -138,6 +143,7 @@ export default function DoctorDetailsPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${tokenData?.token}`,
         },
         body: JSON.stringify({
           appointmentId,
@@ -198,7 +204,9 @@ export default function DoctorDetailsPage() {
         paymentMethod: "pay_later",
       };
 
-      console.log("Pay Later Appointment:", appointmentData);
+      // console.log("Pay Later Appointment:", appointmentData);
+
+      const { data: tokenData } = await authClient.token();
 
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/appointments`,
@@ -206,6 +214,7 @@ export default function DoctorDetailsPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${tokenData?.token}`,
           },
           body: JSON.stringify(appointmentData),
         },
@@ -474,7 +483,7 @@ export default function DoctorDetailsPage() {
         </div>
       </div>
       {showPaymentModal && (
-        <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
           <div className="w-full max-w-xl overflow-hidden rounded-[2rem] bg-white shadow-2xl">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] px-6 py-5">
               <div>
@@ -504,7 +513,7 @@ export default function DoctorDetailsPage() {
                     </p>
 
                     <p className="mt-1 text-base font-extrabold text-[#0F172A]">
-                      Dr. {doctor.name}
+                      {doctor.name}
                     </p>
 
                     <p className="mt-1 text-sm text-[#64748B]">
