@@ -42,6 +42,10 @@ export default function PaymentManagement() {
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
+    document.title = "Payment Management | MediCare";
+  }, []);
+
+  useEffect(() => {
     loadTransactions();
   }, []);
 

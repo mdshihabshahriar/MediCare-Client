@@ -12,6 +12,10 @@ export default function DashboardOverview() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "Dashboard | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     loadAppointments();

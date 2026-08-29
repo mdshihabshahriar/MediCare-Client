@@ -58,6 +58,10 @@ export default function AppointmentRequests() {
   const [completeTarget, setCompleteTarget] = useState(null);
 
   useEffect(() => {
+    document.title = "Appointment Requests | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
     loadRequests();
   }, [session]);

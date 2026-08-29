@@ -67,6 +67,10 @@ export default function DoctorOverview() {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
+    document.title = "Dashboard | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     const loadStats = async () => {

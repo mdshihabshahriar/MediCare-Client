@@ -22,6 +22,10 @@ export default function MyAppointmentsPage() {
   const [selectedSchedule, setSelectedSchedule] = useState("");
 
   useEffect(() => {
+    document.title = "My Appointments | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     loadAppointments();

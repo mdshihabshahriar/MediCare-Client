@@ -86,6 +86,10 @@ export default function ManageDoctors() {
   const [statusTarget, setStatusTarget] = useState(null); 
 
   useEffect(() => {
+    document.title = "Manage Doctors | MediCare";
+  }, []);
+
+  useEffect(() => {
     const loadDoctors = async () => {
       try {
         const { data: tokenData } = await authClient.token();

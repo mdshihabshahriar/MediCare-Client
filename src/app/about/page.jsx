@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 
 const values = [
   {
@@ -91,6 +92,9 @@ const milestones = [
 ];
 
 function PageHero() {
+  useEffect(() => {
+    document.title = "About | MediCare";
+  }, []);
   return (
     <section className="px-4 pt-20 pb-16 sm:px-6 sm:pt-24 lg:px-8">
       <div className="mx-auto max-w-3xl text-center">

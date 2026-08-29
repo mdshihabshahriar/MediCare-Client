@@ -74,6 +74,10 @@ export default function ManageUsers() {
   const [deleteTarget, setDeleteTarget] = useState(null);
 
   useEffect(() => {
+    document.title = "Manage Users | MediCare";
+  }, []);
+
+  useEffect(() => {
     const loadUsers = async () => {
       try {
         const { data: tokenData } = await authClient.token();

@@ -165,6 +165,10 @@ export default function PrescriptionManagement() {
   const [editTarget, setEditTarget] = useState(null);
 
   useEffect(() => {
+    document.title = "Prescription | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     const loadPrescriptions = async () => {

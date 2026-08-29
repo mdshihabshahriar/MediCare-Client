@@ -66,6 +66,10 @@ export default function DoctorProfileManagement() {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
+    document.title = "Profile | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     const loadProfile = async () => {

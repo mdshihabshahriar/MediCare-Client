@@ -76,6 +76,10 @@ export default function MyReviews() {
   const [selectedDoctorId, setSelectedDoctorId] = useState("");
 
   useEffect(() => {
+    document.title = "My Reviews | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     const load = async () => {

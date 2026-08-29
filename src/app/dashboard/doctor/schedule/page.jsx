@@ -110,6 +110,10 @@ export default function ManageSchedule() {
   const { data: session } = authClient.useSession();
 
   useEffect(() => {
+    document.title = "Manage Schedule | MediCare";
+  }, []);
+
+  useEffect(() => {
     loadSchedules();
   }, []);
 

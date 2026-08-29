@@ -101,6 +101,10 @@ export default function Analytics() {
   ];
 
   useEffect(() => {
+    document.title = "Analytics | MediCare";
+  }, []);
+
+  useEffect(() => {
     loadAnalytics();
   }, []);
 

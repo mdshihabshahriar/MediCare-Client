@@ -42,6 +42,10 @@ export default function AdminManageAppointments() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+    document.title = "Manage Appointments | MediCare";
+  }, []);
+
+  useEffect(() => {
     loadAppointments();
   }, []);
 

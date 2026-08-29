@@ -22,6 +22,10 @@ export default function PaymentHistory() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    document.title = "Payment History | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     loadTransactions();

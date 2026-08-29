@@ -50,6 +50,10 @@ export default function MyProfile() {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
+    document.title = "Profile | MediCare";
+  }, []);
+
+  useEffect(() => {
     if (!session?.user?.id) return;
 
     const loadProfile = async () => {

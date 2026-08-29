@@ -89,7 +89,11 @@ const itemVariants = {
 
 export default function AdminOverview() {
   const [stats, setStats] = useState(null); 
-  const [recentActivity, setRecentActivity] = useState(null); 
+  const [recentActivity, setRecentActivity] = useState(null);
+  
+  useEffect(() => {
+    document.title = "Dashboard | MediCare";
+  }, []);
 
   useEffect(() => {
     const loadStats = async () => {

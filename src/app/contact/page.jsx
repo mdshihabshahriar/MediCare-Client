@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { TextField, Label, Input, TextArea, FieldError, Button } from "@heroui/react";
 
@@ -77,6 +77,10 @@ const ContactPage = () => {
     setIsSubmitted(true);
     e.currentTarget.reset();
   };
+
+  useEffect(() => {
+      document.title = "Contact | MediCare";
+    }, []);
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] pt-24">

@@ -69,6 +69,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     );
   };
 
+  useEffect(() => {
+    document.title = "Find Doctors | MediCare";
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}

@@ -44,6 +44,12 @@ export default function DoctorDetailsPage() {
     }
   };
 
+  useEffect(() => {
+  if (doctor?.name) {
+    document.title = `${doctor.name} | MediCare`;
+  }
+  }, [doctor]);
+
   const loadSchedules = async () => {
     try {
       const { data: tokenData } = await authClient.token();
