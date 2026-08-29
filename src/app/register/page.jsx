@@ -14,6 +14,7 @@ import {
 } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 async function uploadPhotoAndGetUrl(file) {
   const formData = new FormData();
@@ -79,15 +80,18 @@ const RegisterPage = () => {
     })
 
     if(error) {
-      alert("Registration failed: " + error.message);
+      toast.error("Registration failed!")
+      // alert("Registration failed: " + error.message);
       setIsSubmitting(false);
       return;
     }
 
     if(data) {
       if (user.role === "doctor") {
+        toast.success("Registration successful!")
         redirect('/verification-pending')
       } else {
+        toast.success("Registration successful!")
         redirect('/')
       }
     }

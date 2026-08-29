@@ -5,6 +5,7 @@ import Link from "next/link";
 import { TextField, Label, Input, FieldError, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,14 +29,16 @@ const LoginPage = () => {
       password: user.password,
     })
 
-    console.log(data, error);
+    // console.log(data, error);
 
     if(data)
     {
+      toast.success("Login successful!")
       redirect(`/dashboard/${data.user?.role}`);
     }
     if(error)
     {
+      toast.error("Login failed!")
       setErrorMessage(error.message || "Your account has been suspended. Please contact support.");
     }
 

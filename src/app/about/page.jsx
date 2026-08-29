@@ -339,7 +339,7 @@ function CtaBanner() {
           Join thousands of patients who found the right doctor, faster.
         </p>
         <Link
-          href="/find-doctors"
+          href="/doctors"
           className="mt-8 inline-flex items-center gap-2 rounded-full bg-sky-300 px-7 py-3.5 text-sm font-bold text-black transition-colors hover:bg-sky-400 sm:text-base"
         >
           Find a Specialist

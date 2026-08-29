@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { Button, Dropdown, Avatar } from "@heroui/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -25,6 +26,8 @@ const Navbar = () => {
   const user = session?.user;
   // console.log("User in Navbar:", user);
 
+  const router = useRouter();
+
   useEffect(() => {
   const handleSessionChange = () => {
     refetchSession();
@@ -39,7 +42,8 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await authClient.signOut();
-    window.location.href = "/login";
+    toast.success("Logout successful!")
+    router.push("/login")
   };
 
   const isActive = (href) => pathname === href;
@@ -111,11 +115,11 @@ const Navbar = () => {
                   </div>
                   <Dropdown.Menu aria-label="Profile actions">
                     <Dropdown.Item id="my-profile" textValue="My Profile">
-                      <Link href="/my-profile">My Profile</Link>
+                      <Link href={`/dashboard/${session.user.role}`}>Dashboard</Link>
                     </Dropdown.Item>
                     <Dropdown.Item id="logout" textValue="Log Out">
-                      <Link href="/login" onClick={handleLogout}>
-                        Logout
+                      <Link className="text-red-500" href="/login" onClick={handleLogout}>
+                        -&gt;Logout
                       </Link>
                     </Dropdown.Item>
                   </Dropdown.Menu>

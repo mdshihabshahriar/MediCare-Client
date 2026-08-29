@@ -276,7 +276,7 @@ export default function DoctorDetailsPage() {
                       src={doctor.photoUrl}
                       alt={doctor.name || "Doctor"}
                       fill
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
 
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/40 to-transparent" />

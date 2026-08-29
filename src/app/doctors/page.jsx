@@ -338,7 +338,7 @@ const FindDoctorsPage = () => {
                         src={doc.photoUrl}
                         alt={doc.name}
                         fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
                       />
                       <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-[#0F172A] shadow-sm backdrop-blur-sm">
                         <span className="text-[#F59E0B]">★</span>

@@ -52,7 +52,7 @@ const FeaturedDoctors = () => {
 
       const data = await res.json();
 
-      const featured = (Array.isArray(data) ? data : [])
+      const featured = (Array.isArray(data.doctors) ? data.doctors : [])
         .sort((a, b) => Number(b.rating || 0) - Number(a.rating || 0))
         .slice(0, 4);
 
@@ -129,7 +129,7 @@ const FeaturedDoctors = () => {
                       src={doc.photoUrl}
                       alt={doc.name}
                       fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
                     />
                     <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-heading shadow-sm backdrop-blur-sm">
                       <span className="text-warning">★</span>
