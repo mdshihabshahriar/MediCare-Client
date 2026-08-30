@@ -1,19 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { TextField, Label, Input, FieldError, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  const router = useRouter()
+  const router = useRouter();
 
-  const session = authClient.useSession().data;
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (!isPending && session?.user) {
+      router.replace(`/dashboard/${session.user.role}`);
+    }
+  }, [isPending, session, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,32 +31,38 @@ const LoginPage = () => {
       password: formData.get("password"),
     };
 
-    const {data, error} = await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       email: user.email,
       password: user.password,
-    })
+    });
 
-    // console.log(data, error);
-
-    if(data)
-    {
-      toast.success("Login successful!")
+    if (data) {
+      toast.success("Login successful!");
       router.push(`/dashboard/${data.user?.role}`);
     }
-    if(error)
-    {
-      toast.error("Login failed!")
-      setErrorMessage(error.message || "Your account has been suspended. Please contact support.");
+    if (error) {
+      toast.error("Login failed!");
+      setErrorMessage(
+        error.message || "Your account has been suspended. Please contact support."
+      );
     }
 
     setIsSubmitting(false);
   };
 
   const handleGoogleLogin = async () => {
-    const data = await authClient.signIn.social({
-    provider: "google",
-  });
+    await authClient.signIn.social({
+      provider: "google",
+    });
   };
+
+  if (isPending || session?.user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+      </div>
+    );
+  }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 pb-10 pt-24 sm:px-6">

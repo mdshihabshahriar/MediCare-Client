@@ -29,21 +29,21 @@ const Navbar = () => {
   const router = useRouter();
 
   useEffect(() => {
-  const handleSessionChange = () => {
-    refetchSession();
-  };
+    const handleSessionChange = () => {
+      refetchSession();
+    };
 
-  window.addEventListener('session-updated', handleSessionChange);
-  
-  return () => {
-    window.removeEventListener('session-updated', handleSessionChange);
-  };
-}, [refetchSession]);
+    window.addEventListener("session-updated", handleSessionChange);
+
+    return () => {
+      window.removeEventListener("session-updated", handleSessionChange);
+    };
+  }, [refetchSession]);
 
   const handleLogout = async () => {
     await authClient.signOut();
-    toast.success("Logout successful!")
-    router.push("/login")
+    toast.success("Logout successful!");
+    router.push("/login");
   };
 
   const isActive = (href) => pathname === href;
@@ -71,37 +71,45 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
-          <li>{user ? <><Link href={`/dashboard/${user.role}`} className={`text-sm font-medium underline-offset-4 transition-colors ${
-                  isActive(`/dashboard/${user.role}`)
-                    ? "text-accent underline"
-                    : "no-underline hover:text-accent"
-                }`}>Dashboard</Link></> : null}</li>
+          <li>
+            {user ? (
+              <>
+                <Link
+                  href={`/dashboard/${user.role}`}
+                  className={`text-sm font-medium underline-offset-4 transition-colors ${
+                    isActive(`/dashboard/${user.role}`)
+                      ? "text-accent underline"
+                      : "no-underline hover:text-accent"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              </>
+            ) : null}
+          </li>
         </ul>
 
         <div className="hidden items-center gap-4 sm:flex">
           {user ? (
             <>
-                <Button onClick={handleLogout} className="btn border-danger text-danger hover:bg-danger hover:text-white">
-                  Logout
-                </Button>
+              <Button
+                onClick={handleLogout}
+                className="btn border-danger text-danger hover:bg-danger hover:text-white"
+              >
+                Logout
+              </Button>
 
               <Dropdown>
                 <Dropdown.Trigger className="rounded-full">
                   <Avatar size="sm">
-                    <Avatar.Image
-                      alt="User"
-                      src={user?.photoUrl || null}
-                    />
+                    <Avatar.Image alt="User" src={user?.photoUrl || null} />
                     <Avatar.Fallback delayMs={600}>U</Avatar.Fallback>
                   </Avatar>
                 </Dropdown.Trigger>
                 <Dropdown.Popover>
                   <div className="flex items-center gap-2 px-3 pb-1 pt-3">
                     <Avatar size="sm">
-                      <Avatar.Image
-                        alt="User"
-                        src={user?.photoUrl}
-                      />
+                      <Avatar.Image alt="User" src={user?.photoUrl} />
                       <Avatar.Fallback delayMs={600}>U</Avatar.Fallback>
                     </Avatar>
                     <div className="flex flex-col">
@@ -115,12 +123,16 @@ const Navbar = () => {
                   </div>
                   <Dropdown.Menu aria-label="Profile actions">
                     <Dropdown.Item id="my-profile" textValue="My Profile">
-                      <Link href={`/dashboard/${session.user.role}`}>Dashboard</Link>
-                    </Dropdown.Item>
-                    <Dropdown.Item id="logout" textValue="Log Out">
-                      <Link className="text-red-500" href="/login" onClick={handleLogout}>
-                        -&gt;Logout
+                      <Link href={`/dashboard/${session.user.role}`}>
+                        Dashboard
                       </Link>
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      id="logout"
+                      textValue="Log Out"
+                      onAction={handleLogout}
+                    >
+                      <span className="text-red-500">Logout</span>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown.Popover>
@@ -170,77 +182,80 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="border-t border-white/20 bg-white/40 dark:bg-black/40 backdrop-blur-lg sm:hidden">
           <ul className="flex flex-col gap-1 px-4 py-4">
-            {user ? <>
-              {navLinks.slice(0, 5).map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={`block py-2 text-base font-medium underline-offset-4 transition-colors ${
-                    isActive(link.href)
-                      ? "text-accent underline"
-                      : "no-underline hover:text-accent"
-                  }`}
-                  onPress={() => setIsMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-            </>:
-            <>
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={`block py-2 text-base font-medium underline-offset-4 transition-colors ${
-                    isActive(link.href)
-                      ? "text-accent underline"
-                      : "no-underline hover:text-accent"
-                  }`}
-                  onPress={() => setIsMenuOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
-            </>}
+            {user ? (
+              <>
+                {navLinks.slice(0, 5).map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={`block py-2 text-base font-medium underline-offset-4 transition-colors ${
+                        isActive(link.href)
+                          ? "text-accent underline"
+                          : "no-underline hover:text-accent"
+                      }`}
+                      onPress={() => setIsMenuOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </>
+            ) : (
+              <>
+                {navLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={`block py-2 text-base font-medium underline-offset-4 transition-colors ${
+                        isActive(link.href)
+                          ? "text-accent underline"
+                          : "no-underline hover:text-accent"
+                      }`}
+                      onPress={() => setIsMenuOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </>
+            )}
           </ul>
 
-          { user ? <div className="flex items-center justify-between gap-4 border-t border-white/20 px-4 py-4">
-            <div className="flex items-center gap-2">
-              <Avatar size="sm">
-                <Avatar.Image
-                  alt="User"
-                  src={user?.photoUrl}
-                />
-                <Avatar.Fallback delayMs={600}>U</Avatar.Fallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <p className="text-sm font-medium leading-5">Signed in as</p>
-                <p className="text-muted text-xs leading-none">
-                  {user?.email}
-                </p>
+          {user ? (
+            <div className="flex items-center justify-between gap-4 border-t border-white/20 px-4 py-4">
+              <div className="flex items-center gap-2">
+                <Avatar size="sm">
+                  <Avatar.Image alt="User" src={user?.photoUrl} />
+                  <Avatar.Fallback delayMs={600}>U</Avatar.Fallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <p className="text-sm font-medium leading-5">Signed in as</p>
+                  <p className="text-muted text-xs leading-none">
+                    {user?.email}
+                  </p>
+                </div>
               </div>
             </div>
-          </div> : null}
+          ) : null}
 
-          { user ? <div className="flex flex-col gap-2 px-4 pb-4">
-            <Button variant="soft" onPress={() => setIsMenuOpen(false)}>
-              <Link href={"/my-profile"}>My Profile</Link>
-            </Button>
-            <Button
-              as={Link}
-              href="/login"
-              variant="soft"
-              color="accent"
-              radius="full"
-              onPress={() => setIsMenuOpen(false)}
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          </div>
-          : null }
+          {user ? (
+            <div className="flex flex-col gap-2 px-4 pb-4">
+              <Button variant="soft" onPress={() => setIsMenuOpen(false)}>
+                <Link href={"/my-profile"}>My Profile</Link>
+              </Button>
+              <Button
+                variant="soft"
+                color="accent"
+                radius="full"
+                onPress={() => {
+                  setIsMenuOpen(false);
+                  handleLogout();
+                }}
+              >
+                Logout
+              </Button>
+            </div>
+          ) : null}
         </div>
       )}
     </nav>
