@@ -156,29 +156,33 @@ const Navbar = () => {
           )}
         </div>
 
-        <button
-          type="button"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isMenuOpen}
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="flex h-9 w-9 flex-col items-center justify-center gap-1.5 sm:hidden"
-        >
-          <span
-            className={`h-0.5 w-6 bg-foreground transition-transform duration-200 ${
-              isMenuOpen ? "translate-y-2 rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`h-0.5 w-6 bg-foreground transition-opacity duration-200 ${
-              isMenuOpen ? "opacity-0" : "opacity-100"
-            }`}
-          />
-          <span
-            className={`h-0.5 w-6 bg-foreground transition-transform duration-200 ${
-              isMenuOpen ? "-translate-y-2 -rotate-45" : ""
-            }`}
-          />
-        </button>
+        <div className="flex items-center gap-3 sm:hidden">
+          <ThemeToggle />
+
+          <button
+            type="button"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="flex h-9 w-9 flex-col items-center justify-center gap-1.5"
+          >
+            <span
+              className={`h-0.5 w-6 bg-foreground transition-transform duration-200 ${
+                isMenuOpen ? "translate-y-2 rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`h-0.5 w-6 bg-foreground transition-opacity duration-200 ${
+                isMenuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`h-0.5 w-6 bg-foreground transition-transform duration-200 ${
+                isMenuOpen ? "-translate-y-2 -rotate-45" : ""
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {isMenuOpen && (
@@ -186,7 +190,7 @@ const Navbar = () => {
           <ul className="flex flex-col gap-1 px-4 py-4">
             {user ? (
               <>
-                {navLinks.slice(0, 5).map((link) => (
+                {navLinks.slice(0, 4).map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
@@ -201,6 +205,19 @@ const Navbar = () => {
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link
+                    href={`/dashboard/${user.role}`}
+                    className={`block py-2 text-base font-medium underline-offset-4 transition-colors ${
+                      isActive(`/dashboard/${user.role}`)
+                        ? "text-accent underline"
+                        : "no-underline hover:text-accent"
+                    }`}
+                    onPress={() => setIsMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                </li>
               </>
             ) : (
               <>
@@ -242,9 +259,6 @@ const Navbar = () => {
 
           {user ? (
             <div className="flex flex-col gap-2 px-4 pb-4">
-              <Button variant="soft" onPress={() => setIsMenuOpen(false)}>
-                <Link href={"/my-profile"}>My Profile</Link>
-              </Button>
               <Button
                 variant="soft"
                 color="accent"
