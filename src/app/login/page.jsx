@@ -4,13 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { TextField, Label, Input, FieldError, Button } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const router = useRouter()
 
   const session = authClient.useSession().data;
 
@@ -34,7 +35,7 @@ const LoginPage = () => {
     if(data)
     {
       toast.success("Login successful!")
-      redirect(`/dashboard/${data.user?.role}`);
+      router.push(`/dashboard/${data.user?.role}`);
     }
     if(error)
     {
