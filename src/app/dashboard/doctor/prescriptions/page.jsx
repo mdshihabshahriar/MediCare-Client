@@ -20,14 +20,14 @@ function Modal({ title, onClose, children }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-lg rounded-2xl bg-base-100 p-6 shadow-xl"
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
+          <h3 className="text-lg font-bold text-base-content">{title}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
+            className="rounded-full p-1.5 text-base-content/50 hover:bg-base-200 hover:text-base-content"
             aria-label="Close"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -52,7 +52,7 @@ function MedicineRows({ medicines, setMedicines }) {
 
   return (
     <div>
-      <Label className="text-sm font-medium text-[#334155]">Medicines</Label>
+      <Label className="text-sm font-medium text-base-content/80">Medicines</Label>
       <div className="mt-1.5 flex flex-col gap-3">
         <AnimatePresence>
           {medicines.map((med, i) => (
@@ -62,31 +62,31 @@ function MedicineRows({ medicines, setMedicines }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -10, transition: { duration: 0.2 } }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="grid grid-cols-[1fr_1fr_auto] gap-2 rounded-xl border border-[#E2E8F0] p-3"
+              className="grid grid-cols-[1fr_1fr_auto] gap-2 rounded-xl border border-base-300 p-3"
             >
               <input
                 value={med.name}
                 onChange={(e) => updateRow(i, "name", e.target.value)}
                 placeholder="Medicine name"
-                className="col-span-3 rounded-lg border border-[#E2E8F0] px-3 py-2 text-sm outline-none focus:border-[#2563EB] sm:col-span-1"
+                className="col-span-3 rounded-lg border border-base-300 px-3 py-2 text-sm outline-none focus:border-primary sm:col-span-1"
               />
               <input
                 value={med.dosage}
                 onChange={(e) => updateRow(i, "dosage", e.target.value)}
                 placeholder="Dosage"
-                className="rounded-lg border border-[#E2E8F0] px-3 py-2 text-sm outline-none focus:border-[#2563EB]"
+                className="rounded-lg border border-base-300 px-3 py-2 text-sm outline-none focus:border-primary"
               />
               <div className="flex gap-2">
                 <input
                   value={med.duration}
                   onChange={(e) => updateRow(i, "duration", e.target.value)}
                   placeholder="Duration"
-                  className="w-full rounded-lg border border-[#E2E8F0] px-3 py-2 text-sm outline-none focus:border-[#2563EB]"
+                  className="w-full rounded-lg border border-base-300 px-3 py-2 text-sm outline-none focus:border-primary"
                 />
                 <button
                   type="button"
                   onClick={() => removeRow(i)}
-                  className="shrink-0 rounded-lg p-2 text-[#94A3B8] hover:bg-[#FEF2F2] hover:text-[#EF4444]"
+                  className="shrink-0 rounded-lg p-2 text-base-content/50 hover:bg-[#FEF2F2] hover:text-[#EF4444]"
                   aria-label="Remove medicine"
                 >
                   <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -104,7 +104,7 @@ function MedicineRows({ medicines, setMedicines }) {
         whileTap={{ scale: 0.97 }}
         type="button"
         onClick={() => setMedicines((prev) => [...prev, { name: "", dosage: "", duration: "" }])}
-        className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB]"
+        className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-primary"
       >
         <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 5v14" />
@@ -124,32 +124,32 @@ function PrescriptionForm({ initial, onSubmit, onCancel }) {
   return (
     <form onSubmit={(e) => onSubmit(e, medicines)} className="flex flex-col gap-5">
       <div>
-        <Label className="text-sm font-medium text-[#334155]">Patient</Label>
-        <div className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-2.5 text-sm font-semibold text-[#0F172A]">
+        <Label className="text-sm font-medium text-base-content/80">Patient</Label>
+        <div className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-200 px-4 py-2.5 text-sm font-semibold text-base-content">
           {initial?.patient}
         </div>
       </div>
 
       <TextField name="diagnosis" defaultValue={initial?.diagnosis} isRequired>
-        <Label className="text-sm font-medium text-[#334155]">Diagnosis</Label>
-        <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+        <Label className="text-sm font-medium text-base-content/80">Diagnosis</Label>
+        <Input className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
       </TextField>
 
       <MedicineRows medicines={medicines} setMedicines={setMedicines} />
 
       <TextField name="advice" defaultValue={initial?.advice}>
-        <Label className="text-sm font-medium text-[#334155]">Advice / Notes</Label>
+        <Label className="text-sm font-medium text-base-content/80">Advice / Notes</Label>
         <TextArea
           rows={3}
-          className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+          className="mt-1.5 w-full resize-none rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </TextField>
 
       <div className="mt-1 flex gap-3">
-        <button type="button" onClick={onCancel} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">
+        <button type="button" onClick={onCancel} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">
           Cancel
         </button>
-        <Button type="submit" className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-sm font-bold text-white hover:bg-[#1D4ED8]">
+        <Button type="submit" className="flex-1 rounded-full bg-primary py-2.5 text-sm font-bold text-white hover:bg-primary/90">
           Save Changes
         </Button>
       </div>
@@ -239,7 +239,7 @@ export default function PrescriptionManagement() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+          className="h-8 w-8 rounded-full border-2 border-base-300 border-t-primary"
         />
       </div>
     );
@@ -253,8 +253,8 @@ export default function PrescriptionManagement() {
       variants={containerVariants}
     >
       <motion.div variants={itemVariants}>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Prescription Management</h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">Prescription Management</h1>
+        <p className="mt-1 text-sm text-base-content/60">
           Update prescriptions you&apos;ve issued. New prescriptions are
           created from a completed appointment — see Appointment Requests.
         </p>
@@ -262,16 +262,16 @@ export default function PrescriptionManagement() {
 
       <motion.div className="flex flex-col gap-4" variants={containerVariants}>
         {prescriptions.length === 0 ? (
-          <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+          <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-base-100 p-10 text-center text-sm text-base-content/50">
             No prescriptions yet. Mark an appointment as completed to write your first one.
           </motion.div>
         ) : (
           prescriptions.map((rx) => (
-            <motion.div key={rx._id} variants={itemVariants} className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+            <motion.div key={rx._id} variants={itemVariants} className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm font-bold text-[#0F172A]">{rx.patient}</p>
-                  <p className="text-xs text-[#94A3B8]">
+                  <p className="text-sm font-bold text-base-content">{rx.patient}</p>
+                  <p className="text-xs text-base-content/50">
                     {rx.diagnosis} · {rx.createdAt ? new Date(rx.createdAt).toLocaleDateString("en-GB") : ""}
                   </p>
                 </div>
@@ -279,27 +279,27 @@ export default function PrescriptionManagement() {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setEditTarget(rx)}
-                  className="shrink-0 rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9]"
+                  className="shrink-0 rounded-lg border border-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/80 hover:bg-base-200"
                 >
                   Update
                 </motion.button>
               </div>
 
-              <div className="mt-4 overflow-hidden rounded-xl border border-[#E2E8F0]">
+              <div className="mt-4 overflow-hidden rounded-xl border border-base-300">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#F8FAFC] text-[#64748B]">
+                  <thead className="bg-base-200 text-base-content/60">
                     <tr>
                       <th className="px-4 py-2 font-semibold">Medicine</th>
                       <th className="px-4 py-2 font-semibold">Dosage</th>
                       <th className="px-4 py-2 font-semibold">Duration</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E2E8F0]">
+                  <tbody className="divide-y divide-base-300">
                     {(rx.medicines || []).map((med, i) => (
                       <tr key={i}>
-                        <td className="px-4 py-2 font-medium text-[#0F172A]">{med.name}</td>
-                        <td className="px-4 py-2 text-[#334155]">{med.dosage}</td>
-                        <td className="px-4 py-2 text-[#334155]">{med.duration}</td>
+                        <td className="px-4 py-2 font-medium text-base-content">{med.name}</td>
+                        <td className="px-4 py-2 text-base-content/80">{med.dosage}</td>
+                        <td className="px-4 py-2 text-base-content/80">{med.duration}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -307,8 +307,8 @@ export default function PrescriptionManagement() {
               </div>
 
               {rx.advice && (
-                <p className="mt-3 text-xs leading-relaxed text-[#64748B]">
-                  <span className="font-semibold text-[#334155]">Advice: </span>
+                <p className="mt-3 text-xs leading-relaxed text-base-content/60">
+                  <span className="font-semibold text-base-content/80">Advice: </span>
                   {rx.advice}
                 </p>
               )}

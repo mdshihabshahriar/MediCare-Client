@@ -108,11 +108,11 @@ export default async function Success({ searchParams }) {
 
   if (errorMessage) {
     return (
-      <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-rose-50 via-[#F8FAFC] to-orange-50 px-4">
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-rose-50 via-base-200 to-orange-50 px-4">
         <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-rose-200/40 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-orange-200/40 blur-3xl" />
 
-        <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/60 bg-white/90 p-10 text-center shadow-[0_20px_60px_-15px_rgba(244,63,94,0.35)] backdrop-blur-sm">
+        <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/60 bg-base-100/90 p-10 text-center shadow-[0_20px_60px_-15px_rgba(244,63,94,0.35)] backdrop-blur-sm">
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-rose-400 to-red-500">
             <svg
               className="h-10 w-10 text-white"
@@ -137,7 +137,7 @@ export default async function Success({ searchParams }) {
 
           <Link
             href="/"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-[#0F172A] transition hover:bg-slate-50"
+            className="mt-6 inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-base-100 px-6 py-3 text-sm font-semibold text-base-content transition hover:bg-slate-50"
           >
             Back to Home
           </Link>
@@ -147,12 +147,12 @@ export default async function Success({ searchParams }) {
   }
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-emerald-50 via-[#F8FAFC] to-sky-50 px-4 py-12">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-emerald-50 via-base-200 to-sky-50 px-4 py-12">
       <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-emerald-200/40 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-sky-200/40 blur-3xl" />
       <div className="pointer-events-none absolute top-1/3 right-10 h-40 w-40 rounded-full bg-teal-200/30 blur-2xl" />
 
-      <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/60 bg-white/90 p-10 text-center shadow-[0_20px_60px_-15px_rgba(16,185,129,0.35)] backdrop-blur-sm animate-[fadeInUp_0.5s_ease-out]">
+      <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/60 bg-base-100/90 p-10 text-center shadow-[0_20px_60px_-15px_rgba(16,185,129,0.35)] backdrop-blur-sm animate-[fadeInUp_0.5s_ease-out]">
         <div className="relative mx-auto mb-6 flex h-20 w-20 items-center justify-center">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/40" />
           <span className="absolute inline-flex h-full w-full rounded-full bg-linear-to-br from-emerald-400 to-teal-500 opacity-90" />
@@ -175,32 +175,32 @@ export default async function Success({ searchParams }) {
           Payment Confirmed
         </span>
 
-        <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0F172A]">
+        <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-base-content">
           Payment Successful!
         </h1>
 
-        <p className="mt-3 text-sm leading-relaxed text-[#64748B]">
+        <p className="mt-3 text-sm leading-relaxed text-base-content/60">
           Your appointment request has been sent to the doctor. You&apos;ll get
           a confirmation once it&apos;s approved.
         </p>
 
         <div className="mt-6 space-y-2 rounded-2xl bg-linear-to-br from-slate-50 to-emerald-50/50 p-4 text-left text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-[#64748B]">Date</span>
-            <span className="font-semibold text-[#0F172A]">
+            <span className="text-base-content/60">Date</span>
+            <span className="font-semibold text-base-content">
               {appointmentDetails.appointmentDay}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[#64748B]">Time</span>
-            <span className="font-semibold text-[#0F172A]">
+            <span className="text-base-content/60">Time</span>
+            <span className="font-semibold text-base-content">
               {appointmentDetails.appointmentStartTime} -{" "}
               {appointmentDetails.appointmentEndTime}
             </span>
           </div>
           {appointmentDetails.consultationFee ? (
             <div className="flex items-center justify-between border-t border-slate-200 pt-2">
-              <span className="text-[#64748B]">Fee Paid</span>
+              <span className="text-base-content/60">Fee Paid</span>
               <span className="font-semibold text-emerald-600">
                 ${Number(appointmentDetails.consultationFee).toFixed(2)}
               </span>
@@ -215,7 +215,7 @@ export default async function Success({ searchParams }) {
           View My Appointments
         </Link>
 
-        <p className="mt-4 text-xs text-[#94A3B8]">
+        <p className="mt-4 text-xs text-base-content/50">
           Payment ID: {appointmentDetails.sessionId}
         </p>
       </div>

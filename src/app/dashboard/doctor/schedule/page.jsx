@@ -31,14 +31,14 @@ function Modal({ title, onClose, children }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-base-100 p-6 shadow-xl"
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
+          <h3 className="text-lg font-bold text-base-content">{title}</h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
+            className="rounded-full p-1.5 text-base-content/50 hover:bg-base-200 hover:text-base-content"
             aria-label="Close"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -57,12 +57,12 @@ function ScheduleForm({ initial, onSubmit, onCancel }) {
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <div>
-        <Label className="text-sm font-medium text-[#334155]">Day</Label>
+        <Label className="text-sm font-medium text-base-content/80">Day</Label>
         <select
           name="day"
           required
           defaultValue={initial?.day || ""}
-          className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+          className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
         >
           <option value="" disabled>
             Select a day
@@ -77,12 +77,12 @@ function ScheduleForm({ initial, onSubmit, onCancel }) {
 
       <div className="grid grid-cols-2 gap-4">
         <TextField name="startTime" type="time" defaultValue={initial?.startTime} isRequired>
-          <Label className="text-sm font-medium text-[#334155]">Start Time</Label>
-          <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+          <Label className="text-sm font-medium text-base-content/80">Start Time</Label>
+          <Input className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
         </TextField>
         <TextField name="endTime" type="time" defaultValue={initial?.endTime} isRequired>
-          <Label className="text-sm font-medium text-[#334155]">End Time</Label>
-          <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+          <Label className="text-sm font-medium text-base-content/80">End Time</Label>
+          <Input className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
         </TextField>
       </div>
 
@@ -90,11 +90,11 @@ function ScheduleForm({ initial, onSubmit, onCancel }) {
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]"
+          className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80"
         >
           Cancel
         </button>
-        <Button type="submit" className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-sm font-bold text-white hover:bg-[#1D4ED8]">
+        <Button type="submit" className="flex-1 rounded-full bg-primary py-2.5 text-sm font-bold text-white hover:bg-primary/90">
           {initial ? "Save Changes" : "Add Slot"}
         </Button>
       </div>
@@ -240,8 +240,8 @@ export default function ManageSchedule() {
     >
       <motion.div variants={itemVariants} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Manage Schedule</h1>
-          <p className="mt-1 text-sm text-[#64748B]">
+          <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">Manage Schedule</h1>
+          <p className="mt-1 text-sm text-base-content/60">
             Set the days and times you&apos;re available for appointments.
           </p>
         </div>
@@ -249,7 +249,7 @@ export default function ManageSchedule() {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={() => setIsAdding(true)}
-          className="inline-flex w-fit cursor-pointer items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8]"
+          className="inline-flex w-fit cursor-pointer items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary/90"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 5v14" />
@@ -260,7 +260,7 @@ export default function ManageSchedule() {
       </motion.div>
 
       {grouped.length === 0 ? (
-        <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+        <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-base-100 p-10 text-center text-sm text-base-content/50">
           No available slots yet. Add your first schedule slot.
         </motion.div>
       ) : (
@@ -273,11 +273,11 @@ export default function ManageSchedule() {
                 initial="hidden"
                 animate="show"
                 exit={{ opacity: 0, y: -10, transition: { duration: 0.2 } }}
-                className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+                className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
               >
-                <p className="text-sm font-bold text-[#0F172A]">{group.day}</p>
+                <p className="text-sm font-bold text-base-content">{group.day}</p>
                 <motion.div
-                  className="mt-3 flex flex-col divide-y divide-[#E2E8F0]"
+                  className="mt-3 flex flex-col divide-y divide-base-300"
                   initial="hidden"
                   animate="show"
                   variants={containerVariants}
@@ -292,7 +292,7 @@ export default function ManageSchedule() {
                         exit={{ opacity: 0, x: -10, transition: { duration: 0.2 } }}
                         className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
                       >
-                        <span className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-[#2563EB]">
+                        <span className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1 text-xs font-semibold text-primary">
                           <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="9" />
                             <path d="M12 7v5l3 3" />
@@ -302,7 +302,7 @@ export default function ManageSchedule() {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => setEditTarget(slot)}
-                            className="rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9]"
+                            className="rounded-lg border border-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/80 hover:bg-base-200"
                           >
                             Update
                           </button>
@@ -342,14 +342,14 @@ export default function ManageSchedule() {
       <AnimatePresence>
         {deleteTarget && (
           <Modal title="Remove Schedule Slot" onClose={() => setDeleteTarget(null)}>
-            <p className="text-sm text-[#64748B]">
-              Remove <span className="font-semibold text-[#0F172A]">{deleteTarget.day}, {deleteTarget.startTime}–{deleteTarget.endTime}</span> from your availability?
+            <p className="text-sm text-base-content/60">
+              Remove <span className="font-semibold text-base-content">{deleteTarget.day}, {deleteTarget.startTime}–{deleteTarget.endTime}</span> from your availability?
             </p>
             <div className="mt-6 flex gap-3">
               <button
                 type="button"
                 onClick={() => setDeleteTarget(null)}
-                className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]"
+                className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80"
               >
                 Keep Slot
               </button>

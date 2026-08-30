@@ -179,7 +179,7 @@ export default function MyProfile() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+          className="h-8 w-8 rounded-full border-2 border-base-300 border-t-[#2563EB]"
         />
       </div>
     );
@@ -193,17 +193,17 @@ export default function MyProfile() {
       variants={containerVariants}
     >
       <motion.div variants={itemVariants}>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">
           My Profile
         </h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <p className="mt-1 text-sm text-base-content/60">
           Update your personal information and profile photo.
         </p>
       </motion.div>
 
       <motion.div
         variants={itemVariants}
-        className="max-w-2xl rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm sm:p-8"
+        className="max-w-2xl rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm sm:p-8"
       >
         <AnimatePresence>
           {isSaved && (
@@ -241,7 +241,7 @@ export default function MyProfile() {
         >
           {/* Photo */}
           <motion.div variants={itemVariants} className="flex items-center gap-4">
-            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#F1F5F9] ring-1 ring-[#E2E8F0]">
+            <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full text-primary ring-1 ring-[#E2E8F0]">
               {photoPreview ? (
                 <Image
                   src={photoPreview}
@@ -250,7 +250,7 @@ export default function MyProfile() {
                   className="object-cover"
                 />
               ) : (
-                <span className="text-sm font-semibold text-[#94A3B8]">
+                <span className="text-sm font-semibold text-base-content/50">
                   {profile.name?.[0]?.toUpperCase() || "?"}
                 </span>
               )}
@@ -259,11 +259,11 @@ export default function MyProfile() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="rounded-full border border-[#E2E8F0] bg-white px-4 py-2 text-xs font-semibold text-[#0F172A] transition-colors hover:bg-[#F1F5F9]"
+                className="rounded-full border border-base-300 bg-base-100 px-4 py-2 text-xs font-semibold text-base-content transition-colors hover:text-primary"
               >
                 Change photo
               </button>
-              <p className="mt-1.5 text-xs text-[#94A3B8]">
+              <p className="mt-1.5 text-xs text-base-content/50">
                 PNG or JPG, up to 5MB
               </p>
               <input
@@ -279,10 +279,10 @@ export default function MyProfile() {
 
           <motion.div variants={itemVariants}>
             <TextField name="name" defaultValue={profile.name} isRequired>
-              <Label className="text-sm font-medium text-[#334155]">
+              <Label className="text-sm font-medium text-base-content/80">
                 Full Name
               </Label>
-              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+              <Input className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
             </TextField>
           </motion.div>
 
@@ -293,22 +293,22 @@ export default function MyProfile() {
               defaultValue={profile.email}
               isRequired
             >
-              <Label className="text-sm font-medium text-[#334155]">
+              <Label className="text-sm font-medium text-base-content/80">
                 Email Address
               </Label>
-              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+              <Input className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
             </TextField>
           </motion.div>
 
           <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
             <div>
-              <Label className="text-sm font-medium text-[#334155]">
+              <Label className="text-sm font-medium text-base-content/80">
                 Gender
               </Label>
               <select
                 name="gender"
                 defaultValue={profile.gender}
-                className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -316,10 +316,10 @@ export default function MyProfile() {
               </select>
             </div>
             <div>
-              <Label className="text-sm font-medium text-[#334155]">
+              <Label className="text-sm font-medium text-base-content/80">
                 Account Type
               </Label>
-              <div className="mt-1.5 flex h-10.5 items-center rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 text-sm text-[#94A3B8]">
+              <div className="mt-1.5 flex h-10.5 items-center rounded-xl border border-base-300 bg-base-200 px-4 text-sm text-base-content/50">
                 {session.user.role}
               </div>
             </div>
@@ -330,7 +330,7 @@ export default function MyProfile() {
               <Button
                 type="submit"
                 isDisabled={isSaving}
-                className="mt-2 w-fit rounded-full bg-[#2563EB] px-7 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-60"
+                className="mt-2 w-fit rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-60"
               >
                 {isSaving ? "Saving…" : "Save Changes"}
               </Button>

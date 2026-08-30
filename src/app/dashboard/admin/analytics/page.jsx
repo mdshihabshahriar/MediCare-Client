@@ -20,8 +20,8 @@ import { authClient } from "@/lib/auth-client";
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-[#E2E8F0] bg-white px-3 py-2 shadow-lg">
-      <p className="text-xs font-semibold text-[#0F172A]">{label}</p>
+    <div className="rounded-xl border border-base-300 bg-base-100 px-3 py-2 shadow-lg">
+      <p className="text-xs font-semibold text-base-content">{label}</p>
       {payload.map((entry) => (
         <p
           key={entry.dataKey}
@@ -144,10 +144,10 @@ export default function Analytics() {
       variants={containerVariants}
     >
       <motion.div variants={cardVariants}>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">
           Analytics
         </h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <p className="mt-1 text-sm text-base-content/60">
           Platform-wide performance and growth trends.
         </p>
       </motion.div>
@@ -159,7 +159,7 @@ export default function Analytics() {
             variants={cardVariants}
             whileHover={{ y: -3, boxShadow: "0 8px 20px rgba(15, 23, 42, 0.08)" }}
             transition={{ duration: 0.2 }}
-            className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+            className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
           >
             <span
               className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}
@@ -181,11 +181,11 @@ export default function Analytics() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25 }}
-              className="mt-4 text-2xl font-extrabold text-[#0F172A]"
+              className="mt-4 text-2xl font-extrabold text-base-content"
             >
               {stat.value}
             </motion.p>
-            <p className="mt-1 text-xs font-medium text-[#64748B]">
+            <p className="mt-1 text-xs font-medium text-base-content/60">
               {stat.label}
             </p>
           </motion.div>
@@ -193,13 +193,13 @@ export default function Analytics() {
       </motion.div>
 
       <motion.div
-        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+        className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm"
         variants={cardVariants}
       >
-        <h2 className="text-base font-bold text-[#0F172A]">
+        <h2 className="text-base font-bold text-base-content">
           Doctor Performance (by Rating)
         </h2>
-        <p className="mt-1 text-xs text-[#64748B]">
+        <p className="mt-1 text-xs text-base-content/60">
           Average patient rating for the top-performing doctors.
         </p>
 
@@ -237,11 +237,11 @@ export default function Analytics() {
       </motion.div>
 
       <motion.div
-        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+        className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm"
         variants={cardVariants}
       >
-        <h2 className="text-base font-bold text-[#0F172A]">Growth Trend</h2>
-        <p className="mt-1 text-xs text-[#64748B]">
+        <h2 className="text-base font-bold text-base-content">Growth Trend</h2>
+        <p className="mt-1 text-xs text-base-content/60">
           Total patients and appointments over the last 6 months.
         </p>
 

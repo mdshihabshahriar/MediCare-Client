@@ -111,7 +111,7 @@ export default function DashboardOverview() {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-lg font-semibold text-[#334155]">
+      <div className="py-24 text-center text-lg font-semibold text-base-content/80">
         Loading dashboard...
       </div>
     );
@@ -121,10 +121,10 @@ export default function DashboardOverview() {
     <div className="flex flex-col gap-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">
           Welcome back, {session?.user?.name} 👋
         </h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <p className="mt-1 text-sm text-base-content/60">
           Here&apos;s what&apos;s happening with your health, at a glance.
         </p>
       </div>
@@ -134,7 +134,7 @@ export default function DashboardOverview() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+            className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
           >
             <span
               className={`flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}
@@ -151,10 +151,10 @@ export default function DashboardOverview() {
                 {stat.icon}
               </svg>
             </span>
-            <p className="mt-4 text-2xl font-extrabold text-[#0F172A]">
+            <p className="mt-4 text-2xl font-extrabold text-base-content">
               {stat.value}
             </p>
-            <p className="mt-1 text-xs font-medium text-[#64748B]">
+            <p className="mt-1 text-xs font-medium text-base-content/60">
               {stat.label}
             </p>
           </div>
@@ -162,21 +162,21 @@ export default function DashboardOverview() {
       </div>
 
       {/* Upcoming appointments */}
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-[#0F172A]">
+          <h2 className="text-base font-bold text-base-content">
             Upcoming Appointments
           </h2>
           <NextLink
             href="/dashboard/patient/appointments"
-            className="text-xs font-semibold text-[#2563EB]"
+            className="text-xs font-semibold text-primary"
           >
             View all
           </NextLink>
         </div>
 
         {upcomingAppointments.length === 0 ? (
-          <p className="mt-6 text-center text-sm text-[#94A3B8]">
+          <p className="mt-6 text-center text-sm text-base-content/50">
             No upcoming appointments.
           </p>
         ) : (
@@ -195,18 +195,18 @@ export default function DashboardOverview() {
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-bold text-[#0F172A]">
+                  <p className="truncate text-sm font-bold text-base-content">
                     {apt.doctor?.name || "Unknown Doctor"}
                   </p>
-                  <p className="text-xs text-[#94A3B8]">
+                  <p className="text-xs text-base-content/50">
                     {apt.doctor?.specialty}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-semibold text-[#0F172A]">
+                  <p className="text-xs font-semibold text-base-content">
                     {apt.schedule?.day}
                   </p>
-                  <p className="text-xs text-[#94A3B8]">
+                  <p className="text-xs text-base-content/50">
                     {formatTime(apt.schedule?.startTime)}
                   </p>
                 </div>

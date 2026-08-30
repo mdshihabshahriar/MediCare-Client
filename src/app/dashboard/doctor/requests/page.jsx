@@ -9,10 +9,10 @@ import toast from "react-hot-toast";
 
 const statusStyles = {
   pending: "bg-[#FEF3C7] text-[#B45309]",
-  accepted: "bg-[#DBEAFE] text-[#1D4ED8]",
+  accepted: "bg-[#DBEAFE] text-primary/90",
   completed: "bg-[#DCFCE7] text-[#15803D]",
   rejected: "bg-[#FEE2E2] text-[#DC2626]",
-  cancelled: "bg-[#F1F5F9] text-[#64748B]",
+  cancelled: "bg-base-200 text-base-content/60",
 };
 
 function Modal({ title, onClose, children }) {
@@ -29,11 +29,11 @@ function Modal({ title, onClose, children }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-base-100 p-6 shadow-xl"
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
-          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]" aria-label="Close">
+          <h3 className="text-lg font-bold text-base-content">{title}</h3>
+          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-base-content/50 hover:bg-base-200 hover:text-base-content" aria-label="Close">
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
@@ -131,7 +131,7 @@ export default function AppointmentRequests() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+          className="h-8 w-8 rounded-full border-2 border-base-300 border-t-primary"
         />
       </div>
     );
@@ -148,8 +148,8 @@ export default function AppointmentRequests() {
       variants={containerVariants}
     >
       <motion.div variants={itemVariants}>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Appointment Requests</h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">Appointment Requests</h1>
+        <p className="mt-1 text-sm text-base-content/60">
           Accept or reject incoming requests, and mark visits as completed.
         </p>
       </motion.div>
@@ -163,8 +163,8 @@ export default function AppointmentRequests() {
             onClick={() => setFilter(f)}
             className={`rounded-full border px-4 py-1.5 text-xs font-semibold capitalize transition-colors ${
               filter === f
-                ? "border-[#2563EB] bg-[#EFF6FF] text-[#2563EB]"
-                : "border-[#E2E8F0] text-[#64748B] hover:bg-[#F1F5F9]"
+                ? "border-primary bg-[#EFF6FF] text-primary"
+                : "border-base-300 text-base-content/60 hover:bg-base-200"
             }`}
           >
             {f}
@@ -174,7 +174,7 @@ export default function AppointmentRequests() {
 
       <motion.div className="flex flex-col gap-4" variants={containerVariants}>
         {filtered.length === 0 ? (
-          <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+          <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-base-100 p-10 text-center text-sm text-base-content/50">
             No {filter !== "all" ? filter : ""} requests.
           </motion.div>
         ) : (
@@ -187,11 +187,11 @@ export default function AppointmentRequests() {
                 animate="show"
                 exit={{ opacity: 0, x: -12, transition: { duration: 0.2 } }}
                 layout
-                className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm sm:p-6"
+                className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm sm:p-6"
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full bg-base-200">
                       <Image
                         src={req.patient?.photoUrl || "https://i.pravatar.cc/150?u=" + req.patientId}
                         alt={req.patient?.name || "Patient"}
@@ -200,8 +200,8 @@ export default function AppointmentRequests() {
                       />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#0F172A]">{req.patient?.name}</p>
-                      <p className="text-xs text-[#94A3B8]">{req.symptoms}</p>
+                      <p className="text-sm font-bold text-base-content">{req.patient?.name}</p>
+                      <p className="text-xs text-base-content/50">{req.symptoms}</p>
                     </div>
                   </div>
 
@@ -210,14 +210,14 @@ export default function AppointmentRequests() {
                   </span>
                 </div>
 
-                <div className="mt-4 flex flex-wrap gap-2 border-t border-[#E2E8F0] pt-4">
+                <div className="mt-4 flex flex-wrap gap-2 border-t border-base-300 pt-4">
                   {req.status === "pending" && (
                     <>
                       <motion.button
                         whileHover={{ scale: 1.04 }}
                         whileTap={{ scale: 0.96 }}
                         onClick={() => handleAccept(req._id)}
-                        className="rounded-lg bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1D4ED8]"
+                        className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white hover:bg-primary/90"
                       >
                         Accept
                       </motion.button>
@@ -242,12 +242,12 @@ export default function AppointmentRequests() {
                     </motion.button>
                   )}
                   {req.status === "completed" && (
-                    <span className="text-xs font-medium text-[#94A3B8]">
+                    <span className="text-xs font-medium text-base-content/50">
                       Visit completed — prescription created.
                     </span>
                   )}
                   {req.status === "rejected" && (
-                    <span className="text-xs font-medium text-[#94A3B8]">This request was rejected.</span>
+                    <span className="text-xs font-medium text-base-content/50">This request was rejected.</span>
                   )}
                 </div>
               </motion.div>
@@ -259,12 +259,12 @@ export default function AppointmentRequests() {
       <AnimatePresence>
         {rejectTarget && (
           <Modal title="Reject Appointment" onClose={() => setRejectTarget(null)}>
-            <p className="text-sm text-[#64748B]">
+            <p className="text-sm text-base-content/60">
               Reject the appointment request from{" "}
-              <span className="font-semibold text-[#0F172A]">{rejectTarget.patient?.name}</span>?
+              <span className="font-semibold text-base-content">{rejectTarget.patient?.name}</span>?
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep Pending</button>
+              <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">Keep Pending</button>
               <button type="button" onClick={handleReject} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Reject</button>
             </div>
           </Modal>
@@ -274,13 +274,13 @@ export default function AppointmentRequests() {
       <AnimatePresence>
         {completeTarget && (
           <Modal title="Mark as Completed" onClose={() => setCompleteTarget(null)}>
-            <p className="text-sm text-[#64748B]">
+            <p className="text-sm text-base-content/60">
               Mark the visit with{" "}
-              <span className="font-semibold text-[#0F172A]">{completeTarget.patient?.name}</span> as
+              <span className="font-semibold text-base-content">{completeTarget.patient?.name}</span> as
               completed? You&apos;ll be taken to create their prescription next.
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setCompleteTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={() => setCompleteTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">Cancel</button>
               <button type="button" onClick={handleMarkCompleted} className="flex-1 rounded-full bg-[#10B981] py-2.5 text-sm font-bold text-white hover:bg-[#059669]">Complete &amp; Continue</button>
             </div>
           </Modal>

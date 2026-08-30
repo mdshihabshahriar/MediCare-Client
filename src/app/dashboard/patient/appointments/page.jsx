@@ -127,7 +127,7 @@ export default function MyAppointmentsPage() {
         return "bg-red-100 text-red-700";
 
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-base-200 text-base-content";
     }
   };
 
@@ -241,7 +241,7 @@ export default function MyAppointmentsPage() {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-lg font-semibold">
+      <div className="py-24 text-center text-lg font-semibold text-base-content">
         Loading Appointments...
       </div>
     );
@@ -249,13 +249,13 @@ export default function MyAppointmentsPage() {
 
   return (
     <>
-      <main className="min-h-screen bg-slate-50 py-10">
+      <main className="min-h-screen bg-base-200 py-10">
         <div className="mx-auto max-w-7xl px-4">
           <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="mb-8 text-3xl font-bold text-slate-800"
+            className="mb-8 text-3xl font-bold text-base-content"
           >
             My Appointments
           </motion.h1>
@@ -265,11 +265,11 @@ export default function MyAppointmentsPage() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="rounded-3xl bg-white p-16 text-center shadow"
+              className="rounded-3xl bg-base-100 p-16 text-center shadow"
             >
-              <h2 className="text-xl font-semibold">No Appointments Found</h2>
+              <h2 className="text-xl font-semibold text-base-content">No Appointments Found</h2>
 
-              <p className="mt-2 text-slate-500">
+              <p className="mt-2 text-base-content/60">
                 Book your first appointment.
               </p>
             </motion.div>
@@ -284,7 +284,7 @@ export default function MyAppointmentsPage() {
                 <motion.div
                   key={appointment._id}
                   variants={cardVariants}
-                  className="rounded-3xl bg-white p-6 shadow-xl"
+                  className="rounded-3xl bg-base-100 p-6 shadow-xl"
                 >
                   <div className="flex flex-col gap-6 lg:flex-row lg:justify-between">
                     <div className="flex gap-5">
@@ -298,7 +298,7 @@ export default function MyAppointmentsPage() {
 
                       <div>
                         <div className="flex items-center gap-3">
-                          <h2 className="text-2xl font-bold">
+                          <h2 className="text-2xl font-bold text-base-content">
                             {appointment.doctor.name}
                           </h2>
 
@@ -307,11 +307,11 @@ export default function MyAppointmentsPage() {
                           </span>
                         </div>
 
-                        <p className="mt-2 text-slate-600">
+                        <p className="mt-2 text-base-content/80">
                           {appointment.doctor.hospitalName}
                         </p>
 
-                        <div className="mt-5 flex flex-wrap gap-6 text-slate-600">
+                        <div className="mt-5 flex flex-wrap gap-6 text-base-content/80">
                           <p>📅 {appointment.schedule?.day}</p>
 
                           <p>
@@ -324,20 +324,20 @@ export default function MyAppointmentsPage() {
                           </p>
                         </div>
 
-                        <div className="mt-5 rounded-2xl border bg-slate-50 p-4">
-                          <p className="font-semibold">Symptoms</p>
+                        <div className="mt-5 rounded-2xl border border-base-300 bg-base-200 p-4">
+                          <p className="font-semibold text-base-content">Symptoms</p>
 
-                          <p className="mt-2 text-slate-600">
+                          <p className="mt-2 text-base-content/80">
                             {appointment.symptoms}
                           </p>
                         </div>
 
-                        <p className="mt-4 text-sm text-slate-400">
+                        <p className="mt-4 text-sm text-base-content/50">
                           Booked On : {formatDate(appointment.createdAt)}
                         </p>
 
                         {appointment.transactionId && (
-                          <p className="mt-1 text-sm text-slate-400">
+                          <p className="mt-1 text-sm text-base-content/50">
                             Stripe ID : {appointment.transactionId}
                           </p>
                         )}
@@ -376,7 +376,7 @@ export default function MyAppointmentsPage() {
                                 setRescheduleAppointment(appointment);
                                 loadSchedules(appointment.doctorId);
                               }}
-                              className="rounded-xl border px-6 py-3 font-semibold hover:bg-slate-100"
+                              className="rounded-xl border border-base-300 px-6 py-3 font-semibold text-base-content hover:bg-base-200"
                             >
                               Reschedule
                             </motion.button>
@@ -396,7 +396,7 @@ export default function MyAppointmentsPage() {
                           !appointment.hasReview && (
                             <Link
                               href={`/dashboard/patient/reviews?appointmentId=${appointment._id}`}
-                              className="rounded-xl bg-blue-600 px-6 py-3 text-center font-semibold text-white hover:bg-blue-700"
+                              className="rounded-xl bg-primary px-6 py-3 text-center font-semibold text-white hover:bg-primary/90"
                             >
                               Leave Review
                             </Link>
@@ -412,7 +412,7 @@ export default function MyAppointmentsPage() {
                         {appointment.status === "cancelled" && (
                           <Link
                             href={`/doctors/${appointment.doctorId}`}
-                            className="rounded-xl bg-slate-800 px-6 py-3 font-semibold text-white text-center"
+                            className="rounded-xl bg-neutral px-6 py-3 font-semibold text-neutral-content text-center"
                           >
                             Book Again
                           </Link>
@@ -438,18 +438,18 @@ export default function MyAppointmentsPage() {
           >
             <motion.div
               variants={modalVariants}
-              className="w-full max-w-md rounded-3xl bg-white p-6"
+              className="w-full max-w-md rounded-3xl bg-base-100 p-6"
             >
-              <h2 className="text-xl font-bold">Cancel Appointment</h2>
+              <h2 className="text-xl font-bold text-base-content">Cancel Appointment</h2>
 
-              <p className="mt-4 text-slate-600">
+              <p className="mt-4 text-base-content/80">
                 Are you sure you want to cancel this appointment?
               </p>
 
               <div className="mt-6 flex justify-end gap-3">
                 <button
                   onClick={() => setCancelAppointment(null)}
-                  className="rounded-xl border px-5 py-2"
+                  className="rounded-xl border border-base-300 px-5 py-2 text-base-content"
                 >
                   Close
                 </button>
@@ -477,20 +477,20 @@ export default function MyAppointmentsPage() {
           >
             <motion.div
               variants={modalVariants}
-              className="w-full max-w-lg rounded-3xl bg-white p-6"
+              className="w-full max-w-lg rounded-3xl bg-base-100 p-6"
             >
-              <h2 className="text-2xl font-bold">Reschedule Appointment</h2>
+              <h2 className="text-2xl font-bold text-base-content">Reschedule Appointment</h2>
 
               <div className="mt-6 space-y-4">
                 {schedules.map((schedule) => (
                   <label
                     key={schedule._id}
-                    className="flex cursor-pointer items-center justify-between rounded-xl border p-4 hover:border-blue-500"
+                    className="flex cursor-pointer items-center justify-between rounded-xl border border-base-300 p-4 hover:border-primary"
                   >
                     <div>
-                      <p className="font-semibold">{schedule.day}</p>
+                      <p className="font-semibold text-base-content">{schedule.day}</p>
 
-                      <p className="text-slate-500">
+                      <p className="text-base-content/60">
                         {formatTime(schedule.startTime)}
                         {" - "}
                         {formatTime(schedule.endTime)}
@@ -511,14 +511,14 @@ export default function MyAppointmentsPage() {
               <div className="mt-8 flex justify-end gap-3">
                 <button
                   onClick={() => setRescheduleAppointment(null)}
-                  className="rounded-xl border px-5 py-2"
+                  className="rounded-xl border border-base-300 px-5 py-2 text-base-content"
                 >
                   Close
                 </button>
 
                 <button
                   onClick={handleReschedule}
-                  className="rounded-xl bg-blue-600 px-5 py-2 text-white"
+                  className="rounded-xl bg-primary px-5 py-2 text-white hover:bg-primary/90"
                 >
                   Save Changes
                 </button>
@@ -539,14 +539,14 @@ export default function MyAppointmentsPage() {
           >
             <motion.div
               variants={modalVariants}
-              className="w-full max-w-lg rounded-3xl bg-white p-6"
+              className="w-full max-w-lg rounded-3xl bg-base-100 p-6"
             >
-              <h2 className="text-2xl font-bold">Leave Review</h2>
+              <h2 className="text-2xl font-bold text-base-content">Leave Review</h2>
 
               <div className="mt-5">
-                <label className="font-medium">Rating</label>
+                <label className="font-medium text-base-content">Rating</label>
 
-                <select className="mt-2 w-full rounded-xl border p-3">
+                <select className="mt-2 w-full rounded-xl border border-base-300 bg-base-100 p-3 text-base-content">
                   <option>⭐⭐⭐⭐⭐ (5)</option>
                   <option>⭐⭐⭐⭐ (4)</option>
                   <option>⭐⭐⭐ (3)</option>
@@ -556,11 +556,11 @@ export default function MyAppointmentsPage() {
               </div>
 
               <div className="mt-5">
-                <label className="font-medium">Review</label>
+                <label className="font-medium text-base-content">Review</label>
 
                 <textarea
                   rows={5}
-                  className="mt-2 w-full rounded-xl border p-3"
+                  className="mt-2 w-full rounded-xl border border-base-300 bg-base-100 p-3 text-base-content placeholder:text-base-content/50"
                   placeholder="Write your experience..."
                 />
               </div>
@@ -568,7 +568,7 @@ export default function MyAppointmentsPage() {
               <div className="mt-8 flex justify-end gap-3">
                 <button
                   onClick={() => setReviewAppointment(null)}
-                  className="rounded-xl border px-5 py-2"
+                  className="rounded-xl border border-base-300 px-5 py-2 text-base-content"
                 >
                   Close
                 </button>

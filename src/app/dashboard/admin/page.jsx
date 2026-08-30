@@ -136,8 +136,8 @@ export default function AdminOverview() {
       variants={containerVariants}
     >
       <motion.div variants={cardVariants}>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Admin Overview</h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">Admin Overview</h1>
+        <p className="mt-1 text-sm text-base-content/60">
           A snapshot of everything happening on the platform.
         </p>
       </motion.div>
@@ -146,7 +146,7 @@ export default function AdminOverview() {
         {statConfig.map((stat) => (
           <motion.div
             key={stat.key}
-            className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+            className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
             variants={cardVariants}
             whileHover={{ y: -3, boxShadow: "0 8px 20px rgba(15, 23, 42, 0.08)" }}
             transition={{ duration: 0.2 }}
@@ -161,25 +161,25 @@ export default function AdminOverview() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25 }}
-              className="mt-4 text-2xl font-extrabold text-[#0F172A]"
+              className="mt-4 text-2xl font-extrabold text-base-content"
             >
               {stats === null ? "—" : stats[stat.key]}
             </motion.p>
-            <p className="mt-1 text-xs font-medium text-[#64748B]">{stat.label}</p>
+            <p className="mt-1 text-xs font-medium text-base-content/60">{stat.label}</p>
           </motion.div>
         ))}
       </motion.div>
 
       <motion.div
-        className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+        className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm"
         variants={cardVariants}
       >
-        <h2 className="text-base font-bold text-[#0F172A]">Recent Activity</h2>
-        <div className="mt-5 flex flex-col divide-y divide-[#E2E8F0]">
+        <h2 className="text-base font-bold text-base-content">Recent Activity</h2>
+        <div className="mt-5 flex flex-col divide-y divide-base-300">
           {recentActivity === null ? (
-            <p className="py-3.5 text-sm text-[#94A3B8]">Loading…</p>
+            <p className="py-3.5 text-sm text-base-content/50">Loading…</p>
           ) : recentActivity.length === 0 ? (
-            <p className="py-3.5 text-sm text-[#94A3B8]">No recent activity yet.</p>
+            <p className="py-3.5 text-sm text-base-content/50">No recent activity yet.</p>
           ) : (
             <motion.div initial="hidden" animate="show" variants={containerVariants}>
               {recentActivity.map((item, i) => (
@@ -188,8 +188,8 @@ export default function AdminOverview() {
                   variants={itemVariants}
                   className="flex items-center justify-between gap-4 py-3.5 first:pt-0 last:pb-0"
                 >
-                  <p className="text-sm text-[#334155]">{item.text}</p>
-                  <p className="shrink-0 text-xs text-[#94A3B8]">{formatTimeAgo(item.createdAt)}</p>
+                  <p className="text-sm text-base-content/80">{item.text}</p>
+                  <p className="shrink-0 text-xs text-base-content/50">{formatTimeAgo(item.createdAt)}</p>
                 </motion.div>
               ))}
             </motion.div>

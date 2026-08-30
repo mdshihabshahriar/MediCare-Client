@@ -103,7 +103,7 @@ export default function PaymentHistory() {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-lg font-semibold text-[#334155]">
+      <div className="py-24 text-center text-lg font-semibold text-base-content/80">
         Loading payment history...
       </div>
     );
@@ -117,10 +117,10 @@ export default function PaymentHistory() {
       variants={containerVariants}
     >
       <motion.div variants={itemVariants}>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">
           Payment History
         </h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <p className="mt-1 text-sm text-base-content/60">
           A record of every consultation payment you&apos;ve made.
         </p>
       </motion.div>
@@ -133,10 +133,10 @@ export default function PaymentHistory() {
           variants={itemVariants}
           whileHover={{ y: -4, boxShadow: "0 8px 20px rgba(15,23,42,0.08)" }}
           transition={{ duration: 0.2 }}
-          className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+          className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
         >
-          <p className="text-xs font-medium text-[#64748B]">Total Paid</p>
-          <p className="mt-1 text-2xl font-extrabold text-[#0F172A]">
+          <p className="text-xs font-medium text-base-content/60">Total Paid</p>
+          <p className="mt-1 text-2xl font-extrabold text-base-content">
             ${totalPaid.toLocaleString()}
           </p>
         </motion.div>
@@ -144,10 +144,10 @@ export default function PaymentHistory() {
           variants={itemVariants}
           whileHover={{ y: -4, boxShadow: "0 8px 20px rgba(15,23,42,0.08)" }}
           transition={{ duration: 0.2 }}
-          className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+          className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
         >
-          <p className="text-xs font-medium text-[#64748B]">Paid Appointments</p>
-          <p className="mt-1 text-2xl font-extrabold text-[#0F172A]">
+          <p className="text-xs font-medium text-base-content/60">Paid Appointments</p>
+          <p className="mt-1 text-2xl font-extrabold text-base-content">
             {transactions.filter((t) => t.status === "paid").length}
           </p>
         </motion.div>
@@ -155,10 +155,10 @@ export default function PaymentHistory() {
           variants={itemVariants}
           whileHover={{ y: -4, boxShadow: "0 8px 20px rgba(15,23,42,0.08)" }}
           transition={{ duration: 0.2 }}
-          className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+          className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
         >
-          <p className="text-xs font-medium text-[#64748B]">Refunded</p>
-          <p className="mt-1 text-2xl font-extrabold text-[#0F172A]">
+          <p className="text-xs font-medium text-base-content/60">Refunded</p>
+          <p className="mt-1 text-2xl font-extrabold text-base-content">
             {transactions.filter((t) => t.status === "refunded").length}
           </p>
         </motion.div>
@@ -167,12 +167,12 @@ export default function PaymentHistory() {
       {transactions.length === 0 ? (
         <motion.div
           variants={itemVariants}
-          className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-16 text-center"
+          className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-16 text-center"
         >
-          <h2 className="text-lg font-semibold text-[#0F172A]">
+          <h2 className="text-lg font-semibold text-base-content">
             No Payments Yet
           </h2>
-          <p className="mt-2 text-sm text-[#94A3B8]">
+          <p className="mt-2 text-sm text-base-content/50">
             Your completed payments will show up here.
           </p>
         </motion.div>
@@ -181,10 +181,10 @@ export default function PaymentHistory() {
           {/* Table (desktop) */}
           <motion.div
             variants={itemVariants}
-            className="hidden overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm md:block"
+            className="hidden overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm md:block"
           >
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-xs uppercase tracking-wide text-[#64748B]">
+              <thead className="border-b border-base-300 bg-base-200 text-xs uppercase tracking-wide text-base-content/60">
                 <tr>
                   <th className="px-6 py-3.5 font-semibold">Transaction</th>
                   <th className="px-6 py-3.5 font-semibold">Doctor</th>
@@ -195,14 +195,14 @@ export default function PaymentHistory() {
                 </tr>
               </thead>
               <motion.tbody
-                className="divide-y divide-[#E2E8F0]"
+                className="divide-y divide-base-300"
                 initial="hidden"
                 animate="show"
                 variants={containerVariants}
               >
                 {transactions.map((txn) => (
                   <motion.tr key={txn.id} variants={rowVariants}>
-                    <td className="px-6 py-4 font-mono text-xs text-[#64748B]">
+                    <td className="px-6 py-4 font-mono text-xs text-base-content/60">
                       {typeof txn.id === "string" ? txn.id.slice(-10) : txn.id}
                     </td>
                     <td className="px-6 py-4">
@@ -215,16 +215,16 @@ export default function PaymentHistory() {
                             className="object-cover"
                           />
                         </div>
-                        <span className="font-semibold text-[#0F172A]">
+                        <span className="font-semibold text-base-content">
                           {txn.doctor}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-[#334155]">
+                    <td className="px-6 py-4 text-base-content/80">
                       {formatDate(txn.date)}
                     </td>
-                    <td className="px-6 py-4 text-[#334155]">{txn.method}</td>
-                    <td className="px-6 py-4 font-semibold text-[#0F172A]">
+                    <td className="px-6 py-4 text-base-content/80">{txn.method}</td>
+                    <td className="px-6 py-4 font-semibold text-base-content">
                       ${Number(txn.amount).toLocaleString()}
                     </td>
                     <td className="px-6 py-4">
@@ -251,7 +251,7 @@ export default function PaymentHistory() {
               <motion.div
                 key={txn.id}
                 variants={itemVariants}
-                className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+                className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
               >
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full">
@@ -263,10 +263,10 @@ export default function PaymentHistory() {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-[#0F172A]">
+                    <p className="truncate font-semibold text-base-content">
                       {txn.doctor}
                     </p>
-                    <p className="text-xs text-[#94A3B8]">
+                    <p className="text-xs text-base-content/50">
                       {formatDate(txn.date)} · {txn.method}
                     </p>
                   </div>
@@ -277,7 +277,7 @@ export default function PaymentHistory() {
                   </span>
                 </div>
                 <div className="mt-3 flex items-center justify-between">
-                  <p className="text-lg font-extrabold text-[#0F172A]">
+                  <p className="text-lg font-extrabold text-base-content">
                     ৳{Number(txn.amount).toLocaleString()}
                   </p>
                 </div>

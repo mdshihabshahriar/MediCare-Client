@@ -58,18 +58,18 @@ const LoginPage = () => {
 
   if (isPending || session?.user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+      <div className="flex min-h-screen items-center justify-center bg-base-200">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-base-300 border-t-primary" />
       </div>
     );
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 pb-10 pt-24 sm:px-6">
-      <div className="grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-[2rem] border border-[#E2E8F0] bg-white shadow-xl lg:grid-cols-2">
+    <main className="flex min-h-screen items-center justify-center bg-base-200 px-4 pb-10 pt-24 sm:px-6">
+      <div className="grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-[2rem] border border-base-300 bg-base-100 shadow-xl lg:grid-cols-2">
         <div className="relative hidden flex-col justify-between bg-accent p-10 text-white lg:flex">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+          <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-base-100/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-base-100/10 blur-3xl" />
 
           <Link href="/" className="relative text-xl font-bold tracking-tight">
             Medi<span className="text-white/80">Care</span>
@@ -97,10 +97,10 @@ const LoginPage = () => {
         </div>
 
         <div className="p-8 sm:p-10 lg:p-12">
-          <h1 className="text-2xl font-extrabold text-[#0F172A]">Welcome back</h1>
-          <p className="mt-1.5 text-sm text-[#64748B]">
+          <h1 className="text-2xl font-extrabold text-base-content">Welcome back</h1>
+          <p className="mt-1.5 text-sm text-base-content/60">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-semibold text-[#2563EB]">
+            <Link href="/register" className="font-semibold text-primary">
               Sign up
             </Link>
           </p>
@@ -119,7 +119,7 @@ const LoginPage = () => {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="mt-7 cursor-pointer flex w-full items-center justify-center gap-3 rounded-xl border border-[#E2E8F0] bg-white py-2.5 text-sm font-semibold text-[#334155] transition-colors hover:bg-[#F8FAFC]"
+            className="mt-7 cursor-pointer flex w-full items-center justify-center gap-3 rounded-xl border border-base-300 bg-base-100 py-2.5 text-sm font-semibold text-base-content/80 transition-colors hover:bg-base-200"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
@@ -144,20 +144,20 @@ const LoginPage = () => {
 
           {/* Divider */}
           <div className="my-7 flex items-center gap-3">
-            <span className="h-px flex-1 bg-[#E2E8F0]" />
-            <span className="text-xs font-medium text-[#94A3B8]">
+            <span className="h-px flex-1 bg-base-300" />
+            <span className="text-xs font-medium text-base-content/50">
               OR CONTINUE WITH EMAIL
             </span>
-            <span className="h-px flex-1 bg-[#E2E8F0]" />
+            <span className="h-px flex-1 bg-base-300" />
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             {/* Email */}
             <TextField name="email" type="email" isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Email Address</Label>
+              <Label className="text-sm font-medium text-base-content/80">Email Address</Label>
               <Input
                 placeholder="you@example.com"
-                className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none transition-colors placeholder:text-base-content/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               <FieldError className="mt-1 text-xs text-[#EF4444]" />
             </TextField>
@@ -165,8 +165,8 @@ const LoginPage = () => {
             {/* Password */}
             <TextField name="password" isRequired>
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-medium text-[#334155]">Password</Label>
-                {/* <NextLink href="/forgot-password" className="text-xs font-semibold text-[#2563EB]">
+                <Label className="text-sm font-medium text-base-content/80">Password</Label>
+                {/* <NextLink href="/forgot-password" className="text-xs font-semibold text-primary">
                   Forgot password?
                 </NextLink> */}
               </div>
@@ -174,12 +174,12 @@ const LoginPage = () => {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 pr-11 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                  className="w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 pr-11 text-sm text-base-content outline-none transition-colors placeholder:text-base-content/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#334155]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-base-content/80"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
@@ -199,11 +199,11 @@ const LoginPage = () => {
             </TextField>
 
             {/* Remember me */}
-            {/* <label className="flex items-center gap-2 text-sm text-[#64748B]">
+            {/* <label className="flex items-center gap-2 text-sm text-base-content/60">
               <input
                 type="checkbox"
                 name="remember"
-                className="h-4 w-4 rounded border-[#CBD5E1] text-[#2563EB] focus:ring-[#2563EB]/30"
+                className="h-4 w-4 rounded border-[#CBD5E1] text-primary focus:ring-primary/30"
               />
               Remember me for 30 days
             </label> */}
@@ -212,7 +212,7 @@ const LoginPage = () => {
             <Button
               type="submit"
               isDisabled={isSubmitting}
-              className="w-full rounded-full bg-[#2563EB] py-3 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-60"
+              className="w-full rounded-full bg-primary py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-60"
             >
               {isSubmitting ? "Logging in…" : "Log In"}
             </Button>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -87,6 +88,7 @@ const Navbar = () => {
               </>
             ) : null}
           </li>
+          <ThemeToggle></ThemeToggle>
         </ul>
 
         <div className="hidden items-center gap-4 sm:flex">

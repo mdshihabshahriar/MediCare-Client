@@ -179,7 +179,7 @@ export default function DoctorProfileManagement() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+          className="h-8 w-8 rounded-full border-2 border-base-300 border-t-primary"
         />
       </div>
     );
@@ -193,15 +193,15 @@ export default function DoctorProfileManagement() {
       variants={containerVariants}
     >
       <motion.div variants={itemVariants}>
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Profile Management</h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">Profile Management</h1>
+        <p className="mt-1 text-sm text-base-content/60">
           Keep your professional details up to date for patients to see.
         </p>
       </motion.div>
 
       <motion.div
         variants={itemVariants}
-        className="max-w-2xl rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm sm:p-8"
+        className="max-w-2xl rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm sm:p-8"
       >
         <AnimatePresence>
           {isSaved && (
@@ -230,7 +230,7 @@ export default function DoctorProfileManagement() {
           variants={containerVariants}
         >
           <motion.div variants={itemVariants}>
-            <label className="text-sm font-medium text-[#334155]">Profile Photo</label>
+            <label className="text-sm font-medium text-base-content/80">Profile Photo</label>
             <div
               onClick={() => fileInputRef.current?.click()}
               onDragOver={(e) => e.preventDefault()}
@@ -242,23 +242,23 @@ export default function DoctorProfileManagement() {
                   setPhotoPreview(URL.createObjectURL(file));
                 }
               }}
-              className="mt-1.5 flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed border-[#CBD5E1] bg-[#F8FAFC] p-4 transition-colors hover:border-[#2563EB] hover:bg-[#EFF6FF]"
+              className="mt-1.5 flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed border-[#CBD5E1] bg-base-200 p-4 transition-colors hover:border-primary hover:bg-[#EFF6FF]"
             >
-              <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#E2E8F0]">
+              <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-base-100 ring-1 ring-base-300">
                 {photoPreview ? (
                   <Image src={photoPreview || null} alt="Profile preview" fill className="object-cover" />
                 ) : (
-                  <svg className="h-6 w-6 text-[#94A3B8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <svg className="h-6 w-6 text-base-content/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z" />
                     <circle cx="12" cy="13" r="4" />
                   </svg>
                 )}
               </div>
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[#0F172A]">
+                <p className="text-sm font-semibold text-base-content">
                   {photoFile ? photoFile.name : "Click to upload or drag and drop"}
                 </p>
-                <p className="mt-0.5 text-xs text-[#94A3B8]">PNG or JPG, up to 5MB</p>
+                <p className="mt-0.5 text-xs text-base-content/50">PNG or JPG, up to 5MB</p>
               </div>
               <input
                 ref={fileInputRef}
@@ -272,12 +272,12 @@ export default function DoctorProfileManagement() {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <Label className="text-sm font-medium text-[#334155]">Clinical Specialties</Label>
+            <Label className="text-sm font-medium text-base-content/80">Clinical Specialties</Label>
             <select
               name="specialty"
               required
               defaultValue={profile.specialty}
-              className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+              className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
             >
               {specialties.map((s) => (
                 <option key={s} value={s}>
@@ -289,43 +289,43 @@ export default function DoctorProfileManagement() {
 
           <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">
             <TextField name="experience" type="number" defaultValue={profile.experience} isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Experience (Years)</Label>
-              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+              <Label className="text-sm font-medium text-base-content/80">Experience (Years)</Label>
+              <Input className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
             </TextField>
             <TextField name="consultationFee" type="number" defaultValue={profile.consultationFee} isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Co-Pay Consultation Fee ($)</Label>
-              <Input className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20" />
+              <Label className="text-sm font-medium text-base-content/80">Co-Pay Consultation Fee ($)</Label>
+              <Input className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" />
             </TextField>
           </motion.div>
 
           <motion.div variants={itemVariants}>
             <TextField name="qualifications" defaultValue={profile.qualifications} isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Qualifications Statement</Label>
+              <Label className="text-sm font-medium text-base-content/80">Qualifications Statement</Label>
               <TextArea
                 rows={3}
-                className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="mt-1.5 w-full resize-none rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </TextField>
           </motion.div>
 
           <motion.div variants={itemVariants}>
             <TextField name="hospitalName" defaultValue={profile.hospitalName} isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Attached Medical Hospital Name</Label>
+              <Label className="text-sm font-medium text-base-content/80">Attached Medical Hospital Name</Label>
               <Input
                 placeholder="e.g. Dhaka Medical College Hospital"
-                className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </TextField>
           </motion.div>
 
           {/* Available slots */}
           {/* <div>
-            <Label className="text-sm font-medium text-[#334155]">Available Slots</Label>
+            <Label className="text-sm font-medium text-base-content/80">Available Slots</Label>
             <div className="mt-2 flex flex-wrap gap-2">
               {slots.map((slot, i) => (
-                <span key={i} className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold text-[#2563EB]">
+                <span key={i} className="inline-flex items-center gap-2 rounded-full bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold text-primary">
                   {slot}
-                  <button type="button" onClick={() => removeSlot(i)} className="text-[#2563EB]/60 hover:text-[#2563EB]" aria-label="Remove slot">
+                  <button type="button" onClick={() => removeSlot(i)} className="text-primary/60 hover:text-primary" aria-label="Remove slot">
                     <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 6 6 18" />
                       <path d="m6 6 12 12" />
@@ -334,7 +334,7 @@ export default function DoctorProfileManagement() {
                 </span>
               ))}
               {slots.length === 0 && (
-                <p className="text-xs text-[#94A3B8]">No slots added yet.</p>
+                <p className="text-xs text-base-content/50">No slots added yet.</p>
               )}
             </div>
 
@@ -349,13 +349,13 @@ export default function DoctorProfileManagement() {
                   }
                 }}
                 placeholder="e.g. Tuesday 15:00–18:00"
-                className="flex-1 rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="flex-1 rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
-              <button type="button" onClick={addSlot} className="shrink-0 rounded-xl border border-[#E2E8F0] px-4 text-sm font-semibold text-[#334155] hover:bg-[#F1F5F9]">
+              <button type="button" onClick={addSlot} className="shrink-0 rounded-xl border border-base-300 px-4 text-sm font-semibold text-base-content/80 hover:bg-base-200">
                 Add
               </button>
             </div>
-            <p className="mt-1.5 text-xs text-[#94A3B8]">
+            <p className="mt-1.5 text-xs text-base-content/50">
               For recurring weekly slots with day-by-day control, use Manage Schedule instead.
             </p>
           </div> */}
@@ -365,7 +365,7 @@ export default function DoctorProfileManagement() {
               <Button
                 type="submit"
                 isDisabled={isSaving}
-                className="mt-2 w-fit rounded-full bg-[#2563EB] px-7 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-60"
+                className="mt-2 w-fit rounded-full bg-primary px-7 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-60"
               >
                 {isSaving ? "Saving…" : "Save Changes"}
               </Button>

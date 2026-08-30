@@ -85,8 +85,8 @@ export default function DashboardLayout({ children }) {
 
   if (isPending) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+      <div className="flex min-h-screen items-center justify-center bg-base-200">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-base-300 border-t-[#2563EB]" />
       </div>
     );
   }
@@ -100,14 +100,14 @@ export default function DashboardLayout({ children }) {
   const navItems = getNavForRole(role);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pt-16">
+    <div className="min-h-screen bg-base-200 pt-16">
       {/* Mobile top bar */}
-      <div className="fixed inset-x-0 top-16 z-40 flex items-center justify-between border-b border-[#E2E8F0] bg-white px-4 py-3 lg:hidden">
-        <p className="text-sm font-bold capitalize text-[#0F172A]">{role} Dashboard</p>
+      <div className="fixed inset-x-0 top-16 z-40 flex items-center justify-between border-b border-base-300 bg-base-100 px-4 py-3 lg:hidden">
+        <p className="text-sm font-bold capitalize text-base-content">{role} Dashboard</p>
         <button
           type="button"
           onClick={() => setIsSidebarOpen((prev) => !prev)}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E2E8F0] text-[#334155]"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-base-300 text-base-content/80"
           aria-label="Toggle sidebar"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -120,12 +120,12 @@ export default function DashboardLayout({ children }) {
 
       <div className="mx-auto flex max-w-350">
         <aside
-          className={`fixed inset-y-0 left-0 z-50 w-64 shrink-0 border-r border-[#E2E8F0] bg-white pt-16 transition-transform lg:sticky lg:top-16 lg:z-0 lg:h-[calc(100vh-4rem)] lg:translate-x-0 ${
+          className={`fixed inset-y-0 left-0 z-50 w-64 shrink-0 border-r border-base-300 bg-base-100 pt-16 transition-transform lg:sticky lg:top-16 lg:z-0 lg:h-[calc(100vh-4rem)] lg:translate-x-0 ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
           <div className="flex h-full flex-col gap-1 overflow-y-auto p-4">
-            <div className="mb-4 flex items-center gap-3 rounded-xl bg-[#F8FAFC] p-3">
+            <div className="mb-4 flex items-center gap-3 rounded-xl bg-base-200 p-3">
               <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full">
                 <Image
                   src={session?.user?.photoUrl || "/default-avatar.png"}
@@ -135,8 +135,8 @@ export default function DashboardLayout({ children }) {
                 />
               </div>
               <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-[#0F172A]">{session.user.name}</p>
-                <p className="text-xs capitalize text-[#94A3B8]">{role}</p>
+                <p className="truncate text-sm font-bold text-base-content">{session.user.name}</p>
+                <p className="text-xs capitalize text-base-content/50">{role}</p>
 
                 {session.user.role === "doctor" && (
                 <p className="text-xs font-medium bg-cyan-500 p-1 rounded-2xl text-white">
@@ -158,8 +158,8 @@ export default function DashboardLayout({ children }) {
                     onClick={() => setIsSidebarOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-[#EFF6FF] text-[#2563EB]"
-                        : "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#0F172A]"
+                        ? "bg-[#EFF6FF] text-primary"
+                        : "text-base-content/60 hover:bg-base-200 hover:text-base-content"
                     }`}
                   >
                     <svg

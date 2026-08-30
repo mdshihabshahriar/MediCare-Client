@@ -102,7 +102,7 @@ export default function AdminManageAppointments() {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-lg font-semibold text-[#334155]">
+      <div className="py-24 text-center text-lg font-semibold text-base-content/80">
         Loading appointments...
       </div>
     );
@@ -115,10 +115,10 @@ export default function AdminManageAppointments() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">
           Manage Appointments
         </h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <p className="mt-1 text-sm text-base-content/60">
           Monitor every appointment across the platform.
         </p>
       </motion.div>
@@ -131,7 +131,7 @@ export default function AdminManageAppointments() {
       >
         <div className="relative flex-1">
           <svg
-            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]"
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/50"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -146,7 +146,7 @@ export default function AdminManageAppointments() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by patient, doctor, or ID..."
-            className="w-full rounded-xl border border-[#E2E8F0] bg-white py-2.5 pl-10 pr-4 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+            className="w-full rounded-xl border border-base-300 bg-base-100 py-2.5 pl-10 pr-4 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
         <div className="flex flex-wrap gap-2">
@@ -156,8 +156,8 @@ export default function AdminManageAppointments() {
               onClick={() => setFilter(f)}
               className={`rounded-full border px-4 py-2 text-xs font-semibold capitalize transition-colors ${
                 filter === f
-                  ? "border-[#2563EB] bg-[#EFF6FF] text-[#2563EB]"
-                  : "border-[#E2E8F0] text-[#64748B] hover:bg-[#F1F5F9]"
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-base-300 text-base-content/60 hover:bg-base-200"
               }`}
             >
               {f}
@@ -174,12 +174,12 @@ export default function AdminManageAppointments() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-16 text-center"
+            className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-16 text-center"
           >
-            <h2 className="text-lg font-semibold text-[#0F172A]">
+            <h2 className="text-lg font-semibold text-base-content">
               No Appointments Found
             </h2>
-            <p className="mt-2 text-sm text-[#94A3B8]">
+            <p className="mt-2 text-sm text-base-content/50">
               Try a different filter or search term.
             </p>
           </motion.div>
@@ -191,9 +191,9 @@ export default function AdminManageAppointments() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="hidden overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm md:block">
+            <div className="hidden overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm md:block">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-xs uppercase tracking-wide text-[#64748B]">
+                <thead className="border-b border-base-300 bg-base-200 text-xs uppercase tracking-wide text-base-content/60">
                   <tr>
                     <th className="px-6 py-3.5 font-semibold">ID</th>
                     <th className="px-6 py-3.5 font-semibold">Patient</th>
@@ -203,17 +203,17 @@ export default function AdminManageAppointments() {
                   </tr>
                 </thead>
                 <motion.tbody
-                  className="divide-y divide-[#E2E8F0]"
+                  className="divide-y divide-base-300"
                   initial="hidden"
                   animate="show"
                   variants={containerVariants}
                 >
                   {filtered.map((apt) => (
                     <motion.tr key={apt.id} variants={rowVariants}>
-                      <td className="px-6 py-4 font-mono text-xs text-[#64748B]">
+                      <td className="px-6 py-4 font-mono text-xs text-base-content/60">
                         #{String(apt.id).slice(-6)}
                       </td>
-                      <td className="px-6 py-4 font-semibold text-[#0F172A]">
+                      <td className="px-6 py-4 font-semibold text-base-content">
                         {apt.patient}
                       </td>
                       <td className="px-6 py-4">
@@ -226,10 +226,10 @@ export default function AdminManageAppointments() {
                               className="object-cover"
                             />
                           </div>
-                          <span className="text-[#334155]">{apt.doctor}</span>
+                          <span className="text-base-content/80">{apt.doctor}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-[#334155]">
+                      <td className="px-6 py-4 text-base-content/80">
                         {apt.date} · {formatTime(apt.time)}
                       </td>
                       <td className="px-6 py-4">
@@ -255,10 +255,10 @@ export default function AdminManageAppointments() {
                 <motion.div
                   key={apt.id}
                   variants={rowVariants}
-                  className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm"
+                  className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
-                    <p className="font-mono text-xs text-[#94A3B8]">
+                    <p className="font-mono text-xs text-base-content/50">
                       #{String(apt.id).slice(-6)}
                     </p>
                     <span
@@ -267,7 +267,7 @@ export default function AdminManageAppointments() {
                       {apt.status}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm font-bold text-[#0F172A]">
+                  <p className="mt-2 text-sm font-bold text-base-content">
                     {apt.patient}
                   </p>
                   <div className="mt-1 flex items-center gap-2">
@@ -279,9 +279,9 @@ export default function AdminManageAppointments() {
                         className="object-cover"
                       />
                     </div>
-                    <p className="text-xs text-[#64748B]">{apt.doctor}</p>
+                    <p className="text-xs text-base-content/60">{apt.doctor}</p>
                   </div>
-                  <p className="mt-2 text-xs text-[#94A3B8]">
+                  <p className="mt-2 text-xs text-base-content/50">
                     {apt.date} · {formatTime(apt.time)}
                   </p>
                 </motion.div>

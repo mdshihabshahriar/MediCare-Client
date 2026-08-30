@@ -41,7 +41,7 @@ function Modal({ title, onClose, children }) {
       onClick={onClose}
     >
       <motion.div
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-base-100 p-6 shadow-xl"
         initial={{ opacity: 0, scale: 0.95, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 12 }}
@@ -49,8 +49,8 @@ function Modal({ title, onClose, children }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
-          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]" aria-label="Close">
+          <h3 className="text-lg font-bold text-base-content">{title}</h3>
+          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-base-content/50 hover:bg-base-200 hover:text-base-content" aria-label="Close">
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
@@ -66,11 +66,11 @@ function Modal({ title, onClose, children }) {
 function InfoRow({ icon, label, value }) {
   return (
     <div className="flex items-start gap-2.5">
-      <svg className="mt-0.5 h-4 w-4 shrink-0 text-[#94A3B8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg className="mt-0.5 h-4 w-4 shrink-0 text-base-content/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         {icon}
       </svg>
-      <p className="text-xs leading-relaxed text-[#334155]">
-        <span className="font-semibold text-[#0F172A]">{label}: </span>
+      <p className="text-xs leading-relaxed text-base-content/80">
+        <span className="font-semibold text-base-content">{label}: </span>
         {value}
       </p>
     </div>
@@ -155,7 +155,7 @@ export default function ManageDoctors() {
   if (doctors === null) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-base-300 border-t-primary" />
       </div>
     );
   }
@@ -167,8 +167,8 @@ export default function ManageDoctors() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Manage Doctors</h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">Manage Doctors</h1>
+        <p className="mt-1 text-sm text-base-content/60">
           Review and verify doctors before they can accept patients.
         </p>
       </motion.div>
@@ -185,8 +185,8 @@ export default function ManageDoctors() {
             onClick={() => setFilter(f)}
             className={`rounded-full border px-4 py-1.5 text-xs font-semibold capitalize transition-colors ${
               filter === f
-                ? "border-[#2563EB] bg-[#EFF6FF] text-[#2563EB]"
-                : "border-[#E2E8F0] text-[#64748B] hover:bg-[#F1F5F9]"
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-base-300 text-base-content/60 hover:bg-base-200"
             }`}
           >
             {f}
@@ -207,11 +207,11 @@ export default function ManageDoctors() {
             variants={cardVariants}
             whileHover={{ y: -3, boxShadow: "0 8px 20px rgba(15, 23, 42, 0.08)" }}
             transition={{ duration: 0.2 }}
-            className="flex flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm"
+            className="flex flex-col overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm"
           >
             <div className="flex gap-4 p-5 sm:p-6">
               {/* Photo */}
-              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F1F5F9] sm:h-24 sm:w-24">
+              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-base-200 sm:h-24 sm:w-24">
                 <Image
                   src={doc.photoUrl || "https://i.pravatar.cc/150?u=" + doc.userId}
                   alt={doc.name}
@@ -223,18 +223,18 @@ export default function ManageDoctors() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-base font-bold text-[#0F172A]">{doc.name}</p>
-                    <p className="mt-0.5 text-sm font-medium text-[#2563EB]">{doc.specialty}</p>
+                    <p className="truncate text-base font-bold text-base-content">{doc.name}</p>
+                    <p className="mt-0.5 text-sm font-medium text-primary">{doc.specialty}</p>
                   </div>
                   <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${verificationStyles[doc.verificationStatus]}`}>
                     {doc.verificationStatus}
                   </span>
                 </div>
-                <p className="mt-1 truncate text-xs text-[#94A3B8]">{doc.email}</p>
+                <p className="mt-1 truncate text-xs text-base-content/50">{doc.email}</p>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2.5 border-t border-[#E2E8F0] px-5 py-4 sm:px-6">
+            <div className="flex flex-col gap-2.5 border-t border-base-300 px-5 py-4 sm:px-6">
               <InfoRow
                 label="Hospital"
                 value={doc.hospitalName}
@@ -282,7 +282,7 @@ export default function ManageDoctors() {
               />
             </div>
 
-            <div className="mt-auto flex flex-wrap gap-2 border-t border-[#E2E8F0] bg-[#F8FAFC] px-5 py-4 sm:px-6">
+            <div className="mt-auto flex flex-wrap gap-2 border-t border-base-300 bg-base-200 px-5 py-4 sm:px-6">
               {doc.verificationStatus === "pending" && (
                 <>
                   <button
@@ -321,8 +321,8 @@ export default function ManageDoctors() {
       </motion.div>
 
       {filtered.length > 0 && (
-        <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-4">
-          <p className="text-xs text-[#64748B]">
+        <div className="flex items-center justify-between border-t border-base-300 pt-4">
+          <p className="text-xs text-base-content/60">
             Showing {(currentPage - 1) * PAGE_SIZE + 1}
             –{Math.min(currentPage * PAGE_SIZE, filtered.length)} of {filtered.length}
           </p>
@@ -330,17 +330,17 @@ export default function ManageDoctors() {
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9] disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/80 hover:bg-base-200 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Previous
             </button>
-            <span className="text-xs font-medium text-[#64748B]">
+            <span className="text-xs font-medium text-base-content/60">
               Page {currentPage} of {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-xs font-semibold text-[#334155] hover:bg-[#F1F5F9] disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded-lg border border-base-300 px-3 py-1.5 text-xs font-semibold text-base-content/80 hover:bg-base-200 disabled:cursor-not-allowed disabled:opacity-40"
             >
               Next
             </button>
@@ -349,7 +349,7 @@ export default function ManageDoctors() {
       )}
 
       {filtered.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+        <div className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-10 text-center text-sm text-base-content/50">
           No doctors found for this filter.
         </div>
       )}
@@ -357,12 +357,12 @@ export default function ManageDoctors() {
       <AnimatePresence>
         {verifyTarget && (
           <Modal key="verify-modal" title="Verify Doctor" onClose={() => setVerifyTarget(null)}>
-            <p className="text-sm text-[#64748B]">
-              Verify <span className="font-semibold text-[#0F172A]">{verifyTarget.name}</span>? They&apos;ll
+            <p className="text-sm text-base-content/60">
+              Verify <span className="font-semibold text-base-content">{verifyTarget.name}</span>? They&apos;ll
               immediately become visible to patients and able to accept appointments.
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setVerifyTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={() => setVerifyTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">Cancel</button>
               <button type="button" onClick={handleVerify} className="flex-1 rounded-full bg-[#10B981] py-2.5 text-sm font-bold text-white hover:bg-[#059669]">Yes, Verify</button>
             </div>
           </Modal>
@@ -372,11 +372,11 @@ export default function ManageDoctors() {
       <AnimatePresence>
         {rejectTarget && (
           <Modal key="reject-modal" title="Reject License" onClose={() => setRejectTarget(null)}>
-            <p className="text-sm text-[#64748B]">
-              Reject the verification request from <span className="font-semibold text-[#0F172A]">{rejectTarget.name}</span>?
+            <p className="text-sm text-base-content/60">
+              Reject the verification request from <span className="font-semibold text-base-content">{rejectTarget.name}</span>?
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={() => setRejectTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">Cancel</button>
               <button type="button" onClick={handleReject} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Reject</button>
             </div>
           </Modal>
@@ -386,12 +386,12 @@ export default function ManageDoctors() {
       <AnimatePresence>
         {statusTarget && (
           <Modal key="status-modal" title="Cancel Verify" onClose={() => setStatusTarget(null)}>
-            <p className="text-sm text-[#64748B]">
-              Revoke <span className="font-semibold text-[#0F172A]">{statusTarget.name}</span>&apos;s verified
+            <p className="text-sm text-base-content/60">
+              Revoke <span className="font-semibold text-base-content">{statusTarget.name}</span>&apos;s verified
               status? They&apos;ll be hidden from patients until re-verified.
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setStatusTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep Verified</button>
+              <button type="button" onClick={() => setStatusTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">Keep Verified</button>
               <button type="button" onClick={handleUnverify} className="flex-1 rounded-full bg-[#F59E0B] py-2.5 text-sm font-bold text-white hover:bg-[#D97706]">Yes, Revoke</button>
             </div>
           </Modal>

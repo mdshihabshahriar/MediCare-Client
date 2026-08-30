@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function VerificationPendingPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 py-16">
+    <main className="flex min-h-screen items-center justify-center bg-base-200 px-4 py-16">
       <div className="mx-auto max-w-md text-center">
         <div className="relative mx-auto flex h-20 w-20 items-center justify-center">
           <span className="absolute inset-0 rounded-full bg-[#F59E0B]/10 blur-xl" />
@@ -14,10 +14,10 @@ export default function VerificationPendingPage() {
           </span>
         </div>
 
-        <h1 className="mt-7 text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+        <h1 className="mt-7 text-2xl font-extrabold text-base-content sm:text-3xl">
           Your account is under review
         </h1>
-        <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-[#64748B]">
+        <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-base-content/60">
           Thanks for registering as a doctor. Our admin team verifies every
           doctor&apos;s credentials before they can appear on the platform —
           this usually takes 24–48 hours. We&apos;ll notify you by email as
@@ -26,7 +26,7 @@ export default function VerificationPendingPage() {
 
         <Link
           href="/"
-          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-[#2563EB] px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8]"
+          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
         >
           Back to Homepage
         </Link>

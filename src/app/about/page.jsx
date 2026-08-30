@@ -102,16 +102,16 @@ function PageHero() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]"
+          className="mx-auto inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-100 px-4 py-1.5 text-xs font-bold tracking-widest text-primary"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
           ABOUT US
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="mt-5 text-4xl font-extrabold leading-tight text-[#0F172A] sm:text-5xl"
+          className="mt-5 text-4xl font-extrabold leading-tight text-base-content sm:text-5xl"
         >
           Healthcare that puts{" "}
           <span className="text-accent">people first</span>
@@ -120,7 +120,7 @@ function PageHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-5 text-lg leading-relaxed text-[#64748B]"
+          className="mt-5 text-lg leading-relaxed text-base-content/60"
         >
           MediCareConnect was built on a simple belief — finding the right
           doctor and getting the care you need should never be complicated.
@@ -149,9 +149,9 @@ function OurStory() {
               className="object-cover"
             />
           </div>
-          <div className="absolute -bottom-6 -left-6 rounded-2xl border border-[#E2E8F0] bg-white px-6 py-4 shadow-lg sm:-left-10">
-            <p className="text-3xl font-extrabold text-[#0F172A]">2021</p>
-            <p className="text-xs font-medium text-[#94A3B8]">Founded in Dhaka</p>
+          <div className="absolute -bottom-6 -left-6 rounded-2xl border border-base-300 bg-base-100 px-6 py-4 shadow-lg sm:-left-10">
+            <p className="text-3xl font-extrabold text-base-content">2021</p>
+            <p className="text-xs font-medium text-base-content/50">Founded in Dhaka</p>
           </div>
         </motion.div>
 
@@ -162,20 +162,20 @@ function OurStory() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-100 px-4 py-1.5 text-xs font-bold tracking-widest text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             OUR STORY
           </div>
-          <h2 className="mt-5 text-3xl font-extrabold text-[#0F172A] sm:text-4xl">
+          <h2 className="mt-5 text-3xl font-extrabold text-base-content sm:text-4xl">
             Built from a personal frustration
           </h2>
-          <p className="mt-5 text-base leading-relaxed text-[#64748B]">
+          <p className="mt-5 text-base leading-relaxed text-base-content/60">
             It started when one of our founders spent three days trying to
             book a simple specialist appointment for a family member —
             endless phone calls, no availability shown, no way to compare
             doctors. We knew there had to be a better way.
           </p>
-          <p className="mt-4 text-base leading-relaxed text-[#64748B]">
+          <p className="mt-4 text-base leading-relaxed text-base-content/60">
             Today, MediCareConnect connects thousands of patients with
             verified specialists every month — with transparent pricing,
             real-time availability, and digital records that travel with you.
@@ -189,7 +189,7 @@ function OurStory() {
 function Milestones() {
   return (
     <section className="px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-5 rounded-[2rem] border border-[#E2E8F0] bg-white px-6 py-10 shadow-sm sm:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-5 rounded-[2rem] border border-base-300 bg-base-100 px-6 py-10 shadow-sm sm:grid-cols-4">
         {milestones.map((item, index) => (
           <motion.div
             key={item.label}
@@ -199,10 +199,10 @@ function Milestones() {
             transition={{ duration: 0.4, delay: index * 0.1 }}
             viewport={{ once: true }}
           >
-            <p className="text-3xl font-extrabold text-[#0F172A] sm:text-4xl">
+            <p className="text-3xl font-extrabold text-base-content sm:text-4xl">
               {item.value}
             </p>
-            <p className="mt-1 text-sm font-medium text-[#64748B]">
+            <p className="mt-1 text-sm font-medium text-base-content/60">
               {item.label}
             </p>
           </motion.div>
@@ -223,14 +223,14 @@ function CoreValues() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+          <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-100 px-4 py-1.5 text-xs font-bold tracking-widest text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             WHAT WE STAND FOR
           </div>
-          <h2 className="mt-5 text-3xl font-extrabold text-[#0F172A] sm:text-4xl">
+          <h2 className="mt-5 text-3xl font-extrabold text-base-content sm:text-4xl">
             Our Core Values
           </h2>
-          <p className="mt-3 text-[#64748B]">
+          <p className="mt-3 text-base-content/60">
             The principles that guide every decision we make, from product
             design to partnerships.
           </p>
@@ -240,7 +240,7 @@ function CoreValues() {
           {values.map((value, index) => (
             <motion.div
               key={value.title}
-              className="rounded-2xl border border-[#E2E8F0] bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+              className="rounded-2xl border border-base-300 bg-base-100 p-7 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -259,10 +259,10 @@ function CoreValues() {
                   {value.icon}
                 </svg>
               </span>
-              <h3 className="mt-5 text-base font-bold text-[#0F172A]">
+              <h3 className="mt-5 text-base font-bold text-base-content">
                 {value.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#64748B]">
+              <p className="mt-2 text-sm leading-relaxed text-base-content/60">
                 {value.description}
               </p>
             </motion.div>
@@ -275,7 +275,7 @@ function CoreValues() {
 
 function TeamSection() {
   return (
-    <section className="bg-[#F8FAFC] px-4 py-16 sm:px-6 lg:px-8">
+    <section className="bg-base-200 px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.div
           className="mx-auto max-w-2xl text-center"
@@ -284,14 +284,14 @@ function TeamSection() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-white px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+          <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-100 px-4 py-1.5 text-xs font-bold tracking-widest text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             OUR TEAM
           </div>
-          <h2 className="mt-5 text-3xl font-extrabold text-[#0F172A] sm:text-4xl">
+          <h2 className="mt-5 text-3xl font-extrabold text-base-content sm:text-4xl">
             The People Behind MediCareConnect
           </h2>
-          <p className="mt-3 text-[#64748B]">
+          <p className="mt-3 text-base-content/60">
             A small team of doctors, engineers, and designers working to make
             healthcare simpler.
           </p>
@@ -310,10 +310,10 @@ function TeamSection() {
               <div className="relative mx-auto h-24 w-24 overflow-hidden rounded-full shadow-md sm:h-28 sm:w-28">
                 <Image src={member.photo} alt={member.name} fill className="object-cover" />
               </div>
-              <h3 className="mt-4 text-sm font-bold text-[#0F172A]">
+              <h3 className="mt-4 text-sm font-bold text-base-content">
                 {member.name}
               </h3>
-              <p className="mt-0.5 text-xs text-[#94A3B8]">{member.role}</p>
+              <p className="mt-0.5 text-xs text-base-content/50">{member.role}</p>
             </motion.div>
           ))}
         </div>
@@ -355,7 +355,7 @@ function CtaBanner() {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#F8FAFC]">
+    <main className="min-h-screen bg-base-200">
       <PageHero />
       <OurStory />
       <Milestones />

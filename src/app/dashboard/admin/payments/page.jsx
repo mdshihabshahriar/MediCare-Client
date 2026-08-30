@@ -106,7 +106,7 @@ export default function PaymentManagement() {
 
   if (loading) {
     return (
-      <div className="py-24 text-center text-lg font-semibold text-[#334155]">
+      <div className="py-24 text-center text-lg font-semibold text-base-content/80">
         Loading payment data...
       </div>
     );
@@ -119,10 +119,10 @@ export default function PaymentManagement() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">
           Payment Management
         </h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <p className="mt-1 text-sm text-base-content/60">
           A complete record of every payment made on the platform.
         </p>
       </motion.div>
@@ -133,25 +133,25 @@ export default function PaymentManagement() {
         animate="show"
         variants={containerVariants}
       >
-        <motion.div variants={cardVariants} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium text-[#64748B]">Total Revenue</p>
-          <p className="mt-1 text-2xl font-extrabold text-[#0F172A]">
+        <motion.div variants={cardVariants} className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm">
+          <p className="text-xs font-medium text-base-content/60">Total Revenue</p>
+          <p className="mt-1 text-2xl font-extrabold text-base-content">
             ${totalRevenue.toLocaleString()}
           </p>
         </motion.div>
-        <motion.div variants={cardVariants} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium text-[#64748B]">
+        <motion.div variants={cardVariants} className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm">
+          <p className="text-xs font-medium text-base-content/60">
             Paid Transactions
           </p>
-          <p className="mt-1 text-2xl font-extrabold text-[#0F172A]">
+          <p className="mt-1 text-2xl font-extrabold text-base-content">
             {transactions.filter((t) => t.status === "paid").length}
           </p>
         </motion.div>
-        <motion.div variants={cardVariants} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
-          <p className="text-xs font-medium text-[#64748B]">
+        <motion.div variants={cardVariants} className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm">
+          <p className="text-xs font-medium text-base-content/60">
             Pending / Refunded
           </p>
-          <p className="mt-1 text-2xl font-extrabold text-[#0F172A]">
+          <p className="mt-1 text-2xl font-extrabold text-base-content">
             {transactions.filter((t) => t.status !== "paid").length}
           </p>
         </motion.div>
@@ -169,8 +169,8 @@ export default function PaymentManagement() {
             onClick={() => setFilter(f)}
             className={`rounded-full border px-4 py-1.5 text-xs font-semibold capitalize transition-colors ${
               filter === f
-                ? "border-[#2563EB] bg-[#EFF6FF] text-[#2563EB]"
-                : "border-[#E2E8F0] text-[#64748B] hover:bg-[#F1F5F9]"
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-base-300 text-base-content/60 hover:bg-base-200"
             }`}
           >
             {f}
@@ -186,12 +186,12 @@ export default function PaymentManagement() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-16 text-center"
+            className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-16 text-center"
           >
-            <h2 className="text-lg font-semibold text-[#0F172A]">
+            <h2 className="text-lg font-semibold text-base-content">
               No Transactions Found
             </h2>
-            <p className="mt-2 text-sm text-[#94A3B8]">
+            <p className="mt-2 text-sm text-base-content/50">
               Try a different filter.
             </p>
           </motion.div>
@@ -202,10 +202,10 @@ export default function PaymentManagement() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm"
+            className="overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm"
           >
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-xs uppercase tracking-wide text-[#64748B]">
+              <thead className="border-b border-base-300 bg-base-200 text-xs uppercase tracking-wide text-base-content/60">
                 <tr>
                   <th className="px-6 py-3.5 font-semibold">Transaction</th>
                   <th className="px-6 py-3.5 font-semibold">Patient</th>
@@ -216,24 +216,24 @@ export default function PaymentManagement() {
                 </tr>
               </thead>
               <motion.tbody
-                className="divide-y divide-[#E2E8F0]"
+                className="divide-y divide-base-300"
                 initial="hidden"
                 animate="show"
                 variants={containerVariants}
               >
                 {filtered.map((txn) => (
                   <motion.tr key={txn.id} variants={rowVariants}>
-                    <td className="px-6 py-4 font-mono text-xs text-[#64748B]">
+                    <td className="px-6 py-4 font-mono text-xs text-base-content/60">
                       {typeof txn.id === "string" ? txn.id.slice(-10) : txn.id}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-[#0F172A]">
+                    <td className="px-6 py-4 font-semibold text-base-content">
                       {txn.patient}
                     </td>
-                    <td className="px-6 py-4 text-[#334155]">{txn.doctor}</td>
-                    <td className="px-6 py-4 text-[#334155]">
+                    <td className="px-6 py-4 text-base-content/80">{txn.doctor}</td>
+                    <td className="px-6 py-4 text-base-content/80">
                       {formatDate(txn.date)}
                     </td>
-                    <td className="px-6 py-4 font-semibold text-[#0F172A]">
+                    <td className="px-6 py-4 font-semibold text-base-content">
                       ৳{Number(txn.amount).toLocaleString()}
                     </td>
                     <td className="px-6 py-4">

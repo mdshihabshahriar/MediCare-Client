@@ -84,7 +84,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E2E8F0] bg-white text-[#64748B] transition-colors hover:border-[#2563EB] hover:text-[#2563EB] disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-9 w-9 items-center justify-center rounded-xl border border-base-300 bg-base-100 text-base-content/60 transition-colors hover:border-[#2563EB] hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
       >
         <svg
           className="h-4 w-4"
@@ -103,7 +103,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         page === "..." ? (
           <span
             key={`ellipsis-${index}`}
-            className="px-1 text-sm text-[#94A3B8]"
+            className="px-1 text-sm text-base-content/50"
           >
             ...
           </span>
@@ -113,8 +113,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             onClick={() => onPageChange(page)}
             className={`flex h-9 w-9 items-center justify-center rounded-xl border text-sm font-semibold transition-colors ${
               page === currentPage
-                ? "border-[#2563EB] bg-[#2563EB] text-white"
-                : "border-[#E2E8F0] bg-white text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB]"
+                ? "border-[#2563EB] bg-primary text-white"
+                : "border-base-300 bg-base-100 text-base-content/60 hover:border-[#2563EB] hover:text-primary"
             }`}
           >
             {page}
@@ -125,7 +125,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E2E8F0] bg-white text-[#64748B] transition-colors hover:border-[#2563EB] hover:text-[#2563EB] disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex h-9 w-9 items-center justify-center rounded-xl border border-base-300 bg-base-100 text-base-content/60 transition-colors hover:border-[#2563EB] hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
       >
         <svg
           className="h-4 w-4"
@@ -198,24 +198,24 @@ const FindDoctorsPage = () => {
   }, [loadDoctors]);
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pt-24 pb-16">
+    <main className="min-h-screen bg-base-200 pt-24 pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <h1 className="text-3xl font-extrabold text-[#0F172A] sm:text-4xl">
+          <h1 className="text-3xl font-extrabold text-base-content sm:text-4xl">
             Find Doctors
           </h1>
-          <p className="mt-2 text-sm text-[#64748B] sm:text-base">
+          <p className="mt-2 text-sm text-base-content/60 sm:text-base">
             Search and filter through our verified specialists to find the right
             doctor for you.
           </p>
         </div>
 
-        <div className="sticky top-16 z-30 mt-8 rounded-2xl border border-[#E2E8F0] bg-white/90 p-4 shadow-sm backdrop-blur-md sm:p-5">
+        <div className="sticky top-16 z-30 mt-8 rounded-2xl border border-base-300 bg-base-100/90 p-4 shadow-sm backdrop-blur-md sm:p-5">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
 
             <div className="relative flex-1">
               <svg
-                className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]"
+                className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/50"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -230,7 +230,7 @@ const FindDoctorsPage = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search doctor name..."
-                className="w-full rounded-xl border border-[#E2E8F0] bg-white py-2.5 pl-10 pr-4 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="w-full rounded-xl border border-base-300 bg-base-100 py-2.5 pl-10 pr-4 text-sm text-base-content outline-none transition-colors placeholder:text-base-content/50 focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
               />
             </div>
 
@@ -238,7 +238,7 @@ const FindDoctorsPage = () => {
               <select
                 value={specialty}
                 onChange={(e) => setSpecialty(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-[#E2E8F0] bg-white py-2.5 pl-4 pr-9 text-sm text-[#0F172A] outline-none transition-colors focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="w-full appearance-none rounded-xl border border-base-300 bg-base-100 py-2.5 pl-4 pr-9 text-sm text-base-content outline-none transition-colors focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
               >
                 {specialtyOptions.map((opt) => (
                   <option key={opt} value={opt}>
@@ -247,7 +247,7 @@ const FindDoctorsPage = () => {
                 ))}
               </select>
               <svg
-                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]"
+                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/50"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -263,7 +263,7 @@ const FindDoctorsPage = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full appearance-none rounded-xl border border-[#E2E8F0] bg-white py-2.5 pl-4 pr-9 text-sm text-[#0F172A] outline-none transition-colors focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="w-full appearance-none rounded-xl border border-base-300 bg-base-100 py-2.5 pl-4 pr-9 text-sm text-base-content outline-none transition-colors focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
               >
                 {sortOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -272,7 +272,7 @@ const FindDoctorsPage = () => {
                 ))}
               </select>
               <svg
-                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]"
+                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/50"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -286,7 +286,7 @@ const FindDoctorsPage = () => {
           </div>
         </div>
 
-        <p className="mt-6 text-sm text-[#64748B]">
+        <p className="mt-6 text-sm text-base-content/60">
           {totalData} doctor{totalData !== 1 ? "s" : ""} found
         </p>
 
@@ -295,18 +295,18 @@ const FindDoctorsPage = () => {
             {Array.from({ length: LIMIT }).map((_, i) => (
               <div
                 key={i}
-                className="h-80 animate-pulse rounded-2xl border border-[#E2E8F0] bg-white"
+                className="h-80 animate-pulse rounded-2xl border border-base-300 bg-base-100"
               />
             ))}
           </div>
         )}
 
         {!loading && doctors.length === 0 && (
-          <div className="mt-6 rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-14 text-center">
-            <p className="text-sm font-semibold text-[#0F172A]">
+          <div className="mt-6 rounded-2xl border border-dashed border-[#CBD5E1] bg-base-100 p-14 text-center">
+            <p className="text-sm font-semibold text-base-content">
               No doctors found
             </p>
-            <p className="mt-1 text-xs text-[#94A3B8]">
+            <p className="mt-1 text-xs text-base-content/50">
               Try adjusting your search or filter to find what you&apos;re
               looking for.
             </p>
@@ -331,16 +331,16 @@ const FindDoctorsPage = () => {
                 >
                   <Link
                     href={`/doctors/${doc.userId}`}
-                    className="group flex flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                    className="group flex flex-col overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
                   >
-                    <div className="relative aspect-4/3 w-full overflow-hidden bg-[#F1F5F9]">
+                    <div className="relative aspect-4/3 w-full overflow-hidden bg-base-200">
                       <Image
                         src={doc.photoUrl}
                         alt={doc.name}
                         fill
                         className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
                       />
-                      <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-bold text-[#0F172A] shadow-sm backdrop-blur-sm">
+                      <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-base-100/90 px-2.5 py-1 text-xs font-bold text-base-content shadow-sm backdrop-blur-sm">
                         <span className="text-[#F59E0B]">★</span>
                         {doc.rating > 0 ? doc.rating.toFixed(1) : "New"}
                       </div>
@@ -351,15 +351,15 @@ const FindDoctorsPage = () => {
                       >
                         {doc.specialty}
                       </span>
-                      <h3 className="mt-3 text-lg font-bold text-[#0F172A]">
+                      <h3 className="mt-3 text-lg font-bold text-base-content">
                         {doc.name}
                       </h3>
-                      <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-[#94A3B8]">
+                      <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-base-content/50">
                         {doc.qualifications}
                       </p>
-                      <div className="mt-3 flex items-center gap-1.5 text-xs text-[#64748B]">
+                      <div className="mt-3 flex items-center gap-1.5 text-xs text-base-content/60">
                         <svg
-                          className="h-3.5 w-3.5 shrink-0 text-[#2563EB]"
+                          className="h-3.5 w-3.5 shrink-0 text-primary"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -372,9 +372,9 @@ const FindDoctorsPage = () => {
                         </svg>
                         {doc.experience}+ years experience
                       </div>
-                      <div className="mt-1.5 flex items-start gap-1.5 text-xs text-[#64748B]">
+                      <div className="mt-1.5 flex items-start gap-1.5 text-xs text-base-content/60">
                         <svg
-                          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#2563EB]"
+                          className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -391,16 +391,16 @@ const FindDoctorsPage = () => {
                         </svg>
                         <span className="line-clamp-1">{doc.hospitalName}</span>
                       </div>
-                      <div className="mt-4 flex items-center justify-between border-t border-[#E2E8F0] pt-4">
+                      <div className="mt-4 flex items-center justify-between border-t border-base-300 pt-4">
                         <div>
-                          <p className="text-xs text-[#94A3B8]">
+                          <p className="text-xs text-base-content/50">
                             Consultation Fee
                           </p>
-                          <p className="text-base font-bold text-[#2563EB]">
+                          <p className="text-base font-bold text-primary">
                             ${doc.consultationFee}
                           </p>
                         </div>
-                        <span className="rounded-full bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white transition-colors group-hover:bg-[#1D4ED8]">
+                        <span className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white transition-colors group-hover:bg-primary/90">
                           Book Now
                         </span>
                       </div>

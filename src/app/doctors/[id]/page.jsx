@@ -250,11 +250,11 @@ export default function DoctorDetailsPage() {
 
   if (!doctor) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC]">
-        <div className="rounded-2xl border border-[#E2E8F0] bg-white px-10 py-8 text-center shadow-sm">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+      <div className="flex min-h-screen items-center justify-center bg-base-200">
+        <div className="rounded-2xl border border-base-300 bg-base-100 px-10 py-8 text-center shadow-sm">
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-base-300 border-t-[#2563EB]" />
 
-          <p className="text-sm font-semibold text-[#334155]">
+          <p className="text-sm font-semibold text-base-content/80">
             Loading doctor…
           </p>
         </div>
@@ -264,14 +264,14 @@ export default function DoctorDetailsPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-[#F8FAFC] pt-24 pb-16">
+      <div className="min-h-screen bg-base-200 pt-24 pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-5">
 
             <div className="lg:col-span-2">
-              <div className="sticky top-24 overflow-hidden rounded-[2rem] border border-[#E2E8F0] bg-white shadow-sm">
+              <div className="sticky top-24 overflow-hidden rounded-[2rem] border border-base-300 bg-base-100 shadow-sm">
                 <div className="relative">
-                  <div className="relative h-72 w-full overflow-hidden bg-[#F1F5F9]">
+                  <div className="relative h-72 w-full overflow-hidden bg-base-200">
                     <Image
                       src={doctor.photoUrl}
                       alt={doctor.name || "Doctor"}
@@ -282,27 +282,27 @@ export default function DoctorDetailsPage() {
                     <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-black/40 to-transparent" />
                   </div>
 
-                  <div className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3.5 py-1.5 text-xs font-bold text-[#2563EB] shadow-sm backdrop-blur-sm">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+                  <div className="absolute bottom-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-base-100/95 px-3.5 py-1.5 text-xs font-bold text-primary shadow-sm backdrop-blur-sm">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary" />
 
                     {doctor.specialty}
                   </div>
                 </div>
 
                 <div className="p-7">
-                  <h2 className="text-2xl font-extrabold text-[#0F172A]">
+                  <h2 className="text-2xl font-extrabold text-base-content">
                     {doctor.name}
                   </h2>
 
-                  <p className="mt-1 text-sm text-[#94A3B8]">
+                  <p className="mt-1 text-sm text-base-content/50">
                     Experienced Healthcare Professional
                   </p>
 
                   <div className="mt-7 flex flex-col gap-3">
 
-                    <div className="flex items-start gap-2.5 rounded-xl bg-[#F8FAFC] p-4">
+                    <div className="flex items-start gap-2.5 rounded-xl bg-base-200 p-4">
                       <svg
-                        className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]"
+                        className="mt-0.5 h-4 w-4 shrink-0 text-primary"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -316,19 +316,19 @@ export default function DoctorDetailsPage() {
                       </svg>
 
                       <div>
-                        <p className="text-xs font-medium text-[#94A3B8]">
+                        <p className="text-xs font-medium text-base-content/50">
                           Hospital
                         </p>
 
-                        <p className="mt-0.5 text-sm font-bold text-[#0F172A]">
+                        <p className="mt-0.5 text-sm font-bold text-base-content">
                           {doctor.hospitalName}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-2.5 rounded-xl bg-[#F8FAFC] p-4">
+                    <div className="flex items-start gap-2.5 rounded-xl bg-base-200 p-4">
                       <svg
-                        className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]"
+                        className="mt-0.5 h-4 w-4 shrink-0 text-primary"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -341,27 +341,27 @@ export default function DoctorDetailsPage() {
                       </svg>
 
                       <div>
-                        <p className="text-xs font-medium text-[#94A3B8]">
+                        <p className="text-xs font-medium text-base-content/50">
                           Experience
                         </p>
 
-                        <p className="mt-0.5 text-sm font-bold text-[#0F172A]">
+                        <p className="mt-0.5 text-sm font-bold text-base-content">
                           {doctor.experience} Years
                         </p>
                       </div>
                     </div>
 
-                    <div className="rounded-xl bg-[#F8FAFC] p-4">
-                      <p className="text-xs font-medium text-[#94A3B8]">
+                    <div className="rounded-xl bg-base-200 p-4">
+                      <p className="text-xs font-medium text-base-content/50">
                         Qualification
                       </p>
 
-                      <p className="mt-1 text-sm font-semibold leading-relaxed text-[#0F172A]">
+                      <p className="mt-1 text-sm font-semibold leading-relaxed text-base-content">
                         {doctor.qualifications}
                       </p>
                     </div>
 
-                    <div className="rounded-xl bg-[#2563EB] p-5 text-white">
+                    <div className="rounded-xl bg-primary p-5 text-white">
                       <p className="text-xs font-medium text-white/80">
                         Consultation Fee
                       </p>
@@ -376,28 +376,28 @@ export default function DoctorDetailsPage() {
             </div>
 
             <div className="lg:col-span-3">
-              <div className="rounded-[2rem] border border-[#E2E8F0] bg-white p-7 shadow-sm sm:p-8">
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-1.5 text-xs font-bold tracking-widest text-[#2563EB]">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]" />
+              <div className="rounded-[2rem] border border-base-300 bg-base-100 p-7 shadow-sm sm:p-8">
+                <div className="inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-200 px-4 py-1.5 text-xs font-bold tracking-widest text-primary">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                   BOOK APPOINTMENT
                 </div>
 
-                <h2 className="mt-4 text-2xl font-extrabold text-[#0F172A] sm:text-3xl">
+                <h2 className="mt-4 text-2xl font-extrabold text-base-content sm:text-3xl">
                   Choose a time that works for you
                 </h2>
 
-                <p className="mt-2 text-sm text-[#64748B]">
+                <p className="mt-2 text-sm text-base-content/60">
                   Select an available schedule and describe your symptoms so the
                   doctor can prepare for your visit.
                 </p>
 
                 <div className="mt-8">
-                  <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-[#334155]">
+                  <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-base-content/80">
                     Available Schedule
                   </h3>
 
                   {schedules.length === 0 ? (
-                    <div className="rounded-xl border border-dashed border-[#CBD5E1] bg-[#F8FAFC] p-6 text-center text-sm text-[#94A3B8]">
+                    <div className="rounded-xl border border-dashed border-[#CBD5E1] bg-base-200 p-6 text-center text-sm text-base-content/50">
                       No available slots right now.
                     </div>
                   ) : (
@@ -411,17 +411,17 @@ export default function DoctorDetailsPage() {
                             className={`flex cursor-pointer items-center justify-between gap-3 rounded-xl border p-4 transition-colors ${
                               isSelected
                                 ? "border-[#2563EB] bg-[#EFF6FF]"
-                                : "border-[#E2E8F0] bg-white hover:border-[#93C5FD] hover:bg-[#F8FAFC]"
+                                : "border-base-300 bg-base-100 hover:border-[#93C5FD] hover:bg-base-200"
                             }`}
                           >
                             <div className="min-w-0">
-                              <p className="text-sm font-bold text-[#0F172A]">
+                              <p className="text-sm font-bold text-base-content">
                                 {slot.day}
                               </p>
 
-                              <p className="mt-1 flex items-center gap-1.5 text-xs text-[#64748B]">
+                              <p className="mt-1 flex items-center gap-1.5 text-xs text-base-content/60">
                                 <svg
-                                  className="h-3.5 w-3.5 shrink-0 text-[#94A3B8]"
+                                  className="h-3.5 w-3.5 shrink-0 text-base-content/50"
                                   viewBox="0 0 24 24"
                                   fill="none"
                                   stroke="currentColor"
@@ -453,7 +453,7 @@ export default function DoctorDetailsPage() {
                 </div>
 
                 <div className="mt-8">
-                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-[#334155]">
+                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-base-content/80">
                     Symptoms
                   </label>
 
@@ -462,7 +462,7 @@ export default function DoctorDetailsPage() {
                     value={symptoms}
                     onChange={(e) => setSymptoms(e.target.value)}
                     placeholder="Describe your symptoms..."
-                    className="w-full resize-none rounded-xl border border-[#E2E8F0] bg-white p-4 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                    className="w-full resize-none rounded-xl border border-base-300 bg-base-100 p-4 text-sm text-base-content outline-none transition-colors placeholder:text-base-content/50 focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
                   />
                 </div>
 
@@ -474,12 +474,12 @@ export default function DoctorDetailsPage() {
                     loadingPayment ||
                     loadingPayLater
                   }
-                  className="mt-8 w-full rounded-full cursor-pointer bg-[#2563EB] py-3.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="mt-8 w-full rounded-full cursor-pointer bg-primary py-3.5 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Book Appointment
                 </button>
 
-                <p className="mt-3 text-center text-xs text-[#94A3B8]">
+                <p className="mt-3 text-center text-xs text-base-content/50">
                   You will be redirected to Stripe securely to complete your
                   payment.
                 </p>
@@ -490,86 +490,86 @@ export default function DoctorDetailsPage() {
       </div>
       {showPaymentModal && (
         <div className="fixed inset-0 z-999 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-xl overflow-hidden rounded-[2rem] bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-[#E2E8F0] px-6 py-5">
+          <div className="w-full max-w-xl overflow-hidden rounded-[2rem] bg-base-100 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-base-300 px-6 py-5">
               <div>
-                <h2 className="text-lg font-extrabold text-[#0F172A]">
+                <h2 className="text-lg font-extrabold text-base-content">
                   Payment
                 </h2>
 
-                <p className="text-sm text-[#94A3B8]">
+                <p className="text-sm text-base-content/50">
                   Secure appointment booking
                 </p>
               </div>
 
               <button
                 onClick={() => setShowPaymentModal(false)}
-                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[#F8FAFC] text-xl text-[#64748B] hover:bg-[#F1F5F9]"
+                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-base-200 text-xl text-base-content/60 hover:bg-base-200"
               >
                 ×
               </button>
             </div>
 
             <div className="p-6">
-              <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-5">
+              <div className="rounded-2xl border border-base-300 bg-base-200 p-5">
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-base-content/50">
                       Doctor
                     </p>
 
-                    <p className="mt-1 text-base font-extrabold text-[#0F172A]">
+                    <p className="mt-1 text-base font-extrabold text-base-content">
                       {doctor.name}
                     </p>
 
-                    <p className="mt-1 text-sm text-[#64748B]">
+                    <p className="mt-1 text-sm text-base-content/60">
                       {doctor.specialty}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-base-content/50">
                       Consultation Schedule
                     </p>
 
-                    <p className="mt-1 text-base font-extrabold text-[#0F172A]">
+                    <p className="mt-1 text-base font-extrabold text-base-content">
                       {selectedSchedule?.day}
                     </p>
 
-                    <p className="mt-1 text-sm text-[#64748B]">
+                    <p className="mt-1 text-sm text-base-content/60">
                       {formatTime(selectedSchedule?.startTime)} –{" "}
                       {formatTime(selectedSchedule?.endTime)}
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-5 flex items-center justify-between border-t border-[#E2E8F0] pt-5">
-                  <span className="text-sm font-semibold text-[#64748B]">
+                <div className="mt-5 flex items-center justify-between border-t border-base-300 pt-5">
+                  <span className="text-sm font-semibold text-base-content/60">
                     Total Consultation Fee
                   </span>
 
-                  <span className="text-2xl font-extrabold text-[#0F172A]">
+                  <span className="text-2xl font-extrabold text-base-content">
                     ${Number(doctor.consultationFee).toFixed(2)}
                   </span>
                 </div>
               </div>
 
               <div className="mt-6">
-                <p className="mb-3 text-sm font-bold text-[#334155]">
+                <p className="mb-3 text-sm font-bold text-base-content/80">
                   Choose Payment Option
                 </p>
 
                 <button
                   onClick={handlePayLater}
                   disabled={loadingPayLater || loadingPayment}
-                  className="mb-3 flex w-full cursor-pointer items-center justify-between rounded-2xl border border-[#E2E8F0] bg-white p-5 text-left transition hover:border-[#93C5FD] hover:bg-[#F8FAFC] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mb-3 flex w-full cursor-pointer items-center justify-between rounded-2xl border border-base-300 bg-base-100 p-5 text-left transition hover:border-[#93C5FD] hover:bg-base-200 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <div>
-                    <p className="text-base font-extrabold text-[#0F172A]">
+                    <p className="text-base font-extrabold text-base-content">
                       Pay Later
                     </p>
 
-                    <p className="mt-1 text-xs text-[#64748B]">
+                    <p className="mt-1 text-xs text-base-content/60">
                       Book your appointment now and pay later.
                     </p>
                   </div>
@@ -582,7 +582,7 @@ export default function DoctorDetailsPage() {
                 <button
                   onClick={handlePayment}
                   disabled={loadingPayment || loadingPayLater}
-                  className="flex w-full cursor-pointer items-center justify-between rounded-2xl bg-[#2563EB] p-5 text-left text-white transition hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full cursor-pointer items-center justify-between rounded-2xl bg-primary p-5 text-left text-white transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <div>
                     <p className="text-base font-extrabold">
@@ -602,7 +602,7 @@ export default function DoctorDetailsPage() {
                 </button>
               </div>
 
-              <p className="mt-5 text-center text-xs leading-relaxed text-[#94A3B8]">
+              <p className="mt-5 text-center text-xs leading-relaxed text-base-content/50">
                 Your appointment request will be sent to the doctor. Payment can
                 be completed now or later.
               </p>

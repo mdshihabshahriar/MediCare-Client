@@ -44,7 +44,7 @@ function Modal({ title, onClose, children }) {
       onClick={onClose}
     >
       <motion.div
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-base-100 p-6 shadow-xl"
         initial={{ opacity: 0, scale: 0.95, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 12 }}
@@ -52,8 +52,8 @@ function Modal({ title, onClose, children }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
-          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]" aria-label="Close">
+          <h3 className="text-lg font-bold text-base-content">{title}</h3>
+          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-base-content/50 hover:bg-base-200 hover:text-base-content" aria-label="Close">
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
@@ -134,7 +134,7 @@ export default function ManageUsers() {
   if (users === null) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-base-300 border-t-primary" />
       </div>
     );
   }
@@ -146,8 +146,8 @@ export default function ManageUsers() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">Manage Users</h1>
-        <p className="mt-1 text-sm text-[#64748B]">
+        <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">Manage Users</h1>
+        <p className="mt-1 text-sm text-base-content/60">
           View, suspend, or remove patient and doctor accounts.
         </p>
       </motion.div>
@@ -160,7 +160,7 @@ export default function ManageUsers() {
         transition={{ duration: 0.3, ease: "easeOut", delay: 0.05 }}
       >
         <div className="relative flex-1">
-          <svg className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
           </svg>
@@ -168,7 +168,7 @@ export default function ManageUsers() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or email..."
-            className="w-full rounded-xl border border-[#E2E8F0] bg-white py-2.5 pl-10 pr-4 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+            className="w-full rounded-xl border border-base-300 bg-base-100 py-2.5 pl-10 pr-4 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </div>
         <div className="flex gap-2">
@@ -178,8 +178,8 @@ export default function ManageUsers() {
               onClick={() => setRoleFilter(r)}
               className={`rounded-full border px-4 py-2 text-xs font-semibold capitalize transition-colors ${
                 roleFilter === r
-                  ? "border-[#2563EB] bg-[#EFF6FF] text-[#2563EB]"
-                  : "border-[#E2E8F0] text-[#64748B] hover:bg-[#F1F5F9]"
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-base-300 text-base-content/60 hover:bg-base-200"
               }`}
             >
               {r}
@@ -189,9 +189,9 @@ export default function ManageUsers() {
       </motion.div>
 
       {/* Table */}
-      <div className="hidden overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white shadow-sm md:block">
+      <div className="hidden overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm md:block">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] text-xs uppercase tracking-wide text-[#64748B]">
+          <thead className="border-b border-base-300 bg-base-200 text-xs uppercase tracking-wide text-base-content/60">
             <tr>
               <th className="px-6 py-3.5 font-semibold">User</th>
               <th className="px-6 py-3.5 font-semibold">Role</th>
@@ -201,7 +201,7 @@ export default function ManageUsers() {
             </tr>
           </thead>
           <motion.tbody
-            className="divide-y divide-[#E2E8F0]"
+            className="divide-y divide-base-300"
             initial="hidden"
             animate="show"
             variants={containerVariants}
@@ -210,7 +210,7 @@ export default function ManageUsers() {
               <motion.tr key={u._id} variants={rowVariants}>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
+                    <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-base-200">
                       <Image
                         src={u.photoUrl || "https://i.pravatar.cc/150?u=" + u._id}
                         alt={u.name}
@@ -218,7 +218,7 @@ export default function ManageUsers() {
                         className="object-cover"
                       />
                     </div>
-                    <p className="font-semibold text-[#0F172A]">{u.name}</p>
+                    <p className="font-semibold text-base-content">{u.name}</p>
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -226,7 +226,7 @@ export default function ManageUsers() {
                     {u.role}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-[#334155]">{u.email}</td>
+                <td className="px-6 py-4 text-base-content/80">{u.email}</td>
                 <td className="px-6 py-4">
                   <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${statusStyles[u.status] || statusStyles.active}`}>
                     {u.status || "active"}
@@ -259,9 +259,9 @@ export default function ManageUsers() {
         variants={containerVariants}
       >
         {filtered.map((u) => (
-          <motion.div key={u._id} variants={rowVariants} className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
+          <motion.div key={u._id} variants={rowVariants} className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-base-200">
                 <Image
                   src={u.photoUrl || "https://i.pravatar.cc/150?u=" + u._id}
                   alt={u.name}
@@ -270,8 +270,8 @@ export default function ManageUsers() {
                 />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-semibold text-[#0F172A]">{u.name}</p>
-                <p className="truncate text-xs text-[#94A3B8]">{u.email}</p>
+                <p className="truncate font-semibold text-base-content">{u.name}</p>
+                <p className="truncate text-xs text-base-content/50">{u.email}</p>
               </div>
               <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${roleStyles[u.role]}`}>
                 {u.role}
@@ -295,13 +295,13 @@ export default function ManageUsers() {
       <AnimatePresence>
         {suspendTarget && (
           <Modal key="suspend-modal" title={suspendTarget.status === "suspended" ? "Reactivate User" : "Suspend User"} onClose={() => setSuspendTarget(null)}>
-            <p className="text-sm text-[#64748B]">
+            <p className="text-sm text-base-content/60">
               {suspendTarget.status === "suspended"
-                ? <>Reactivate <span className="font-semibold text-[#0F172A]">{suspendTarget.name}</span>&apos;s account? They&apos;ll be able to log in again.</>
-                : <>Suspend <span className="font-semibold text-[#0F172A]">{suspendTarget.name}</span>? They won&apos;t be able to log in until reactivated.</>}
+                ? <>Reactivate <span className="font-semibold text-base-content">{suspendTarget.name}</span>&apos;s account? They&apos;ll be able to log in again.</>
+                : <>Suspend <span className="font-semibold text-base-content">{suspendTarget.name}</span>? They won&apos;t be able to log in until reactivated.</>}
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setSuspendTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Cancel</button>
+              <button type="button" onClick={() => setSuspendTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">Cancel</button>
               <button type="button" onClick={handleToggleSuspend} className="flex-1 rounded-full bg-[#F59E0B] py-2.5 text-sm font-bold text-white hover:bg-[#D97706]">
                 {suspendTarget.status === "suspended" ? "Reactivate" : "Suspend"}
               </button>
@@ -313,11 +313,11 @@ export default function ManageUsers() {
       <AnimatePresence>
         {deleteTarget && (
           <Modal key="delete-modal" title="Delete User" onClose={() => setDeleteTarget(null)}>
-            <p className="text-sm text-[#64748B]">
-              Permanently delete <span className="font-semibold text-[#0F172A]">{deleteTarget.name}</span>&apos;s account? This can&apos;t be undone.
+            <p className="text-sm text-base-content/60">
+              Permanently delete <span className="font-semibold text-base-content">{deleteTarget.name}</span>&apos;s account? This can&apos;t be undone.
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setDeleteTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">Keep User</button>
+              <button type="button" onClick={() => setDeleteTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">Keep User</button>
               <button type="button" onClick={handleDelete} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">Yes, Delete</button>
             </div>
           </Modal>

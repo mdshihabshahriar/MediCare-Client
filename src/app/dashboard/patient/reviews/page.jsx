@@ -45,11 +45,11 @@ function Modal({ title, onClose, children }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+        className="w-full max-w-md rounded-2xl bg-base-100 p-6 shadow-xl"
       >
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#0F172A]">{title}</h3>
-          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#0F172A]" aria-label="Close">
+          <h3 className="text-lg font-bold text-base-content">{title}</h3>
+          <button type="button" onClick={onClose} className="rounded-full p-1.5 text-base-content/50 hover:bg-base-200 hover:text-base-content" aria-label="Close">
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
@@ -248,7 +248,7 @@ export default function MyReviews() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          className="h-8 w-8 rounded-full border-2 border-[#E2E8F0] border-t-[#2563EB]"
+          className="h-8 w-8 rounded-full border-2 border-base-300 border-t-primary"
         />
       </div>
     );
@@ -263,8 +263,8 @@ export default function MyReviews() {
     >
       <motion.div variants={itemVariants} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0F172A] sm:text-3xl">My Reviews</h1>
-          <p className="mt-1 text-sm text-[#64748B]">
+          <h1 className="text-2xl font-extrabold text-base-content sm:text-3xl">My Reviews</h1>
+          <p className="mt-1 text-sm text-base-content/60">
             Share feedback on doctors after your visit is completed.
           </p>
         </div>
@@ -273,7 +273,7 @@ export default function MyReviews() {
           whileTap={{ scale: 0.97 }}
           onClick={openAdd}
           disabled={reviewableDoctors.length === 0}
-          className="inline-flex w-fit items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex w-fit items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 5v14" />
@@ -284,7 +284,7 @@ export default function MyReviews() {
       </motion.div>
 
       {reviewableDoctors.length === 0 && (
-        <motion.div variants={itemVariants} className="flex items-center gap-2 rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3 text-sm text-[#1D4ED8]">
+        <motion.div variants={itemVariants} className="flex items-center gap-2 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-primary">
           <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="9" />
             <path d="M12 8v4" />
@@ -296,7 +296,7 @@ export default function MyReviews() {
 
       <motion.div className="flex flex-col gap-4" variants={containerVariants}>
         {reviews.length === 0 ? (
-          <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-10 text-center text-sm text-[#94A3B8]">
+          <motion.div variants={itemVariants} className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-10 text-center text-sm text-base-content/50">
             You haven&apos;t written any reviews yet.
           </motion.div>
         ) : (
@@ -308,11 +308,11 @@ export default function MyReviews() {
                 initial="hidden"
                 animate="show"
                 exit={{ opacity: 0, x: -12, transition: { duration: 0.2 } }}
-                className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-sm"
+                className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-[#F1F5F9]">
+                    <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-base-200">
                       <Image
                         src={review.doctorPhoto || "https://i.pravatar.cc/150?u=" + review.doctorId}
                         alt={review.doctorName || "Doctor"}
@@ -321,8 +321,8 @@ export default function MyReviews() {
                       />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#0F172A]">{review.doctorName}</p>
-                      <p className="text-xs text-[#94A3B8]">
+                      <p className="text-sm font-bold text-base-content">{review.doctorName}</p>
+                      <p className="text-xs text-base-content/50">
                         {review.specialty || ""}
                         {review.specialty ? " · " : ""}
                         {review.createdAt ? new Date(review.createdAt).toLocaleDateString("en-GB") : ""}
@@ -331,13 +331,13 @@ export default function MyReviews() {
                   </div>
 
                   <div className="flex shrink-0 items-center gap-1">
-                    <button onClick={() => openEdit(review)} className="rounded-lg p-1.5 text-[#94A3B8] hover:bg-[#F1F5F9] hover:text-[#2563EB]" aria-label="Edit review">
+                    <button onClick={() => openEdit(review)} className="rounded-lg p-1.5 text-base-content/50 hover:bg-base-200 hover:text-primary" aria-label="Edit review">
                       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 20h9" />
                         <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
                       </svg>
                     </button>
-                    <button onClick={() => setDeleteTarget(review)} className="rounded-lg p-1.5 text-[#94A3B8] hover:bg-[#FEF2F2] hover:text-[#EF4444]" aria-label="Delete review">
+                    <button onClick={() => setDeleteTarget(review)} className="rounded-lg p-1.5 text-base-content/50 hover:bg-red-50 hover:text-[#EF4444]" aria-label="Delete review">
                       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M3 6h18" />
                         <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
@@ -355,7 +355,7 @@ export default function MyReviews() {
                   ))}
                 </div>
 
-                <p className="mt-3 text-sm leading-relaxed text-[#334155]">{review.comment}</p>
+                <p className="mt-3 text-sm leading-relaxed text-base-content/80">{review.comment}</p>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -367,13 +367,13 @@ export default function MyReviews() {
           <Modal title="Add Review" onClose={() => setIsAdding(false)}>
             <form onSubmit={handleAdd} className="flex flex-col gap-5">
               <div>
-                <Label className="text-sm font-medium text-[#334155]">Doctor</Label>
+                <Label className="text-sm font-medium text-base-content/80">Doctor</Label>
                 <select
                   name="doctorId"
                   required
                   value={selectedDoctorId}
                   onChange={(e) => setSelectedDoctorId(e.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                  className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 >
                   {reviewableDoctors.map((d) => (
                     <option key={d.doctorId} value={d.doctorId}>
@@ -384,26 +384,26 @@ export default function MyReviews() {
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-[#334155]">Rating</Label>
+                <Label className="text-sm font-medium text-base-content/80">Rating</Label>
                 <div className="mt-1.5">
                   <StarPicker value={rating} onChange={setRating} />
                 </div>
               </div>
 
               <TextField name="comment" isRequired>
-                <Label className="text-sm font-medium text-[#334155]">Your Review</Label>
+                <Label className="text-sm font-medium text-base-content/80">Your Review</Label>
                 <TextArea
                   rows={4}
                   placeholder="Share your experience..."
-                  className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                  className="mt-1.5 w-full resize-none rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </TextField>
 
               <div className="mt-1 flex gap-3">
-                <button type="button" onClick={() => setIsAdding(false)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">
+                <button type="button" onClick={() => setIsAdding(false)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">
                   Cancel
                 </button>
-                <Button type="submit" className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-sm font-bold text-white hover:bg-[#1D4ED8]">
+                <Button type="submit" className="flex-1 rounded-full bg-primary py-2.5 text-sm font-bold text-white hover:bg-primary/90">
                   Submit Review
                 </Button>
               </div>
@@ -415,30 +415,30 @@ export default function MyReviews() {
       <AnimatePresence>
         {editTarget && (
           <Modal title="Edit Review" onClose={() => setEditTarget(null)}>
-            <p className="text-sm text-[#64748B]">
-              Editing your review for <span className="font-semibold text-[#0F172A]">{editTarget.doctorName}</span>
+            <p className="text-sm text-base-content/60">
+              Editing your review for <span className="font-semibold text-base-content">{editTarget.doctorName}</span>
             </p>
             <form onSubmit={handleUpdate} className="mt-4 flex flex-col gap-5">
               <div>
-                <Label className="text-sm font-medium text-[#334155]">Rating</Label>
+                <Label className="text-sm font-medium text-base-content/80">Rating</Label>
                 <div className="mt-1.5">
                   <StarPicker value={rating} onChange={setRating} />
                 </div>
               </div>
 
               <TextField name="comment" defaultValue={editTarget.comment} isRequired>
-                <Label className="text-sm font-medium text-[#334155]">Your Review</Label>
+                <Label className="text-sm font-medium text-base-content/80">Your Review</Label>
                 <TextArea
                   rows={4}
-                  className="mt-1.5 w-full resize-none rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                  className="mt-1.5 w-full resize-none rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </TextField>
 
               <div className="mt-1 flex gap-3">
-                <button type="button" onClick={() => setEditTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">
+                <button type="button" onClick={() => setEditTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">
                   Cancel
                 </button>
-                <Button type="submit" className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-sm font-bold text-white hover:bg-[#1D4ED8]">
+                <Button type="submit" className="flex-1 rounded-full bg-primary py-2.5 text-sm font-bold text-white hover:bg-primary/90">
                   Save Changes
                 </Button>
               </div>
@@ -450,12 +450,12 @@ export default function MyReviews() {
       <AnimatePresence>
         {deleteTarget && (
           <Modal title="Delete Review" onClose={() => setDeleteTarget(null)}>
-            <p className="text-sm text-[#64748B]">
+            <p className="text-sm text-base-content/60">
               Are you sure you want to delete your review for{" "}
-              <span className="font-semibold text-[#0F172A]">{deleteTarget.doctorName}</span>? This can&apos;t be undone.
+              <span className="font-semibold text-base-content">{deleteTarget.doctorName}</span>? This can&apos;t be undone.
             </p>
             <div className="mt-6 flex gap-3">
-              <button type="button" onClick={() => setDeleteTarget(null)} className="flex-1 rounded-full border border-[#E2E8F0] py-2.5 text-sm font-semibold text-[#334155]">
+              <button type="button" onClick={() => setDeleteTarget(null)} className="flex-1 rounded-full border border-base-300 py-2.5 text-sm font-semibold text-base-content/80">
                 Keep Review
               </button>
               <button type="button" onClick={handleDelete} className="flex-1 rounded-full bg-[#EF4444] py-2.5 text-sm font-bold text-white hover:bg-[#DC2626]">

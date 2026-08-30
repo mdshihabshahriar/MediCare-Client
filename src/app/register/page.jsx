@@ -100,12 +100,12 @@ const RegisterPage = () => {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 pb-10 pt-24 sm:px-6">
-      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-[2rem] border border-[#E2E8F0] bg-white shadow-xl lg:grid-cols-2">
+    <main className="flex min-h-screen items-center justify-center bg-base-200 px-4 pb-10 pt-24 sm:px-6">
+      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-[2rem] border border-base-300 bg-base-100 shadow-xl lg:grid-cols-2">
         {/* Left: accent banner */}
         <div className="relative hidden flex-col justify-between bg-accent p-10 text-white lg:flex">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+          <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-base-100/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-base-100/10 blur-3xl" />
 
           <Link href="/" className="relative text-xl font-bold tracking-tight">
             MediCare<span className="text-white/80">Connect</span>
@@ -134,12 +134,12 @@ const RegisterPage = () => {
 
         {/* Right: form */}
         <div className="p-8 sm:p-10 lg:p-12">
-          <h1 className="text-2xl font-extrabold text-[#0F172A]">
+          <h1 className="text-2xl font-extrabold text-base-content">
             Create your account
           </h1>
-          <p className="mt-1.5 text-sm text-[#64748B]">
+          <p className="mt-1.5 text-sm text-base-content/60">
             Already have an account?{" "}
-            <Link href="/login" className="font-semibold text-[#2563EB]">
+            <Link href="/login" className="font-semibold text-primary">
               Login
             </Link>
           </p>
@@ -147,7 +147,7 @@ const RegisterPage = () => {
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-6">
             {/* Photo upload */}
             <div>
-              <label className="text-sm font-medium text-[#334155]">Profile Photo</label>
+              <label className="text-sm font-medium text-base-content/80">Profile Photo</label>
               <div
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={(e) => e.preventDefault()}
@@ -159,14 +159,14 @@ const RegisterPage = () => {
                     setPhotoPreview(URL.createObjectURL(file));
                   }
                 }}
-                className="mt-1.5 flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed border-[#CBD5E1] bg-[#F8FAFC] p-4 transition-colors hover:border-[#2563EB] hover:bg-[#EFF6FF]"
+                className="mt-1.5 flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed border-[#CBD5E1] bg-base-200 p-4 transition-colors hover:border-primary hover:bg-primary/10"
               >
-                <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#E2E8F0]">
+                <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-base-100 ring-1 ring-base-300">
                   {photoPreview ? (
                     <Image src={photoPreview} alt="Profile preview" fill className="object-cover" />
                   ) : (
                     <svg
-                      className="h-6 w-6 text-[#94A3B8]"
+                      className="h-6 w-6 text-base-content/50"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -181,10 +181,10 @@ const RegisterPage = () => {
                 </div>
 
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-[#0F172A]">
+                  <p className="text-sm font-semibold text-base-content">
                     {photoPreview ? photoFile?.name : "Click to upload or drag and drop"}
                   </p>
-                  <p className="mt-0.5 text-xs text-[#94A3B8]">PNG or JPG, up to 5MB</p>
+                  <p className="mt-0.5 text-xs text-base-content/50">PNG or JPG, up to 5MB</p>
                 </div>
 
                 {photoPreview && (
@@ -196,7 +196,7 @@ const RegisterPage = () => {
                       setPhotoPreview(null);
                       if (fileInputRef.current) fileInputRef.current.value = "";
                     }}
-                    className="shrink-0 rounded-full p-1.5 text-[#94A3B8] transition-colors hover:bg-white hover:text-[#EF4444]"
+                    className="shrink-0 rounded-full p-1.5 text-base-content/50 transition-colors hover:bg-base-100 hover:text-[#EF4444]"
                     aria-label="Remove photo"
                   >
                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -219,37 +219,37 @@ const RegisterPage = () => {
 
             {/* Name */}
             <TextField name="name" isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Full Name</Label>
+              <Label className="text-sm font-medium text-base-content/80">Full Name</Label>
               <Input
                 placeholder="Sarah Jenkins"
-                className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none transition-colors placeholder:text-base-content/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               <FieldError className="mt-1 text-xs text-[#EF4444]" />
             </TextField>
 
             {/* Email */}
             <TextField name="email" type="email" isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Email Address</Label>
+              <Label className="text-sm font-medium text-base-content/80">Email Address</Label>
               <Input
                 placeholder="you@example.com"
-                className="mt-1.5 w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                className="mt-1.5 w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 text-sm text-base-content outline-none transition-colors placeholder:text-base-content/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               <FieldError className="mt-1 text-xs text-[#EF4444]" />
             </TextField>
 
             {/* Password */}
             <TextField name="password" isRequired>
-              <Label className="text-sm font-medium text-[#334155]">Password</Label>
+              <Label className="text-sm font-medium text-base-content/80">Password</Label>
               <div className="relative mt-1.5">
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a strong password"
-                  className="w-full rounded-xl border border-[#E2E8F0] bg-white px-4 py-2.5 pr-11 text-sm text-[#0F172A] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
+                  className="w-full rounded-xl border border-base-300 bg-base-100 px-4 py-2.5 pr-11 text-sm text-base-content outline-none transition-colors placeholder:text-base-content/50 focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#334155]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-base-content/80"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
@@ -270,11 +270,11 @@ const RegisterPage = () => {
 
             {/* User role */}
             <RadioGroup name="role" value={role} onChange={setRole}>
-              <Label className="text-sm font-medium text-[#334155]">I am a</Label>
+              <Label className="text-sm font-medium text-base-content/80">I am a</Label>
               <div className="mt-2 grid grid-cols-2 gap-3">
                 <Radio
                   value="patient"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-15 py-6 text-sm font-semibold text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-base-300 px-15 py-6 text-sm font-semibold text-base-content/80 outline-none transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -283,7 +283,7 @@ const RegisterPage = () => {
                 </Radio>
                 <Radio
                   value="doctor"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-15 py-6 text-sm font-semibold text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-base-300 px-15 py-6 text-sm font-semibold text-base-content/80 outline-none transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -309,11 +309,11 @@ const RegisterPage = () => {
 
             {/* Gender */}
             <RadioGroup name="gender" value={gender} onChange={setGender}>
-              <Label className="text-sm font-medium text-[#334155]">Gender</Label>
+              <Label className="text-sm font-medium text-base-content/80">Gender</Label>
               <div className="mt-2 grid grid-cols-3 gap-3">
                 <Radio
                   value="male"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-10 py-5 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-base-300 px-10 py-5 text-sm font-medium text-base-content/80 outline-none transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -322,7 +322,7 @@ const RegisterPage = () => {
                 </Radio>
                 <Radio
                   value="female"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-10 py-5 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-base-300 px-10 py-5 text-sm font-medium text-base-content/80 outline-none transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -331,7 +331,7 @@ const RegisterPage = () => {
                 </Radio>
                 <Radio
                   value="other"
-                  className="flex cursor-pointer items-center justify-center rounded-xl border border-[#E2E8F0] px-10 py-5 text-sm font-medium text-[#334155] outline-none transition-colors data-[selected=true]:border-[#2563EB] data-[selected=true]:bg-[#EFF6FF] data-[selected=true]:text-[#2563EB]"
+                  className="flex cursor-pointer items-center justify-center rounded-xl border border-base-300 px-10 py-5 text-sm font-medium text-base-content/80 outline-none transition-colors data-[selected=true]:border-primary data-[selected=true]:bg-primary/10 data-[selected=true]:text-primary"
                 >
                   <Radio.Control className="hidden">
                     <Radio.Indicator />
@@ -345,18 +345,18 @@ const RegisterPage = () => {
             <Button
               type="submit"
               isDisabled={isSubmitting}
-              className="mt-2 w-full rounded-full bg-[#2563EB] py-3 text-sm font-bold text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-60"
+              className="mt-2 w-full rounded-full bg-primary py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-60"
             >
               {isSubmitting ? "Creating account…" : "Create Account"}
             </Button>
 
-            <p className="text-center text-xs text-[#94A3B8]">
+            <p className="text-center text-xs text-base-content/50">
               By creating an account, you agree to our{" "}
-              <Link href="" className="font-medium text-[#334155] hover:text-[#2563EB]">
+              <Link href="" className="font-medium text-base-content/80 hover:text-primary">
                 Terms
               </Link>{" "}
               and{" "}
-              <Link href="" className="font-medium text-[#334155] hover:text-[#2563EB]">
+              <Link href="" className="font-medium text-base-content/80 hover:text-primary">
                 Privacy Policy
               </Link>
               .
