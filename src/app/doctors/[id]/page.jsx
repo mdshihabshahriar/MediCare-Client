@@ -367,7 +367,7 @@ export default function DoctorDetailsPage() {
                       </p>
 
                       <p className="mt-1 text-3xl font-extrabold">
-                        ৳{doctor.consultationFee}
+                        ${doctor.consultationFee}
                       </p>
                     </div>
                   </div>
