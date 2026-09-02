@@ -18,7 +18,7 @@ export default function VerificationPendingPage() {
           Your account is under review
         </h1>
         <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-base-content/60">
-          Thanks for registering as a doctor. Our admin team verifies every
+          Thanks for registering as a doctor. Please setup your profile. Our admin team verifies every
           doctor&apos;s credentials before they can appear on the platform —
           this usually takes 24–48 hours. We&apos;ll notify you by email as
           soon as you&apos;re approved.
