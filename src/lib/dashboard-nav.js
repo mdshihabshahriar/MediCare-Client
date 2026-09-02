@@ -1,7 +1,3 @@
-// lib/dashboard-nav.js
-// Single source of truth for the dashboard sidebar — every link knows
-// which role(s) can see it. The layout just filters this array.
-
 export const dashboardNav = [
   // ------------------------- PATIENT -------------------------
   {
@@ -21,6 +17,12 @@ export const dashboardNav = [
     href: "/dashboard/patient/appointments",
     roles: ["patient"],
     icon: "calendar",
+  },
+  {
+    label: "My Prescriptions",
+    href: "/dashboard/patient/prescriptions",
+    roles: ["patient"],
+    icon: "file",
   },
   {
     label: "Payment History",
