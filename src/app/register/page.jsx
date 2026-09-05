@@ -40,7 +40,7 @@ const RegisterPage = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("patient");
-  const [gender, setGender] = useState("female");
+  const [gender, setGender] = useState("male");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handlePhotoChange = (e) => {
@@ -80,7 +80,7 @@ const RegisterPage = () => {
     })
 
     if(error) {
-      toast.error("Registration failed!")
+      toast.error("Registration failed: " + error.message)
       // alert("Registration failed: " + error.message);
       setIsSubmitting(false);
       return;
